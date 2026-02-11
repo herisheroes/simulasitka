@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Simulasi TKA SD 2026</title>
+    
+    <!-- Mengambil Library CSS Tailwind (untuk styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Mengambil Library Ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Animasi Custom */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+        .animate-slideUp { animation: slideUp 0.4s ease-out; }
+        
+        /* Warna Background Utama */
+        body {
+            background-color: #4a7fb8;
+        }
+
+        /* Utility Class untuk Modal Animasi */
+        .modal-active #modal-backdrop { opacity: 1; }
+        .modal-active #modal-panel { opacity: 1; transform: scale(1); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans text-gray-800">
+
+    <!-- HEADER -->
+    <header class="pt-8 pb-6 px-4 flex flex-col items-center justify-center text-center">
+        <!-- Logo -->
+        <div class="bg-white p-2 rounded-full shadow-lg mb-4">
+            <img src="https://pusmendik.kemdikbud.go.id/tka/images/logo-kemdikbud-71x72.png" 
+                 alt="Logo Tut Wuri Handayani" 
+                 class="w-24 h-24 object-contain">
+        </div>
+        
+        <!-- Judul -->
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white drop-shadow-md tracking-tight">
+            Kumpulan Simulasi TKA SD <br/> Tahun 2026
+        </h1>
+        <div class="h-1 w-20 bg-yellow-400 mt-4 rounded-full"></div>
+    </header>
+
+    <!-- CONTAINER UTAMA (Isinya akan berubah-ubah lewat Javascript) -->
+    <main id="app-container" class="flex-grow flex flex-col items-center justify-start pt-4 pb-12 w-full">
+        <!-- Konten akan dimasukkan di sini oleh Script di bawah -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full bg-black/20 text-white text-center py-6 mt-auto backdrop-blur-sm">
+        <p class="font-medium flex items-center justify-center gap-2">
+            <i data-lucide="graduation-cap"></i>
+            Simulasi TKA oleh Herisheroes 2026
+        </p>
+    </footer>
+
+    <!-- MODAL POPUP (Tersembunyi by default) -->
+    <div id="info-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden pointer-events-none">
+        <!-- Overlay/Background Gelap -->
+        <div id="modal-backdrop" onclick="closeModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-auto"></div>
+        
+        <!-- Panel Konten -->
+        <div id="modal-panel" class="relative bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-90 opacity-0 transition-all duration-300 pointer-events-auto border-t-8 border-yellow-400">
+            <div class="flex flex-col items-center text-center">
+                <!-- Ikon di tengah atas modal -->
+                <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                    <i id="modal-icon" data-lucide="wrench" class="w-8 h-8"></i>
+                </div>
+                
+                <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-2">Sedang Dikembangkan</h3>
+                <p id="modal-message" class="text-gray-600 mb-6 leading-relaxed">
+                    Mohon maaf, paket soal ini belum tersedia. Silakan coba paket lainnya.
+                </p>
+                
+                <button onclick="closeModal()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-200">
+                    Sabar Menunggu!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        // --- KONFIGURASI DATA ---
+        const year = 2026;
+        
+        // Data Mata Pelajaran
+        const subjects = [
+            {
+                id: 'mtk',
+                title: 'TKA Matematika SD',
+                icon: 'calculator', 
+                colorClass: 'text-blue-600',
+                filePrefix: 'tkamtk', 
+                description: 'Latihan soal berhitung dan logika matematika.'
+            },
+            {
+                id: 'ind',
+                title: 'TKA Bahasa Indonesia SD',
+                icon: 'book-open',
+                colorClass: 'text-green-600',
+                filePrefix: 'tkaind', 
+                description: 'Latihan pemahaman bacaan dan tata bahasa.'
+            }
+        ];
+
+        // Element tempat menaruh konten
+        const appContainer = document.getElementById('app-container');
+
+        // --- FUNGSI UTAMA ---
+
+        // 1. Tampilkan Halaman Depan
+        function renderHome() {
+            let html = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl px-4 animate-fadeIn">
+            `;
+            
+            subjects.forEach(sub => {
+                html += `
+                    <div onclick="renderPackets('${sub.id}')" 
+                        class="bg-white rounded-2xl shadow-xl p-8 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center text-center border-b-8 border-yellow-400">
+                        <i data-lucide="${sub.icon}" class="${sub.colorClass} mb-4 w-12 h-12"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">${sub.title}</h2>
+                        <p class="text-gray-600">${sub.description}</p>
+                        <button class="mt-6 px-6 py-2 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition">
+                            Buka Latihan
+                        </button>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            appContainer.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // 2. Tampilkan Daftar Paket
+        function renderPackets(subjectId) {
+            const subject = subjects.find(s => s.id === subjectId);
+            if (!subject) return;
+
+            let html = `
+                <div class="w-full max-w-5xl px-4 animate-slideUp">
+                    <button onclick="renderHome()" class="mb-6 flex items-center text-white hover:text-yellow-300 transition font-semibold">
+                        <i data-lucide="arrow-left" class="mr-2"></i> Kembali ke Menu Utama
+                    </button>
+
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20">
+                        <h2 class="text-3xl font-bold text-white mb-1 flex items-center gap-3">
+                            <i data-lucide="${subject.icon}" class="text-white"></i> 
+                            ${subject.title}
+                        </h2>
+                        <p class="text-blue-100">Silakan pilih paket soal untuk memulai simulasi.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            `;
+
+            for (let i = 1; i <= 6; i++) {
+                const titleText = subject.id === 'mtk' ? 'Matematika' : 'Bahasa Indonesia';
+                html += `
+                    <div onclick="handlePacketClick('${subject.filePrefix}', ${i})" 
+                        class="bg-white rounded-xl shadow-lg p-5 cursor-pointer transform transition hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group">
+                        
+                        <div class="absolute -right-4 -top-4 bg-gray-100 text-gray-200 text-9xl font-bold select-none z-0 rotate-12 group-hover:text-blue-50 transition-colors">
+                            ${i}
+                        </div>
+
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-3 bg-blue-100 rounded-lg text-blue-600">
+                                    <i data-lucide="file-question" class="w-6 h-6"></i>
+                                </div>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide">
+                                    TKA ${year}
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-lg font-bold text-gray-800 mb-6 leading-snug">
+                                TKA ${titleText} Simulasi Paket ${i}
+                            </h3>
+
+                            <div onclick="handleCheckScore(event)" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-500 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition">
+                                <i data-lucide="check-circle" class="mr-2 w-4 h-4"></i>
+                                Cek Nilai
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `</div></div>`;
+            appContainer.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // --- LOGIKA MODAL POPUP ---
+        
+        function showPopup(title, message, iconName = 'wrench') {
+            const modal = document.getElementById('info-modal');
+            const iconElem = document.getElementById('modal-icon');
+            
+            // Set konten modal
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerHTML = message;
+            
+            // Set icon
+            iconElem.setAttribute('data-lucide', iconName);
+            lucide.createIcons();
+
+            // Tampilkan modal dengan animasi
+            modal.classList.remove('hidden');
+            // Sedikit delay agar transisi CSS berjalan
+            setTimeout(() => {
+                modal.classList.add('modal-active');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('info-modal');
+            modal.classList.remove('modal-active');
+            
+            // Tunggu animasi selesai baru hide element
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // 3. Logika Klik Paket
+        function handlePacketClick(prefix, packetNumber) {
+            const availablePackets = [1, 2]; // Hanya paket 1 & 2 yang "ada"
+            
+            if (availablePackets.includes(packetNumber)) {
+                const fileName = prefix + packetNumber + '.html';
+                
+                // Cek preview mode
+                if (window.location.protocol === 'blob:' || (window.location.hostname === 'localhost' && !window.location.port)) {
+                     // Gunakan Popup juga untuk info di mode preview, dengan teks yang diminta
+                     showPopup("Info Simulasi", "Paket Sedang di Kembangkan", "wrench");
+                } else {
+                     window.location.href = fileName;
+                }
+            } else {
+                // Tampilkan Popup jika file "tidak ada"
+                showPopup(
+                    "Paket Sedang Dikembangkan", 
+                    `Mohon maaf, <b>Paket ${packetNumber}</b> saat ini belum tersedia.<br>Tim kami sedang menyusun soal terbaik untuk Anda.`, 
+                    "hammer" // Ikon palu/obeng
+                );
+            }
+        }
+
+        // 4. Logika Cek Nilai
+        function handleCheckScore(e) {
+            e.stopPropagation(); 
+            showPopup("Segera Hadir", "Fitur <b>Cek Nilai</b> sedang dalam tahap pengembangan.<br>Nantikan update selanjutnya!", "clipboard-list");
+        }
+
+        // --- JALANKAN SAAT PERTAMA KALI ---
+        renderHome();
+        lucide.createIcons(); 
+    </script>
+</body>
+</html>

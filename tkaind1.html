@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <title>Simulasi TKA 2026</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://pusmendik.kemdikbud.go.id/tka/fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://pusmendik.kemdikbud.go.id/tka/fav/favicon-32x32.png">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <link rel="stylesheet" href="https://pusmendik.kemdikbud.go.id/tka/_assets/css/icheck-bootstrap.min.css" />
+    
+    <!-- JS Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        body { background-color: #f0f3f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .wrapper { margin-top: -80px; }
+        
+        /* Login Panel Styles */
+        #login-panel {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #326698 0%, #1a3a5a 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        #formContent {
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+        
+        .footer-text {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-navigasi { width: 160px; margin: 5px; }
+        
+        /* Typography for Questions */
+        .teks-bacaan {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 6px solid #326698;
+            margin-bottom: 25px;
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            text-align: justify;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        /* Custom Visuals for Charts/Data */
+        .visual-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .piring-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            height: 300px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .piring-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        /* Result & Modal Styles */
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #326698;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            border: 5px solid #74b9ff;
+            box-shadow: 0 0 20px rgba(50, 102, 152, 0.5);
+        }
+        
+        .modal-content { border-radius: 15px; border: none; }
+        .modal-header { background: #f1f1f1; border-radius: 15px 15px 0 0; }
+        .table-rekap th { background-color: #326698; color: white; }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Icheck Fixes */
+        .radio.icheck-primary > input:first-child:not(:checked):not(:disabled) + label::before, 
+        .radio.icheck-primary > input:first-child:not(:checked):not(:disabled) + input[type="hidden"] + label::before {
+            border-color: #326698;
+        }
+        .checkbox.icheck-primary > input:first-child:not(:checked):not(:disabled) + label::before {
+            border-color: #326698;
+        }
+        
+        /* ================= RESPONSIVE STYLES ================= */
+        /* Desktop Default Header */
+        #app-header {
+            background: #326698; 
+            height: 130px; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; 
+            z-index: 900; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        #app-content {
+            margin-top: 140px;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile & Tablet Portrait (< 768px) */
+        @media (max-width: 768px) {
+            /* Compact Header */
+            #app-header {
+                height: auto;
+                padding-bottom: 10px;
+            }
+            #app-header .row {
+                padding-top: 10px !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            #app-header img {
+                height: 40px !important;
+                margin-right: 10px !important;
+            }
+            #app-header div[style*="font-size:18px"] {
+                font-size: 14px !important;
+                line-height: 1.2;
+            }
+            #app-header div[style*="font-size:12px"] {
+                font-size: 10px !important;
+            }
+            
+            /* Adjust Content Margin for smaller header */
+            #app-content {
+                margin-top: 100px !important;
+            }
+            
+            /* Typography & Layout */
+            #noSoal { font-size: 20px !important; }
+            .cfont { font-size: 14px !important; }
+            .mataujian { text-align: left !important; font-size: 12px; margin-top: 5px; }
+            
+            /* Buttons Stack Vertically */
+            .btn-navigasi {
+                width: 100%;
+                margin: 5px 0;
+                display: block;
+            }
+            .btn-bawah .col-auto {
+                width: 100%;
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            
+            /* Top Info Buttons */
+            .cont-btn-informasi {
+                text-align: left !important;
+                margin-top: 10px;
+                display: flex;
+                gap: 5px;
+            }
+            .cont-btn-informasi button {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+            
+            /* Hide fancy elements on mobile login */
+            .login-box { padding: 20px; margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN PANEL -->
+<div id="login-panel">
+    <div class="login-box">
+        <img src="https://pusmendik.kemdikbud.go.id/tka/images/logo-kemdikbud-71x72.png" height="60" class="mb-3">
+        <h4 style="color:#326698; font-weight:bold;">Simulasi TKA 2026</h4>
+        <p class="text-muted small">Silahkan login untuk memulai tes</p>
+        <hr>
+        <div class="form-group text-left">
+            <label class="small font-weight-bold">Nama Lengkap</label>
+            <input type="text" id="inputNama" class="form-control" placeholder="Masukkan nama Anda">
+        </div>
+        <div class="form-group text-left">
+            <label class="small font-weight-bold">Asal Sekolah</label>
+            <input type="text" id="inputSekolah" class="form-control" placeholder="Masukkan asal sekolah">
+        </div>
+        <button class="btn btn-primary btn-block mt-4 shadow-sm" onclick="mulaiTes()">MULAI TES</button>
+        <div class="mt-3 text-muted" style="font-size:10px;"><small>di buat oleh herisheroes @2026</small></div>
+    </div>
+</div>
+
+<!-- Header Aplikasi (Hidden until login) -->
+<div id="app-header" class="container-fluid text-white" style="display:none;">
+    <div class="row pt-3 px-4 align-items-center">
+        <div class="col-8 d-flex align-items-center">
+            <img src="https://pusmendik.kemdikbud.go.id/tka/images/logo-kemdikbud-71x72.png" style="height:60px; margin-right:15px;">
+            <div>
+                <div style="font-size:18px; font-weight:bold;">SIMULASI TKA</div>
+                <div style="font-size:12px;">TAHUN 2026</div>
+            </div>
+        </div>
+        <div class="col-4 text-right">
+            <div class="d-none d-md-block">
+                <div id="displayNama" style="font-weight:bold; font-size:1.1rem;">Peserta</div>
+                <small id="displaySekolah" style="opacity: 0.8;">Sekolah</small>
+            </div>
+            <div class="d-md-none">
+                <i class="fa fa-user-circle fa-lg"></i>
+                <div id="displayNamaMobile" style="font-size:10px; font-weight:bold;">Peserta</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content (Hidden until login) -->
+<div id="app-content" class="container mb-5" style="display:none; opacity: 0; transition: opacity 0.5s;">
+  <div class="row justify-content-center">
+    <div class="col-lg-11 col-md-12 p-0 p-md-3">
+        <div class="text-left pt-3 pb-5 mb-2 px-3 px-md-5" id="formContent">
+          
+          <!-- Top Bar Soal -->
+          <div class="row row-atas align-items-center border-bottom pb-3 mb-3"> 
+            <div class="col-6 col-md-4">
+                <span class="text-muted small">Soal No.</span> <span style="font-size:24px; font-weight:bold; color:#326698;" id="noSoal">1</span>
+            </div>
+            <div class="col-6 col-md-8 text-right cont-btn-informasi">
+                <button class="btn btn-outline-secondary btn-round btn-sm mb-1 font-weight-bold">
+                    <i class="far fa-clock mr-1"></i> <span id="countdown" class="text-danger">60:00</span>
+                </button>
+                <button class="btn btn-primary btn-round btn-sm mb-1 shadow-sm" data-toggle="modal" data-target="#myModal">
+                    Daftar <i class="fa fa-th-large ml-1"></i>
+                </button>
+            </div>
+          </div>
+          
+          <div class="row pb-2 align-items-center"> 
+            <div class="col-12 col-sm-6">
+                <small class="text-muted">Ukuran font:</small> 
+                <span style="font-size:14px" class="ml-2 cfont border px-1 rounded" onclick="changeFont(14)">A</span> 
+                <span style="font-size:18px" class="ml-2 cfont border px-1 rounded" onclick="changeFont(18)">A</span> 
+                <span style="font-size:22px" class="ml-2 cfont border px-1 rounded" onclick="changeFont(22)">A</span>
+            </div>
+            <div class="col-12 col-sm-6 mt-2 mt-sm-0 mataujian text-md-right text-primary font-weight-bold">
+                Literasi Membaca - Bahasa Indonesia
+            </div>
+          </div>
+
+          <!-- CONTAINER SOAL -->
+          <div id="isisoal" style="font-size:16px;">
+            
+            <!-- ===================== SOAL 1-5: TEKS FIKSI (Persahabatan) ===================== -->
+            <!-- Soal 1: Identifikasi Tokoh -->
+            <div class="soal-soal" id="soal-no-1">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold mb-3">Janji Seekor Elang</h5>
+                            <p>Di sebuah lembah yang hijau, hiduplah seekor Elang yang gagah dan seekor Kura-kura yang bijak. Mereka bersahabat karib meskipun memiliki sifat fisik yang jauh berbeda. Elang suka terbang tinggi menjelajahi angkasa, sedangkan Kura-kura menghabiskan waktunya berjalan lambat di tepian sungai.</p>
+                            <p>"Wahai Kura-kura, suatu hari nanti aku akan membawamu terbang melihat dunia di atas sana," janji Elang suatu sore. Kura-kura tersenyum, "Terima kasih, Elang. Namun, cangkangku ini berat, apakah kau sanggup?" Elang mengangguk mantap, "Tentu saja, aku adalah burung terkuat di lembah ini."</p>
+                            <p>Hari berganti hari, musim pun berubah. Elang semakin sibuk dengan kawan-kawan barunya yang sesama burung pemburu. Ia mulai melupakan Kura-kura yang setia menunggunya di tepi sungai setiap sore. Hingga suatu hari, badai besar melanda lembah. Elang yang sombong mencoba menantang angin, namun sayapnya terluka. Ia jatuh tepat di dekat tempat Kura-kura biasa berjemur.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Siapakah tokoh utama yang memiliki sifat setia kawan dalam cerita tersebut?</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s1a" name="ans1" value="A" onchange="pilihan(1,'A')"><label for="s1a"></label></div></td><td><label for="s1a">Elang</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s1b" name="ans1" value="B" onchange="pilihan(1,'B')"><label for="s1b"></label></div></td><td><label for="s1b">Kura-kura</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s1c" name="ans1" value="C" onchange="pilihan(1,'C')"><label for="s1c"></label></div></td><td><label for="s1c">Burung Pemburu</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s1d" name="ans1" value="D" onchange="pilihan(1,'D')"><label for="s1d"></label></div></td><td><label for="s1d">Angin</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 2: Watak -->
+            <div class="soal-soal" id="soal-no-2" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan"><small class="text-muted">(Teks merujuk pada "Janji Seekor Elang")</small><br>... Elang yang sombong mencoba menantang angin, namun sayapnya terluka. Ia jatuh tepat di dekat tempat Kura-kura biasa berjemur. Melihat sahabatnya terluka, Kura-kura tidak mengejeknya. Ia justru merawat Elang dengan sabar hingga pulih.</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Bagaimana watak tokoh Elang sebelum ia terluka?</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s2a" name="ans2" value="A" onchange="pilihan(2,'A')"><label for="s2a"></label></div></td><td><label for="s2a">Rendah hati dan penolong</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s2b" name="ans2" value="B" onchange="pilihan(2,'B')"><label for="s2b"></label></div></td><td><label for="s2b">Sombong dan ingkar janji</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s2c" name="ans2" value="C" onchange="pilihan(2,'C')"><label for="s2c"></label></div></td><td><label for="s2c">Bijaksana dan setia</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s2d" name="ans2" value="D" onchange="pilihan(2,'D')"><label for="s2d"></label></div></td><td><label for="s2d">Pemalas dan licik</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 3: Makna Kata (Kosakata) -->
+            <div class="soal-soal" id="soal-no-3" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan"><small class="text-muted">(Teks merujuk pada "Janji Seekor Elang")</small><br>Elang suka terbang tinggi <b>menjelajahi</b> angkasa, sedangkan Kura-kura menghabiskan waktunya berjalan lambat di tepian sungai.</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Makna kata <b>menjelajahi</b> dalam kalimat tersebut adalah...</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s3a" name="ans3" value="A" onchange="pilihan(3,'A')"><label for="s3a"></label></div></td><td><label for="s3a">Melihat dari kejauhan</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s3b" name="ans3" value="B" onchange="pilihan(3,'B')"><label for="s3b"></label></div></td><td><label for="s3b">Pergi berkeliling ke berbagai tempat</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s3c" name="ans3" value="C" onchange="pilihan(3,'C')"><label for="s3c"></label></div></td><td><label for="s3c">Membangun sarang di tempat tinggi</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s3d" name="ans3" value="D" onchange="pilihan(3,'D')"><label for="s3d"></label></div></td><td><label for="s3d">Mencari mangsa untuk dimakan</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 4: Benar Salah (Evaluasi) -->
+            <div class="soal-soal" id="soal-no-4" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Berdasarkan cerita "Janji Seekor Elang", tentukan pernyataan berikut <b>Benar</b> atau <b>Salah</b>!</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light"><tr><th>Pernyataan</th><th class="text-center" width="80">Benar</th><th class="text-center" width="80">Salah</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Elang menepati janjinya untuk membawa Kura-kura terbang.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4a1" name="ans4a" value="1" onchange="pilihan3(4)"><label for="s4a1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4a2" name="ans4a" value="2" onchange="pilihan3(4)"><label for="s4a2"></label></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kura-kura tetap menolong Elang meskipun pernah dilupakan.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4b1" name="ans4b" value="1" onchange="pilihan3(4)"><label for="s4b1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4b2" name="ans4b" value="2" onchange="pilihan3(4)"><label for="s4b2"></label></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Elang terluka karena diserang oleh kawanan burung pemburu.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4c1" name="ans4c" value="1" onchange="pilihan3(4)"><label for="s4c1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4c2" name="ans4c" value="2" onchange="pilihan3(4)"><label for="s4c2"></label></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 5: Amanat -->
+            <div class="soal-soal" id="soal-no-5" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="mb-4 font-weight-bold">Apa amanat (pesan moral) yang dapat diambil dari cerita tersebut?</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s5a" name="ans5" value="A" onchange="pilihan(5,'A')"><label for="s5a"> Kita harus memiliki sayap yang kuat agar bisa terbang tinggi.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s5b" name="ans5" value="B" onchange="pilihan(5,'B')"><label for="s5b"> Janganlah melupakan sahabat lama saat kita mendapatkan teman baru atau kesuksesan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s5c" name="ans5" value="C" onchange="pilihan(5,'C')"><label for="s5c"> Kura-kura adalah hewan yang paling lambat sehingga butuh bantuan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s5d" name="ans5" value="D" onchange="pilihan(5,'D')"><label for="s5d"> Kita harus menantang badai untuk membuktikan kekuatan diri.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 6-10: TEKS NON-FIKSI (Lingkungan) ===================== -->
+            <!-- Soal 6: Ide Pokok -->
+            <div class="soal-soal" id="soal-no-6" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold">Bahaya Sampah Plastik</h5>
+                            <p>Sampah plastik menjadi masalah serius bagi lingkungan kita. Plastik membutuhkan waktu ratusan tahun untuk terurai secara alami di dalam tanah. Selama proses itu, plastik dapat mencemari tanah dan sumber air dengan zat kimia berbahaya.</p>
+                            <p>Di lautan, sampah plastik seringkali dikira makanan oleh hewan laut seperti penyu dan ikan paus. Hal ini menyebabkan kematian banyak hewan laut setiap tahunnya. Selain itu, plastik yang hancur menjadi mikroplastik dapat masuk ke dalam tubuh ikan yang kemudian dikonsumsi oleh manusia.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Ide pokok paragraf pertama adalah...</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s6a" name="ans6" value="A" onchange="pilihan(6,'A')"><label for="s6a"></label></div></td><td><label for="s6a">Cara mendaur ulang sampah plastik.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s6b" name="ans6" value="B" onchange="pilihan(6,'B')"><label for="s6b"></label></div></td><td><label for="s6b">Dampak negatif sampah plastik bagi tanah dan air.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s6c" name="ans6" value="C" onchange="pilihan(6,'C')"><label for="s6c"></label></div></td><td><label for="s6c">Hewan laut yang memakan plastik.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s6d" name="ans6" value="D" onchange="pilihan(6,'D')"><label for="s6d"></label></div></td><td><label for="s6d">Proses pembuatan plastik yang murah.</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 7: PG Kompleks (Sebab Akibat) -->
+            <div class="soal-soal" id="soal-no-7" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Apa dampak sampah plastik bagi kehidupan di laut berdasarkan teks?<br><span class="text-primary small">(Pilih lebih dari satu jawaban yang benar!)</span></p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s7a" name="pilihan7" value="A" onchange="pilihan2(7)"><label for="s7a"> Menyebabkan air laut menjadi jernih.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s7b" name="pilihan7" value="B" onchange="pilihan2(7)"><label for="s7b"> Dikira makanan oleh hewan seperti penyu.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s7c" name="pilihan7" value="C" onchange="pilihan2(7)"><label for="s7c"> Menjadi tempat tinggal baru bagi terumbu karang.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s7d" name="pilihan7" value="D" onchange="pilihan2(7)"><label for="s7d"> Mikroplastik dapat masuk ke rantai makanan.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 8: Isian/Pasangkan (Inferensi) -->
+            <div class="soal-soal" id="soal-no-8" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan"><small>(Teks: Bahaya Sampah Plastik)</small><br>Plasti yang hancur menjadi partikel kecil disebut <b>Mikroplastik</b>. Partikel ini sangat berbahaya karena tidak terlihat oleh mata telanjang namun ada di mana-mana.</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan teks, mengapa mikroplastik disebut berbahaya bagi manusia?</p>
+                         <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s8a" name="ans8" value="A" onchange="pilihan(8,'A')"><label for="s8a"></label></div></td><td><label for="s8a">Karena ukurannya besar dan tajam.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s8b" name="ans8" value="B" onchange="pilihan(8,'B')"><label for="s8b"></label></div></td><td><label for="s8b">Karena dapat dikonsumsi ikan yang lalu dimakan manusia.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s8c" name="ans8" value="C" onchange="pilihan(8,'C')"><label for="s8c"></label></div></td><td><label for="s8c">Karena membuat air laut menjadi asin.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s8d" name="ans8" value="D" onchange="pilihan(8,'D')"><label for="s8d"></label></div></td><td><label for="s8d">Karena mudah terurai dalam hitungan hari.</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Soal 9: Ringkasan -->
+            <div class="soal-soal" id="soal-no-9" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Ringkasan yang paling tepat untuk teks "Bahaya Sampah Plastik" adalah...</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s9a" name="ans9" value="A" onchange="pilihan(9,'A')"><label for="s9a"> Sampah plastik sangat bermanfaat karena tahan lama dan murah harganya.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s9b" name="ans9" value="B" onchange="pilihan(9,'B')"><label for="s9b"> Plastik berbahaya bagi lingkungan karena sulit terurai, membunuh hewan laut, dan mencemari makanan manusia melalui mikroplastik.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s9c" name="ans9" value="C" onchange="pilihan(9,'C')"><label for="s9c"> Lautan penuh dengan sampah plastik sehingga kita harus berhenti makan ikan laut agar tetap sehat.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s9d" name="ans9" value="D" onchange="pilihan(9,'D')"><label for="s9d"> Penyu dan ikan paus sering mengira plastik sebagai makanan sehingga mereka kenyang.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Soal 10: Prediksi (Evaluasi) -->
+            <div class="soal-soal" id="soal-no-10" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Apa yang kemungkinan besar akan terjadi jika penggunaan plastik sekali pakai tidak dikurangi?</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s10a" name="ans10" value="A" onchange="pilihan(10,'A')"><label for="s10a"> Lautan akan semakin tercemar dan populasi hewan laut menurun drastis.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s10b" name="ans10" value="B" onchange="pilihan(10,'B')"><label for="s10b"> Tanah akan menjadi lebih subur karena plastik.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s10c" name="ans10" value="C" onchange="pilihan(10,'C')"><label for="s10c"> Manusia akan menemukan planet baru untuk ditinggali.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s10d" name="ans10" value="D" onchange="pilihan(10,'D')"><label for="s10d"> Pabrik plastik akan bangkrut dalam waktu dekat.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 11-15: INFOGRAFIS/DATA (Nutrisi) ===================== -->
+            <!-- Soal 11: Tersurat (Visual Replaced) -->
+            <div class="soal-soal" id="soal-no-11" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="visual-container">
+                            <div class="bg-primary text-white text-center py-2 font-weight-bold">PANDUAN ISI PIRINGKU</div>
+                            <div class="piring-grid">
+                                <div class="piring-item bg-success">
+                                    <span>SAYURAN</span>
+                                    <small style="font-weight:normal; margin-top:5px;">2/3 dari 1/2 Piring</small>
+                                </div>
+                                <div class="piring-item bg-warning text-dark">
+                                    <span>MAKANAN POKOK</span>
+                                    <small style="font-weight:normal; margin-top:5px;">2/3 dari 1/2 Piring</small>
+                                </div>
+                                <div class="piring-item bg-danger">
+                                    <span>BUAH-BUAHAN</span>
+                                    <small style="font-weight:normal; margin-top:5px;">1/3 dari 1/2 Piring</small>
+                                </div>
+                                <div class="piring-item bg-info">
+                                    <span>LAUK-PAUK</span>
+                                    <small style="font-weight:normal; margin-top:5px;">1/3 dari 1/2 Piring</small>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center py-1 text-muted small font-italic">Visualisasi Data Gizi Seimbang</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan visualisasi "Isi Piringku" di samping, berapa porsi yang dianjurkan untuk Makanan Pokok dalam satu kali makan?</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s11a" name="ans11" value="A" onchange="pilihan(11,'A')"><label for="s11a"></label></div></td><td><label for="s11a">1/2 bagian penuh dari piring</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s11b" name="ans11" value="B" onchange="pilihan(11,'B')"><label for="s11b"></label></div></td><td><label for="s11b">2/3 bagian dari setengah piring</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s11c" name="ans11" value="C" onchange="pilihan(11,'C')"><label for="s11c"></label></div></td><td><label for="s11c">1/3 bagian dari setengah piring</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s11d" name="ans11" value="D" onchange="pilihan(11,'D')"><label for="s11d"></label></div></td><td><label for="s11d">Sama rata dengan lauk-pauk</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 12: Kategori Objek -->
+            <div class="soal-soal" id="soal-no-12" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <p class="font-weight-bold">Berdasarkan pedoman gizi seimbang, manakah yang termasuk dalam kelompok <b>Lauk Pauk</b>?</p>
+                         <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s12a" name="ans12" value="A" onchange="pilihan(12,'A')"><label for="s12a"></label></div></td><td><label for="s12a">Nasi, Jagung, Roti</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s12b" name="ans12" value="B" onchange="pilihan(12,'B')"><label for="s12b"></label></div></td><td><label for="s12b">Bayam, Kangkung, Wortel</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s12c" name="ans12" value="C" onchange="pilihan(12,'C')"><label for="s12c"></label></div></td><td><label for="s12c">Ikan, Ayam, Tahu, Tempe</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s12d" name="ans12" value="D" onchange="pilihan(12,'D')"><label for="s12d"></label></div></td><td><label for="s12d">Pisang, Pepaya, Jeruk</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 13: Benar Salah (Interpretasi Data) -->
+            <div class="soal-soal" id="soal-no-13" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Perhatikan pernyataan tentang pola makan sehat berikut. Tentukan <b>Benar</b> atau <b>Salah</b>!</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light"><tr><th>Pernyataan</th><th class="text-center" width="80">Benar</th><th class="text-center" width="80">Salah</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Porsi sayuran sebaiknya sama banyaknya dengan porsi makanan pokok.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13a1" name="ans13a" value="1" onchange="pilihan3(13)"><label for="s13a1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13a2" name="ans13a" value="2" onchange="pilihan3(13)"><label for="s13a2"></label></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kita disarankan untuk mencuci tangan pakai sabun sebelum makan.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13b1" name="ans13b" value="1" onchange="pilihan3(13)"><label for="s13b1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13b2" name="ans13b" value="2" onchange="pilihan3(13)"><label for="s13b2"></label></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 14: PG Kompleks (Aplikasi) -->
+            <div class="soal-soal" id="soal-no-14" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Andi ingin menerapkan pola hidup sehat sesuai anjuran "Isi Piringku". Apa saja yang sebaiknya Andi lakukan?<br><span class="text-primary small">(Pilih jawaban yang benar!)</span></p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s14a" name="pilihan14" value="A" onchange="pilihan2(14)"><label for="s14a"> Minum air putih 8 gelas sehari.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s14b" name="pilihan14" value="B" onchange="pilihan2(14)"><label for="s14b"> Hanya makan daging tanpa sayur.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s14c" name="pilihan14" value="C" onchange="pilihan2(14)"><label for="s14c"> Melakukan aktivitas fisik minimal 30 menit sehari.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s14d" name="pilihan14" value="D" onchange="pilihan2(14)"><label for="s14d"> Mengganti nasi dengan permen agar kenyang.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 15: Inferensi Sederhana -->
+            <div class="soal-soal" id="soal-no-15" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Mengapa porsi buah-buahan dan lauk pauk lebih sedikit dibandingkan sayuran dan makanan pokok?</p>
+                         <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s15a" name="ans15" value="A" onchange="pilihan(15,'A')"><label for="s15a"></label></div></td><td><label for="s15a">Karena harganya lebih mahal.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s15b" name="ans15" value="B" onchange="pilihan(15,'B')"><label for="s15b"></label></div></td><td><label for="s15b">Karena tubuh membutuhkan serat dan energi lebih banyak dari sayur dan karbohidrat.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s15c" name="ans15" value="C" onchange="pilihan(15,'C')"><label for="s15c"></label></div></td><td><label for="s15c">Agar piring muat menampung semua makanan.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s15d" name="ans15" value="D" onchange="pilihan(15,'D')"><label for="s15d"></label></div></td><td><label for="s15d">Karena rasa buah terlalu manis.</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 16-20: PUISI ===================== -->
+            <!-- Soal 16: Tema -->
+            <div class="soal-soal" id="soal-no-16" style="display:none;">
+                 <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan text-center">
+                            <h5>Guruku Pelitaku</h5>
+                            <p>Dalam gelap kau jadi cahaya<br>Menuntun langkahku mengejar asa<br>Tak kenal lelah kau berbagi ilmu<br>Demi masa depan anak didikmu</p>
+                            <p>Terima kasih pahlawan tanpa jasa<br>Jasamu abadi sepanjang masa</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Tema puisi di samping adalah...</p>
+                         <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s16a" name="ans16" value="A" onchange="pilihan(16,'A')"><label for="s16a"></label></div></td><td><label for="s16a">Keindahan alam</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s16b" name="ans16" value="B" onchange="pilihan(16,'B')"><label for="s16b"></label></div></td><td><label for="s16b">Perjuangan pahlawan perang</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s16c" name="ans16" value="C" onchange="pilihan(16,'C')"><label for="s16c"></label></div></td><td><label for="s16c">Penghormatan kepada guru</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s16d" name="ans16" value="D" onchange="pilihan(16,'D')"><label for="s16d"></label></div></td><td><label for="s16d">Cita-cita menjadi guru</label></td></tr>
+                        </table>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Soal 17: Makna Kiasan -->
+            <div class="soal-soal" id="soal-no-17" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Apa makna kiasan "Dalam gelap kau jadi cahaya" pada puisi tersebut?</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s17a" name="ans17" value="A" onchange="pilihan(17,'A')"><label for="s17a"> Guru membawa lampu saat mengajar di malam hari.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s17b" name="ans17" value="B" onchange="pilihan(17,'B')"><label for="s17b"> Guru memberikan ilmu yang menghilangkan kebodohan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s17c" name="ans17" value="C" onchange="pilihan(17,'C')"><label for="s17c"> Sekolah selalu terang benderang.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s17d" name="ans17" value="D" onchange="pilihan(17,'D')"><label for="s17d"> Guru adalah sumber listrik bagi siswa.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 18: Suasana Puisi -->
+            <div class="soal-soal" id="soal-no-18" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Suasana yang tergambar dalam puisi "Guruku Pelitaku" adalah...</p>
+                         <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s18a" name="ans18" value="A" onchange="pilihan(18,'A')"><label for="s18a"></label></div></td><td><label for="s18a">Sedih dan kecewa</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s18b" name="ans18" value="B" onchange="pilihan(18,'B')"><label for="s18b"></label></div></td><td><label for="s18b">Penuh rasa syukur dan haru</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s18c" name="ans18" value="C" onchange="pilihan(18,'C')"><label for="s18c"></label></div></td><td><label for="s18c">Marah dan dendam</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s18d" name="ans18" value="D" onchange="pilihan(18,'D')"><label for="s18d"></label></div></td><td><label for="s18d">Tegang dan menakutkan</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 19: Pasangkan (Rima) - FIXED Options -->
+            <div class="soal-soal" id="soal-no-19" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Manakah pasangan kata dari puisi yang memiliki rima akhir yang sama?</p>
+                        <div class="card p-2 mb-1 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s19a" name="ans19" value="A" onchange="pilihan(19,'A')"><label for="s19a"> Cahaya - Asa</label></div></div>
+                        <div class="card p-2 mb-1 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s19b" name="ans19" value="B" onchange="pilihan(19,'B')"><label for="s19b"> Ilmu - Jasa</label></div></div>
+                        <div class="card p-2 mb-1 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s19c" name="ans19" value="C" onchange="pilihan(19,'C')"><label for="s19c"> Gelap - Terang</label></div></div>
+                        <div class="card p-2 mb-1 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s19d" name="ans19" value="D" onchange="pilihan(19,'D')"><label for="s19d"> Lelah - Masa</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 20: Respons Emosional - FIXED Options -->
+            <div class="soal-soal" id="soal-no-20" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Setelah membaca puisi tersebut, sikap apa yang sebaiknya kita tunjukkan kepada guru?</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s20a" name="ans20" value="A" onchange="pilihan(20,'A')"><label for="s20a"></label></div></td><td><label for="s20a">Melupakan jasanya setelah lulus.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s20b" name="ans20" value="B" onchange="pilihan(20,'B')"><label for="s20b"></label></div></td><td><label for="s20b">Menghormati dan mengamalkan ilmu yang diberikan.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s20c" name="ans20" value="C" onchange="pilihan(20,'C')"><label for="s20c"></label></div></td><td><label for="s20c">Menjauhinya karena sudah tidak mengajar lagi.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s20d" name="ans20" value="D" onchange="pilihan(20,'D')"><label for="s20d"></label></div></td><td><label for="s20d">Memberikan barang mewah sebagai balasan.</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 21-25: TEKS PROSEDUR ===================== -->
+            <!-- Soal 21: Urutan -->
+            <div class="soal-soal" id="soal-no-21" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5>Cara Mencuci Tangan yang Benar</h5>
+                            <ol>
+                                <li>Basahi tangan dengan air mengalir.</li>
+                                <li>Tuangkan sabun secukupnya.</li>
+                                <li>Gosok telapak tangan, punggung tangan, dan sela-sela jari.</li>
+                                <li>Bilas dengan air bersih hingga buih hilang.</li>
+                                <li>Keringkan tangan dengan tisu atau kain bersih.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Apa langkah yang harus dilakukan setelah menuangkan sabun?</p>
+                         <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s21a" name="ans21" value="A" onchange="pilihan(21,'A')"><label for="s21a"></label></div></td><td><label for="s21a">Mengeringkan tangan.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s21b" name="ans21" value="B" onchange="pilihan(21,'B')"><label for="s21b"></label></div></td><td><label for="s21b">Menggosok seluruh bagian tangan.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s21c" name="ans21" value="C" onchange="pilihan(21,'C')"><label for="s21c"></label></div></td><td><label for="s21c">Membilas dengan air bersih.</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s21d" name="ans21" value="D" onchange="pilihan(21,'D')"><label for="s21d"></label></div></td><td><label for="s21d">Mematikan keran air.</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 22: Alat dan Bahan -->
+            <div class="soal-soal" id="soal-no-22" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Apa saja yang dibutuhkan untuk melakukan kegiatan di atas? <br><span class="text-primary small">(Pilih lebih dari satu!)</span></p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s22a" name="pilihan22" value="A" onchange="pilihan2(22)"><label for="s22a"> Air mengalir</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s22b" name="pilihan22" value="B" onchange="pilihan2(22)"><label for="s22b"> Sabun</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s22c" name="pilihan22" value="C" onchange="pilihan2(22)"><label for="s22c"> Minyak goreng</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="checkbox icheck-primary"><input type="checkbox" id="s22d" name="pilihan22" value="D" onchange="pilihan2(22)"><label for="s22d"> Tisu atau kain lap</label></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 23: Tujuan - FIXED Options -->
+            <div class="soal-soal" id="soal-no-23" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Tujuan dari teks prosedur tersebut adalah...</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s23a" name="ans23" value="A" onchange="pilihan(23,'A')"><label for="s23a"> Agar tangan menjadi wangi sepanjang hari.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s23b" name="ans23" value="B" onchange="pilihan(23,'B')"><label for="s23b"> Membersihkan kuman dan bakteri dari tangan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s23c" name="ans23" value="C" onchange="pilihan(23,'C')"><label for="s23c"> Membuat kulit tangan menjadi lebih putih.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s23d" name="ans23" value="D" onchange="pilihan(23,'D')"><label for="s23d"> Menghemat penggunaan sabun cuci tangan.</label></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 24: Konjungsi (Kebahasaan) -->
+            <div class="soal-soal" id="soal-no-24" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Kata kerja perintah (imperatif) yang terdapat dalam teks tersebut adalah...</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s24a" name="ans24" value="A" onchange="pilihan(24,'A')"><label for="s24a">Tangan, sabun, air</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s24b" name="ans24" value="B" onchange="pilihan(24,'B')"><label for="s24b">Basahi, tuangkan, gosok</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s24c" name="ans24" value="C" onchange="pilihan(24,'C')"><label for="s24c">Mengalir, bersih, hilang</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s24d" name="ans24" value="D" onchange="pilihan(24,'D')"><label for="s24d">Dengan, dari, ke</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 25: Evaluasi - FIXED Options -->
+            <div class="soal-soal" id="soal-no-25" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Mengapa kita harus membilas tangan hingga buih sabun hilang?</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s25a" name="ans25" value="A" onchange="pilihan(25,'A')"><label for="s25a"> Agar tangan tidak licin dan sisa sabun tidak tertelan saat makan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s25b" name="ans25" value="B" onchange="pilihan(25,'B')"><label for="s25b"> Agar air tidak terbuang sia-sia.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s25c" name="ans25" value="C" onchange="pilihan(25,'C')"><label for="s25c"> Supaya tangan menjadi kering seketika.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s25d" name="ans25" value="D" onchange="pilihan(25,'D')"><label for="s25d"> Agar sabun bisa digunakan kembali.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 26-30: KOSAKATA & BAHASA ===================== -->
+            <!-- Soal 26: Ungkapan -->
+            <div class="soal-soal" id="soal-no-26" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Rudi menjadi <b>buah bibir</b> di sekolah karena berhasil memenangkan lomba matematika tingkat nasional. <br>Arti ungkapan <b>buah bibir</b> adalah...</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s26a" name="ans26" value="A" onchange="pilihan(26,'A')"><label for="s26a"></label></div></td><td><label for="s26a">Bahan pembicaraan</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s26b" name="ans26" value="B" onchange="pilihan(26,'B')"><label for="s26b"></label></div></td><td><label for="s26b">Orang yang sombong</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s26c" name="ans26" value="C" onchange="pilihan(26,'C')"><label for="s26c"></label></div></td><td><label for="s26c">Anak kesayangan</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s26d" name="ans26" value="D" onchange="pilihan(26,'D')"><label for="s26d"></label></div></td><td><label for="s26d">Oleh-oleh</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 27: Sinonim -->
+            <div class="soal-soal" id="soal-no-27" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Pemandangan di desa itu sangat <b>asri</b>.<br>Sinonim kata <b>asri</b> adalah...</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s27a" name="ans27" value="A" onchange="pilihan(27,'A')"><label for="s27a"></label></div></td><td><label for="s27a">Ramai</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s27b" name="ans27" value="B" onchange="pilihan(27,'B')"><label for="s27b"></label></div></td><td><label for="s27b">Indah dan sejuk</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s27c" name="ans27" value="C" onchange="pilihan(27,'C')"><label for="s27c"></label></div></td><td><label for="s27c">Gersang</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s27d" name="ans27" value="D" onchange="pilihan(27,'D')"><label for="s27d"></label></div></td><td><label for="s27d">Modern</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 28: Antonim -->
+            <div class="soal-soal" id="soal-no-28" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Antonim dari kata <b>Hemat</b> adalah...</p>
+                        <table class="table table-borderless table-sm">
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s28a" name="ans28" value="A" onchange="pilihan(28,'A')"><label for="s28a"></label></div></td><td><label for="s28a">Pelit</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s28b" name="ans28" value="B" onchange="pilihan(28,'B')"><label for="s28b"></label></div></td><td><label for="s28b">Boros</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s28c" name="ans28" value="C" onchange="pilihan(28,'C')"><label for="s28c"></label></div></td><td><label for="s28c">Kaya</label></td></tr>
+                            <tr><td width="30"><div class="radio icheck-primary"><input type="radio" id="s28d" name="ans28" value="D" onchange="pilihan(28,'D')"><label for="s28d"></label></div></td><td><label for="s28d">Cermat</label></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 29: Peribahasa -->
+            <div class="soal-soal" id="soal-no-29" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Peribahasa yang tepat untuk menggambarkan orang yang "Menginginkan sesuatu yang mustahil didapatkan" adalah...</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s29a" name="ans29" value="A" onchange="pilihan(29,'A')"><label for="s29a"> Bagai air di daun talas.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s29b" name="ans29" value="B" onchange="pilihan(29,'B')"><label for="s29b"> Pungguk merindukan bulan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s29c" name="ans29" value="C" onchange="pilihan(29,'C')"><label for="s29c"> Tong kosong nyaring bunyinya.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s29d" name="ans29" value="D" onchange="pilihan(29,'D')"><label for="s29d"> Seperti katak dalam tempurung.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 30: Ejaan -->
+            <div class="soal-soal" id="soal-no-30" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="font-weight-bold">Manakah penulisan kalimat yang benar menurut ejaan bahasa Indonesia?</p>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s30a" name="ans30" value="A" onchange="pilihan(30,'A')"><label for="s30a"> Ibu membeli: Apel, Jeruk, dan Mangga di pasar.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s30b" name="ans30" value="B" onchange="pilihan(30,'B')"><label for="s30b"> Ibu membeli apel, jeruk, dan mangga di pasar.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s30c" name="ans30" value="C" onchange="pilihan(30,'C')"><label for="s30c"> ibu membeli Apel, Jeruk, dan Mangga di Pasar.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm"><div class="radio icheck-primary"><input type="radio" id="s30d" name="ans30" value="D" onchange="pilihan(30,'D')"><label for="s30d"> Ibu membeli apel, jeruk dan mangga, di pasar.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+          </div> <!-- End Isisoal -->
+          
+          <div class="row pl-3 pr-3 pb-1 mb-0 border-top mt-4"></div>
+          
+          <!-- Bottom Navigation (Stacked on Mobile) -->
+          <div class="row pb-0 pt-2 mt-2 btn-bawah justify-content-center"> 
+            <div class="col-12 col-md-auto text-center mb-2 mb-md-0">
+                <button class="btn btn-danger btn-round btn-navigasi shadow-sm" onClick="prevSoal()"><i class="fa fa-chevron-circle-left"></i> Sebelumnya</button>
+            </div>
+            <div class="col-12 col-md-auto text-center mb-2 mb-md-0">
+                <button class="btn btn-warning btn-round btn-navigasi text-white shadow-sm"><input type="checkbox" onClick="raguRagu()" id="c_ragu_ragu"> Ragu-ragu</button>
+            </div>
+            <div class="col-12 col-md-auto text-center">
+                <button class="btn btn-primary btn-round btn-navigasi shadow-sm" onClick="nextSoal()" id="nextSoal">Berikutnya <i class="fa fa-chevron-circle-right"></i></button>
+            </div>
+          </div>
+          
+        </div>
+        <div class="footer-text">di buat oleh herisheroes @2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Daftar Soal -->
+<div class="modal fadeIn" id="myModal">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Daftar Soal</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body text-center pb-5 pt-5">
+        <div id="nav-soal-container" class="row justify-content-center">
+            <!-- JS will populate this -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Konfirmasi Selesai -->
+<div class="modal fade" id="confirmFinishModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content text-center">
+      <div class="modal-body p-5">
+        <div class="mb-4">
+            <i class="fas fa-check-circle text-success" style="font-size: 80px;"></i>
+        </div>
+        <h3 class="mb-3">Konfirmasi Selesai</h3>
+        <p class="mb-4 text-muted">Apakah Anda yakin ingin mengakhiri tes ini? <br>Pastikan semua jawaban sudah terisi dengan benar.</p>
+        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-success px-4" onclick="hitungNilai()">Ya, Selesai</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Hasil & Rekap -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-poll"></i> Hasil Simulasi TKA 2026</h5>
+      </div>
+      <div class="modal-body p-4">
+        <!-- Result Summary -->
+        <div id="resultSummary" class="text-center mb-5">
+            <h4 class="mb-4">Nilai Akhir Anda</h4>
+            <div class="score-circle">
+                <span id="finalScore">0</span>
+            </div>
+            <p>Total Poin: <span id="totalPoints" class="font-weight-bold">0</span></p>
+            <div class="mt-4">
+                <button class="btn btn-primary px-4 mr-2 mb-2" onclick="showRecap()">Lihat Rekap Jawaban</button>
+                <button class="btn btn-secondary px-4 mb-2" onclick="location.reload()">Selesai & Keluar</button>
+            </div>
+        </div>
+
+        <!-- Recap Table (Hidden initially) -->
+        <div id="recapSection" style="display:none;">
+            <h5 class="mb-3 text-primary border-bottom pb-2">Rekapitulasi Jawaban</h5>
+            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-bordered table-striped table-hover table-rekap">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="text-center">No</th>
+                            <th width="15%" class="text-center">Status</th>
+                            <th width="10%" class="text-center">Poin</th>
+                            <th>Pembahasan & Kunci Jawaban</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recapTableBody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-secondary" onclick="hideRecap()">Kembali ke Nilai</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Timeout -->
+<div class="modal fadeIn" id="timeoutDialog" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center pb-2 pt-5">
+        <h5 class="modal-title text-danger">PERHATIAN !!</h5>
+        <p>Waktu tes sudah habis!</p>
+      </div>
+      <div class="modal-footer text-center justify-content-center">
+        <button class="btn btn-danger" onClick="hitungNilai()">Lihat Hasil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    var totalSoal = 30;
+    var currentSoal = 1;
+    var jawabanUser = {}; // Stores user answers
+    var raguUser = {};
+    var timeLeft = 3600; // 60 menit
+    var timerInterval;
+
+    // KUNCI JAWABAN & PEMBAHASAN
+    const kunciJawaban = {
+        1: 'B', 2: 'B', 3: 'B', 
+        4: { 'a': '2', 'b': '1', 'c': '2' },
+        5: 'B', 6: 'B', 
+        7: ['B', 'D'], 
+        8: 'B', 9: 'B', 10: 'A',
+        11: 'B', 12: 'C', 
+        13: { 'a': '1', 'b': '1' },
+        14: ['A', 'C'],
+        15: 'B', 16: 'C', 17: 'B', 18: 'B', 19: 'A', 20: 'B',
+        21: 'B', 
+        22: ['A', 'B', 'D'],
+        23: 'B', 24: 'B', 25: 'A', 26: 'A', 27: 'B', 28: 'B', 29: 'B', 30: 'B'
+    };
+
+    const pembahasanSoal = {
+        1: "Kura-kura setia menunggu Elang di tepi sungai setiap sore, sedangkan Elang melupakan janjinya.",
+        2: "Elang digambarkan sombong ('aku adalah burung terkuat') dan ingkar janji.",
+        3: "Menjelajahi bermakna pergi berkeliling ke berbagai tempat.",
+        4: "Elang ingkar janji (Salah), Kura-kura menolong (Benar), Elang terluka karena badai/angin (Salah).",
+        5: "Amanat utama adalah tentang kesetiaan kawan dan tidak melupakan sahabat saat sukses.",
+        6: "Paragraf 1 membahas dampak negatif plastik yang sulit terurai dan mencemari lingkungan.",
+        7: "Dampak negatif: Dikira makanan oleh hewan (B) dan menjadi mikroplastik yang masuk rantai makanan (D).",
+        8: "Mikroplastik berbahaya karena dimakan ikan, lalu ikan tersebut dimakan manusia.",
+        9: "Ringkasan mencakup sifat plastik, bahayanya bagi hewan, dan bahaya mikroplastik bagi manusia.",
+        10: "Jika plastik tidak dikurangi, laut tercemar dan hewan mati (populasi turun).",
+        11: "Sesuai pedoman 'Isi Piringku', Makanan Pokok adalah 2/3 dari setengah piring.",
+        12: "Lauk pauk terdiri dari protein hewani (Ikan, Ayam) dan nabati (Tahu, Tempe).",
+        13: "Sesuai pedoman: Porsi Sayuran = Porsi Makanan Pokok (Benar). Cuci tangan wajib (Benar).",
+        14: "Pola hidup sehat: Minum air 8 gelas (A) dan Aktivitas fisik (C). Makan daging tanpa sayur salah.",
+        15: "Tubuh membutuhkan porsi serat dan karbohidrat lebih besar sebagai sumber energi dan pencernaan.",
+        16: "Puisi 'Guruku Pelitaku' bertema penghormatan kepada guru.",
+        17: "'Cahaya' melambangkan ilmu yang menghilangkan kegelapan (kebodohan).",
+        18: "Suasana penuh rasa syukur dan haru atas jasa guru.",
+        19: "Rima yang tepat: Cahaya (a) - Asa (a).",
+        20: "Sikap terbaik adalah menghormati dan mengamalkan ilmunya.",
+        21: "Langkah 2: Tuang sabun -> Langkah 3: Gosok seluruh bagian tangan.",
+        22: "Alat/Bahan: Air mengalir, Sabun, Tisu/Lap bersih.",
+        23: "Tujuannya membersihkan kuman dan bakteri.",
+        24: "Kata kerja imperatif: Basahi, Tuangkan, Gosok.",
+        25: "Membilas bersih agar sisa sabun kimia tidak tertelan.",
+        26: "'Buah bibir' artinya bahan pembicaraan.",
+        27: "Asri bersinonim dengan indah dan sejuk (alami).",
+        28: "Lawan kata Hemat adalah Boros.",
+        29: "Menginginkan hal mustahil: Pungguk merindukan bulan.",
+        30: "Penulisan rincian buah menggunakan huruf kecil dan tanda koma sebelum 'dan'."
+    };
+
+    $(document).ready(function() {
+        generateNav();
+    });
+
+    function mulaiTes() {
+        var nama = $('#inputNama').val();
+        var sekolah = $('#inputSekolah').val();
+
+        if(nama === "" || sekolah === "") {
+            alert("Harap isi Nama dan Asal Sekolah terlebih dahulu!");
+            return;
+        }
+
+        $('#displayNama').text(nama);
+        $('#displaySekolah').text(sekolah);
+        // Mobile display
+        $('#displayNamaMobile').text(nama);
+
+        $('#login-panel').fadeOut();
+        $('#app-header').fadeIn();
+        $('#app-content').css('display', 'block');
+        setTimeout(function(){ $('#app-content').css('opacity', 1); }, 100);
+
+        startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(function() {
+            if(timeLeft > 0) {
+                timeLeft--;
+                var m = Math.floor(timeLeft / 60);
+                var s = timeLeft % 60;
+                $('#countdown').html((m<10?'0':'')+m + ':' + (s<10?'0':'')+s);
+            } else {
+                clearInterval(timerInterval);
+                $('#timeoutDialog').modal('show');
+            }
+        }, 1000);
+    }
+
+    function generateNav() {
+        var navHtml = '';
+        for(var i=1; i<=totalSoal; i++) {
+            navHtml += `
+            <div class="col-2 col-md-1 mb-2 px-1">
+                <div id="jawaban-no-${i}" class="btn btn-outline-dark btn-sm btn-block btn-lihat-soal shadow-sm" style="height:40px; position:relative; font-weight:500;" onClick="lihatSoal(${i})" data-dismiss="modal">
+                    ${i}
+                    <span id="answer${i}" class="badge badge-success d-none" style="position:absolute; top:-5px; right:-5px; font-size:8px;"><i class="fa fa-check"></i></span>
+                </div>
+            </div>`;
+        }
+        $('#nav-soal-container').html(navHtml);
+    }
+
+    function lihatSoal(no) {
+        $('.soal-soal').hide();
+        $('#soal-no-'+no).fadeIn();
+        currentSoal = no;
+        $('#noSoal').text(no);
+
+        // Update tombol navigasi
+        $('.btn-lihat-soal').removeClass('btn-primary text-white').addClass('btn-outline-dark');
+        
+        for(var i=1; i<=totalSoal; i++) {
+            var btn = $('#jawaban-no-'+i);
+            btn.removeClass('btn-primary btn-warning btn-dark text-white');
+            
+            if(raguUser[i]) {
+                btn.addClass('btn-warning text-white');
+            } else if(jawabanUser[i]) {
+                btn.addClass('btn-dark text-white');
+            } else {
+                btn.addClass('btn-outline-dark');
+            }
+        }
+
+        $('#jawaban-no-'+no).removeClass('btn-outline-dark btn-dark').addClass('btn-primary text-white');
+        $('#c_ragu_ragu').prop('checked', raguUser[no] ? true : false);
+        
+        if(currentSoal == totalSoal) {
+            $('#nextSoal').html('Selesai <i class="fa fa-check"></i>').removeClass('btn-primary').addClass('btn-success').attr('onclick', 'konfirmasiSelesai()');
+        } else {
+            $('#nextSoal').html('Berikutnya <i class="fa fa-chevron-circle-right"></i>').removeClass('btn-success').addClass('btn-primary').attr('onclick', 'nextSoal()');
+        }
+    }
+
+    function nextSoal() {
+        if(currentSoal < totalSoal) {
+            lihatSoal(currentSoal + 1);
+        }
+    }
+
+    function prevSoal() {
+        if(currentSoal > 1) {
+            lihatSoal(currentSoal - 1);
+        }
+    }
+
+    function pilihan(no, val) {
+        jawabanUser[no] = val;
+        updateStatus(no);
+    }
+
+    function pilihan2(no) {
+        var checkedValues = [];
+        $('input[name="pilihan'+no+'"]:checked').each(function() {
+            checkedValues.push($(this).val());
+        });
+        if(checkedValues.length > 0) {
+            jawabanUser[no] = checkedValues;
+        } else {
+            delete jawabanUser[no];
+        }
+        updateStatus(no);
+    }
+    
+    function pilihan3(no) {
+        if (!jawabanUser[no] || typeof jawabanUser[no] !== 'object') jawabanUser[no] = {};
+        $('input[name^="ans'+no+'"]:checked').each(function() {
+            var name = $(this).attr('name');
+            var rowKey = name.substr(name.length - 1); 
+            jawabanUser[no][rowKey] = $(this).val();
+        });
+        updateStatus(no);
+    }
+
+    function updateStatus(no) {
+        var btn = $('#jawaban-no-'+no);
+        var badge = $('#answer'+no);
+        var hasAnswer = false;
+        
+        if(jawabanUser[no]) {
+            if(Array.isArray(jawabanUser[no])) {
+                if(jawabanUser[no].length > 0) hasAnswer = true;
+            } else if(typeof jawabanUser[no] === 'object') {
+                if(Object.keys(jawabanUser[no]).length > 0) hasAnswer = true;
+            } else {
+                hasAnswer = true;
+            }
+        }
+
+        if(hasAnswer) {
+            badge.removeClass('d-none');
+            if(!raguUser[no]) {
+                btn.removeClass('btn-outline-dark').addClass('btn-dark text-white');
+            }
+        } else {
+            badge.addClass('d-none');
+            btn.removeClass('btn-dark text-white').addClass('btn-outline-dark');
+        }
+        
+        if(currentSoal == no) btn.removeClass('btn-dark btn-outline-dark').addClass('btn-primary text-white');
+    }
+
+    function raguRagu() {
+        var isRagu = $('#c_ragu_ragu').is(':checked');
+        raguUser[currentSoal] = isRagu;
+        var btn = $('#jawaban-no-'+currentSoal);
+        if(isRagu) {
+            btn.removeClass('btn-primary btn-dark').addClass('btn-warning text-white');
+        } else {
+            btn.removeClass('btn-warning text-white').addClass('btn-primary');
+        }
+    }
+
+    function changeFont(size) {
+        $('#isisoal').css('font-size', size + 'px');
+    }
+
+    function konfirmasiSelesai() {
+        $('#confirmFinishModal').modal('show');
+    }
+
+    function hitungNilai() {
+        $('#confirmFinishModal').modal('hide');
+        $('#timeoutDialog').modal('hide');
+        clearInterval(timerInterval);
+
+        let totalPoin = 0;
+        let recapHtml = '';
+
+        for (let i = 1; i <= totalSoal; i++) {
+            let key = kunciJawaban[i];
+            let userAns = jawabanUser[i];
+            let scoreSoal = 0;
+            let statusBadge = '';
+            let detailJawaban = '';
+
+            if (Array.isArray(key)) { 
+                let userArr = userAns || [];
+                let correctCount = 0;
+                let wrongCount = 0;
+
+                userArr.forEach(val => {
+                    if (key.includes(val)) {
+                        totalPoin += 5;
+                        correctCount++;
+                    } else {
+                        totalPoin -= 1;
+                        wrongCount++;
+                    }
+                });
+
+                scoreSoal = (correctCount * 5) + (wrongCount * -1);
+                if (correctCount === key.length && wrongCount === 0 && userArr.length === key.length) 
+                    statusBadge = '<span class="badge badge-success">Benar</span>';
+                else if (correctCount > 0) 
+                    statusBadge = '<span class="badge badge-warning">Sebagian</span>';
+                else 
+                    statusBadge = '<span class="badge badge-danger">Salah</span>';
+                
+                detailJawaban = `Anda: <b>${userArr.join(', ') || '-'}</b> <br>Kunci: <b>${key.join(', ')}</b>`;
+
+            } else if (typeof key === 'object') {
+                let userObj = userAns || {};
+                let subCorrect = 0;
+                let subWrong = 0;
+
+                for (let subKey in key) {
+                    if (userObj[subKey] === key[subKey]) {
+                        totalPoin += 5;
+                        subCorrect++;
+                    } else if (userObj[subKey]) {
+                        totalPoin -= 1;
+                        subWrong++;
+                    }
+                }
+                
+                scoreSoal = (subCorrect * 5) + (subWrong * -1);
+                statusBadge = subWrong === 0 && subCorrect === Object.keys(key).length ? '<span class="badge badge-success">Benar</span>' : '<span class="badge badge-warning">Parsial</span>';
+                detailJawaban = "Jawaban Tabel";
+
+            } else {
+                if (userAns === key) {
+                    totalPoin += 5;
+                    scoreSoal = 5;
+                    statusBadge = '<span class="badge badge-success">Benar</span>';
+                } else if (userAns) {
+                    totalPoin -= 1;
+                    scoreSoal = -1;
+                    statusBadge = '<span class="badge badge-danger">Salah</span>';
+                } else {
+                    statusBadge = '<span class="badge badge-secondary">Kosong</span>';
+                }
+                detailJawaban = `Anda: <b>${userAns || '-'}</b> <br> Kunci: <b>${key}</b>`;
+            }
+
+            recapHtml += `
+                <tr>
+                    <td class="text-center font-weight-bold">${i}</td>
+                    <td class="text-center">${statusBadge}</td>
+                    <td class="text-center font-weight-bold text-${scoreSoal > 0 ? 'success' : 'danger'}">${scoreSoal > 0 ? '+'+scoreSoal : scoreSoal}</td>
+                    <td>
+                        <div class="mb-1 small">${detailJawaban}</div>
+                        <div class="text-muted small border-top pt-1 mt-1">
+                            <b>Pembahasan:</b><br>
+                            ${pembahasanSoal[i] || 'Tidak ada pembahasan.'}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+        
+        let maxPossibleScore = 180; 
+        let finalScore100 = Math.round((totalPoin > 0 ? totalPoin : 0) / maxPossibleScore * 100);
+
+        $('#totalPoints').text(totalPoin);
+        $('#finalScore').text(finalScore100);
+        $('#recapTableBody').html(recapHtml);
+        $('#resultModal').modal('show');
+    }
+
+    function showRecap() {
+        $('#resultSummary').slideUp();
+        $('#recapSection').slideDown();
+    }
+
+    function hideRecap() {
+        $('#recapSection').slideUp();
+        $('#resultSummary').slideDown();
+    }
+</script>
+
+</body>
+</html>
