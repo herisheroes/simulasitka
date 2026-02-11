@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simulasi TKA Tahun 2026</title>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="https://pusmendik.kemdikbud.go.id/tka/fav/favicon-32x32.png">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <link rel="stylesheet" href="https://pusmendik.kemdikbud.go.id/tka/_assets/css/icheck-bootstrap.min.css" />
+    
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 50px; 
+        }
+
+        /* --- Login Styles --- */
+        #view-login {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #326698 0%, #1a3c5e 100%);
+        }
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        .login-logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Header Styles --- */
+        .top-header {
+            background: #326698;
+            background-image: url('https://pusmendik.kemdikbud.go.id/tka/images/bg-top.png');
+            background-size: cover;
+            height: 110px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+        }
+
+        .logo-kemdikbud {
+            height: 55px;
+            margin-right: 15px;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 30px;
+            right: 50px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+        }
+
+        .cap-icon {
+            background: #74b9ff;
+            border-radius: 4px;
+            color: #326698;
+            padding: 8px;
+            margin-left: 10px;
+            font-size: 20px;
+        }
+
+        /* --- Content Styles --- */
+        #formContent {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            min-height: 500px;
+            margin-top: 140px; /* Space for fixed header */
+        }
+
+        .soal-header {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .btn-informasi {
+            border-radius: 30px;
+            font-size: 12px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
+
+        .isi-soal-container {
+            border: 1px solid #ddd;
+            border-top: 5px solid #326698;
+            border-radius: 5px;
+            padding: 25px;
+            background: #fff;
+            min-height: 300px;
+        }
+
+        .stimulus {
+            padding-right: 20px;
+            border-right: 2px dotted #eee;
+            background: #fdfdfd;
+        }
+
+        /* --- Navigation --- */
+        .btn-navigasi {
+            min-width: 160px;
+            border-radius: 30px;
+            font-weight: 600;
+            padding: 10px 20px;
+            margin: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* --- Grid Soal Modal --- */
+        .grid-soal {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .btn-grid {
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+        
+        .btn-grid.answered { background: #343a40; color: white; border-color: #343a40; }
+        .btn-grid.current { background: #007bff; color: white; border-color: #007bff; }
+        .btn-grid.ragu { background: #ffc107; color: black; border-color: #ffc107; }
+
+        /* --- Visualisasi Data (CSS Charts & Shapes) --- */
+        .bar-chart-container {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            padding: 10px;
+            margin: 20px auto;
+            width: 80%;
+            gap: 15px;
+        }
+        .bar {
+            flex: 1;
+            background: #326698;
+            text-align: center;
+            color: #000;
+            position: relative;
+            margin: 0 5px;
+            transition: height 1s;
+        }
+        .bar span {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            font-weight: bold;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .fraction-box {
+            display: inline-block;
+            border: 2px solid #333;
+            margin: 5px;
+        }
+        .fraction-row {
+            display: flex;
+        }
+        .fraction-cell {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #999;
+        }
+        .shaded { background-color: #74b9ff; }
+
+        .shape-rect {
+            width: 150px; height: 80px; border: 2px solid #000; background: #e2e2e2; margin: 10px auto;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .shape-triangle {
+            width: 0; height: 0; 
+            border-left: 50px solid transparent; border-right: 50px solid transparent; 
+            border-bottom: 100px solid #74b9ff;
+            margin: 10px auto;
+        }
+
+        /* --- Footer --- */
+        .custom-footer {
+            text-align: center;
+            padding: 15px;
+            background: #343a40;
+            color: #aaa;
+            font-size: 0.9rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        /* --- Animations --- */
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-cool-content {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            .stimulus { border-right: none; border-bottom: 2px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px; }
+            .top-header { height: 90px; }
+            .logo-kemdikbud { height: 40px; }
+            #formContent { margin-top: 100px; padding: 15px; }
+            .user-info { display: none; }
+            .btn-navigasi { width: 100%; margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- VIEW: LOGIN -->
+<div id="view-login">
+    <div class="login-card">
+        <img src="https://pusmendik.kemdikbud.go.id/tka/images/logo-kemdikbud-71x72.png" alt="Logo" class="login-logo">
+        <h4 class="mb-4 font-weight-bold" style="color: #326698;">SIMULASI TKA<br>Tahun 2026</h4>
+        <form id="loginForm" onsubmit="event.preventDefault(); startExam();">
+            <div class="form-group text-left">
+                <label>Nama Peserta</label>
+                <input type="text" class="form-control" id="inputNama" placeholder="Masukkan Nama Lengkap" required>
+            </div>
+            <div class="form-group text-left">
+                <label>Nama Sekolah</label>
+                <input type="text" class="form-control" id="inputSekolah" placeholder="Masukkan Nama Sekolah" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" style="border-radius: 30px;">
+                MULAI UJIAN <i class="fa fa-arrow-right ml-2"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- VIEW: EXAM (Hidden by default) -->
+<div id="view-exam" style="display: none;">
+    <div class="top-header">
+        <div class="logo-container">
+            <img class="logo-kemdikbud" src="https://pusmendik.kemdikbud.go.id/tka/images/logo-kemdikbud-71x72.png" alt="Logo">
+            <div>
+                <div style="font-size: 1.2rem; font-weight: bold;">SIMULASI TKA</div>
+                <div style="font-size: 0.8rem; letter-spacing: 1px;">TAHUN 2026</div>
+            </div>
+        </div>
+        <div class="user-info">
+            <div>
+                <small id="displayNama">Peserta</small><br>
+                <strong id="displaySekolah">Sekolah</strong>
+            </div>
+            <div class="cap-icon">
+                <i class="fa fa-user"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-11 col-12">
+                <div id="formContent">
+                    <!-- Toolbar Atas -->
+                    <div class="row soal-header align-items-center">
+                        <div class="col-md-4 col-6">
+                            <span style="font-size: 18px;">Soal No.</span>
+                            <span style="font-size: 26px; font-weight: bold; color: #326698;" id="displayNoSoal">1</span>
+                        </div>
+                        <div class="col-md-8 col-6 text-right">
+                            <button class="btn btn-outline-danger btn-informasi">
+                                Sisa Waktu : <strong id="timer">00:00:00</strong>
+                            </button>
+                            <button class="btn btn-primary btn-informasi" data-toggle="modal" data-target="#modalDaftarSoal">
+                                Daftar Soal <i class="fa fa-th"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Font & Mapel -->
+                    <div class="row mb-3">
+                        <div class="col-6 font-selector">
+                            <small>Ukuran Huruf:</small>
+                            <span class="ml-2 btn btn-sm btn-light" onclick="setFontSize(14)">A</span>
+                            <span class="ml-1 btn btn-sm btn-light" onclick="setFontSize(18)">A</span>
+                            <span class="ml-1 btn btn-sm btn-light" onclick="setFontSize(24)">A</span>
+                        </div>
+                        <div class="col-6 text-right font-weight-bold" style="color:#326698;">
+                            Matematika - SD
+                        </div>
+                    </div>
+
+                    <!-- Area Soal -->
+                    <div class="isi-soal-container" id="soalContainer">
+                        <div class="row">
+                            <div class="col-md-6 stimulus" id="stimulusArea"></div>
+                            <div class="col-md-6" id="questionArea"></div>
+                        </div>
+                    </div>
+
+                    <!-- Navigasi -->
+                    <div class="row mt-4 pt-3 border-top justify-content-center">
+                        <div class="col-md-3 text-center order-2 order-md-1">
+                            <button class="btn btn-danger btn-navigasi" id="btnPrev" onclick="prevSoal()">
+                                <i class="fa fa-chevron-left"></i> Sebelumnya
+                            </button>
+                        </div>
+                        <div class="col-md-3 text-center order-1 order-md-2 mb-2">
+                            <div class="btn btn-warning btn-navigasi text-white">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="checkRagu" onclick="toggleRagu()">
+                                    <label class="custom-control-label" for="checkRagu">RAGU-RAGU</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center order-3 order-md-3">
+                            <button class="btn btn-primary btn-navigasi" id="btnNext" onclick="nextSoal()">
+                                Berikutnya <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VIEW: RESULT (Hidden by default) -->
+<div id="view-result" style="display: none; padding-top: 150px;">
+    <div class="container mb-5">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white text-center">
+                <h3><i class="fa fa-trophy"></i> HASIL SIMULASI TKA 2026</h3>
+            </div>
+            <div class="card-body text-center">
+                <h5 id="resNama">Nama Peserta</h5>
+                <p id="resSekolah" class="text-muted">Nama Sekolah</p>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <h3>Total Poin</h3>
+                            <h1 id="scoreTotal" style="font-size: 4rem; font-weight: bold;">0</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-warning">
+                            <h3>Nilai Rata-rata (0-100)</h3>
+                            <h1 id="scoreAvg" style="font-size: 4rem; font-weight: bold;">0</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="btn btn-primary mr-2" onclick="showDetail()">Lihat Rekap Jawaban</button>
+                    <button class="btn btn-secondary" onclick="location.reload()">Kembali ke Menu Awal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Detail -->
+        <div id="detailSection" class="mt-4" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5>Rekapitulasi Jawaban & Pembahasan</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Soal (Ringkasan)</th>
+                                    <th>Jawaban Anda</th>
+                                    <th>Kunci Jawaban</th>
+                                    <th>Poin</th>
+                                    <th>Pembahasan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultTableBody">
+                                <!-- Diisi JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="custom-footer">
+    Dibuat oleh herisheroes @2026
+</div>
+
+<!-- MODAL DAFTAR SOAL -->
+<div class="modal fade" id="modalDaftarSoal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Daftar Soal</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-soal" id="soalGrid"></div>
+                <div class="mt-3 small text-muted">
+                    <span class="badge badge-primary mr-1">&nbsp;</span> Sedang dikerjakan
+                    <span class="badge badge-dark mr-1 ml-2">&nbsp;</span> Sudah dijawab
+                    <span class="badge badge-warning mr-1 ml-2">&nbsp;</span> Ragu-ragu
+                    <span class="badge badge-light border mr-1 ml-2">&nbsp;</span> Belum dijawab
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL KONFIRMASI SELESAI (COOL EFFECT) -->
+<div class="modal fade" id="modalSelesai" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-cool-content border-0 shadow-lg">
+            <div class="modal-header bg-success text-white border-0">
+                <h5 class="modal-title"><i class="fa fa-check-circle"></i> Konfirmasi Selesai</h5>
+            </div>
+            <div class="modal-body text-center p-5">
+                <div class="mb-4">
+                    <i class="fa fa-flag-checkered text-success" style="font-size: 80px;"></i>
+                </div>
+                <h4>Sudah yakin ingin menyelesaikan ujian?</h4>
+                <p class="text-muted">Pastikan Anda telah memeriksa kembali jawaban yang masih ragu-ragu.</p>
+                <div class="mt-4 row">
+                    <div class="col-6">
+                        <button class="btn btn-outline-secondary btn-block btn-lg" data-dismiss="modal">Batal</button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success btn-block btn-lg shadow" onclick="calculateAndFinish()">YA, SELESAI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // --- 1. DATA SOAL (30 Soal based on Kisi-Kisi) ---
+    // Gambar dibuat dengan HTML/CSS string
+    const bankSoal = [
+        // BILANGAN (9 Soal)
+        {
+            id: 1, type: "PG",
+            stimulus: `<p>Perhatikan gambar pecahan berikut!</p>
+                       <div class="fraction-box"><div class="fraction-row"><div class="fraction-cell shaded"></div><div class="fraction-cell"></div></div></div>
+                       <p>Gambar A</p>
+                       <div class="fraction-box"><div class="fraction-row"><div class="fraction-cell shaded"></div><div class="fraction-cell shaded"></div></div><div class="fraction-row"><div class="fraction-cell"></div><div class="fraction-cell"></div></div></div>
+                       <p>Gambar B</p>`,
+            question: "Manakah pernyataan yang benar mengenai kedua gambar tersebut?",
+            options: [
+                {val: 'A', label: "Gambar A menunjukkan 1/3 dan Gambar B menunjukkan 2/4"},
+                {val: 'B', label: "Gambar A senilai dengan Gambar B (1/2 = 2/4)"},
+                {val: 'C', label: "Gambar A lebih besar dari Gambar B"},
+                {val: 'D', label: "Gambar B menunjukkan 3/4"}
+            ],
+            key: 'B',
+            discuss: "Gambar A mengarsir 1 dari 2 kotak (1/2). Gambar B mengarsir 2 dari 4 kotak (2/4). 1/2 senilai dengan 2/4."
+        },
+        {
+            id: 2, type: "PG",
+            stimulus: "Ibu membeli 3/4 kg gula, 1/2 kg tepung, dan 0.8 kg mentega.",
+            question: "Urutan belanjaan Ibu dari yang paling berat adalah...",
+            options: [
+                {val: 'A', label: "Gula, Tepung, Mentega"},
+                {val: 'B', label: "Mentega, Gula, Tepung"},
+                {val: 'C', label: "Tepung, Mentega, Gula"},
+                {val: 'D', label: "Mentega, Tepung, Gula"}
+            ],
+            key: 'B',
+            discuss: "Mentega 0.8kg. Gula 3/4 = 0.75kg. Tepung 1/2 = 0.5kg. Urutan: Mentega, Gula, Tepung."
+        },
+        {
+            id: 3, type: "MATRIX",
+            stimulus: "Diketahui pecahan: 25%, 0.4, dan 1/5.",
+            question: "Tentukan Benar atau Salah pernyataan berikut!",
+            rows: [
+                {id: 'r1', text: "25% senilai dengan 1/4"},
+                {id: 'r2', text: "0.4 lebih kecil dari 1/5"},
+                {id: 'r3', text: "1/5 jika dijadikan desimal adalah 0.2"}
+            ],
+            key: {r1: 'B', r2: 'S', r3: 'B'}, // B=Benar, S=Salah
+            discuss: "25%=1/4 (Benar). 0.4 > 0.2 (1/5), jadi pernyataan kedua Salah. 1/5 = 0.2 (Benar)."
+        },
+        {
+            id: 4, type: "PG",
+            stimulus: "Pak Budi memanen 1.250 kg jagung. Jagung tersebut dimasukkan ke dalam 5 karung sama rata.",
+            question: "Berapa kg isi setiap karung?",
+            options: [{val: 'A', label: "200 kg"}, {val: 'B', label: "225 kg"}, {val: 'C', label: "250 kg"}, {val: 'D', label: "300 kg"}],
+            key: 'C',
+            discuss: "1.250 / 5 = 250 kg."
+        },
+        {
+            id: 5, type: "PG",
+            stimulus: "Di toko, harga 1 buku tulis Rp3.500 dan 1 pensil Rp2.000. Ani membeli 4 buku dan 3 pensil.",
+            question: "Berapa total belanjaan Ani?",
+            options: [{val: 'A', label: "Rp18.000"}, {val: 'B', label: "Rp20.000"}, {val: 'C', label: "Rp22.000"}, {val: 'D', label: "Rp25.000"}],
+            key: 'B',
+            discuss: "(4 x 3.500) + (3 x 2.000) = 14.000 + 6.000 = Rp20.000."
+        },
+        {
+            id: 6, type: "PG",
+            stimulus: "Hasil dari 3/4 + 0.5 - 25% adalah...",
+            question: "Hitunglah hasil operasi tersebut!",
+            options: [{val: 'A', label: "0.5"}, {val: 'B', label: "1.0"}, {val: 'C', label: "1.25"}, {val: 'D', label: "0.75"}],
+            key: 'B',
+            discuss: "3/4 = 0.75. 0.5 = 0.50. 25% = 0.25. Jadi 0.75 + 0.50 - 0.25 = 1.0."
+        },
+        {
+            id: 7, type: "CHECKBOX",
+            stimulus: "Ibu memiliki 2.5 liter minyak goreng. Digunakan menggoreng 1/2 liter, lalu tumpah 0.25 liter.",
+            question: "Pilih pernyataan yang benar! (Jawaban bisa lebih dari satu)",
+            options: [
+                {val: 'A', label: "Minyak yang digunakan 0.5 liter"},
+                {val: 'B', label: "Sisa minyak adalah 1.75 liter"},
+                {val: 'C', label: "Minyak yang tumpah setara 1/4 liter"}
+            ],
+            key: ['A', 'B', 'C'],
+            discuss: "Semua pernyataan benar. Sisa = 2.5 - 0.5 - 0.25 = 1.75."
+        },
+        {
+            id: 8, type: "PG",
+            stimulus: "Lampu A menyala setiap 4 detik. Lampu B menyala setiap 6 detik.",
+            question: "Pada detik ke berapa kedua lampu menyala bersamaan untuk pertama kalinya?",
+            options: [{val: 'A', label: "10"}, {val: 'B', label: "12"}, {val: 'C', label: "24"}, {val: 'D', label: "16"}],
+            key: 'B',
+            discuss: "KPK dari 4 dan 6 adalah 12."
+        },
+        {
+            id: 9, type: "PG",
+            stimulus: "Bu Guru memiliki 24 permen coklat dan 36 permen stroberi. Akan dibagikan ke murid dengan jumlah sama rata.",
+            question: "Berapa jumlah murid terbanyak yang bisa menerima permen?",
+            options: [{val: 'A', label: "6"}, {val: 'B', label: "8"}, {val: 'C', label: "12"}, {val: 'D', label: "4"}],
+            key: 'C',
+            discuss: "FPB dari 24 dan 36 adalah 12."
+        },
+
+        // GEOMETRI (16 Soal)
+        {
+            id: 10, type: "PG",
+            stimulus: `<div class="shape-rect">Persegi Panjang</div>`,
+            question: "Benda di sekitarmu yang memiliki bentuk permukaan seperti gambar di samping adalah...",
+            options: [{val: 'A', label: "Bola"}, {val: 'B', label: "Permukaan Meja"}, {val: 'C', label: "Topi Ulang Tahun"}, {val: 'D', label: "Kaleng Susu"}],
+            key: 'B',
+            discuss: "Permukaan meja umumnya berbentuk persegi panjang."
+        },
+        {
+            id: 11, type: "CHECKBOX",
+            stimulus: "Sifat-sifat bangun datar.",
+            question: "Pilih sifat yang dimiliki PERSEGI!",
+            options: [
+                {val: 'A', label: "Memiliki 4 sisi sama panjang"},
+                {val: 'B', label: "Memiliki 4 sudut siku-siku"},
+                {val: 'C', label: "Memiliki hanya sepasang sisi sejajar"}
+            ],
+            key: ['A', 'B'],
+            discuss: "Persegi memiliki 4 sisi sama panjang dan 4 sudut siku-siku."
+        },
+        {
+            id: 12, type: "PG",
+            stimulus: "Sebuah kubus memiliki rusuk.",
+            question: "Jumlah rusuk pada bangun ruang kubus adalah...",
+            options: [{val: 'A', label: "8"}, {val: 'B', label: "10"}, {val: 'C', label: "12"}, {val: 'D', label: "6"}],
+            key: 'C',
+            discuss: "Kubus memiliki 12 rusuk."
+        },
+        {
+            id: 13, type: "PG",
+            stimulus: "Panjang pensil Andi diukur dengan penggaris menunjukkan angka 15 cm.",
+            question: "Panjang pensil tersebut jika diubah ke milimeter adalah...",
+            options: [{val: 'A', label: "1.5 mm"}, {val: 'B', label: "150 mm"}, {val: 'C', label: "1500 mm"}, {val: 'D', label: "0.15 mm"}],
+            key: 'B',
+            discuss: "1 cm = 10 mm. 15 cm = 150 mm."
+        },
+        {
+            id: 14, type: "PG",
+            stimulus: "Jarak rumah ke sekolah 2 km. Andi sudah berjalan sejauh 1.200 meter.",
+            question: "Berapa meter lagi Andi sampai ke sekolah?",
+            options: [{val: 'A', label: "800 m"}, {val: 'B', label: "1.000 m"}, {val: 'C', label: "1.200 m"}, {val: 'D', label: "200 m"}],
+            key: 'A',
+            discuss: "2 km = 2.000 m. Sisa = 2.000 - 1.200 = 800 m."
+        },
+        {
+            id: 15, type: "PG",
+            stimulus: `<div class="shape-rect" style="width:100px; height:100px">Kubus</div><p>Volume kubus dengan sisi 10 cm.</p>`,
+            question: "Hitung volumenya!",
+            options: [{val: 'A', label: "100 cm³"}, {val: 'B', label: "1.000 cm³"}, {val: 'C', label: "600 cm³"}, {val: 'D', label: "30 cm³"}],
+            key: 'B',
+            discuss: "Volume = s x s x s = 10 x 10 x 10 = 1.000."
+        },
+        {
+            id: 16, type: "PG",
+            stimulus: "Ibu membeli 2 liter susu cair.",
+            question: "2 liter sama dengan berapa mililiter?",
+            options: [{val: 'A', label: "200 ml"}, {val: 'B', label: "2.000 ml"}, {val: 'C', label: "20.000 ml"}, {val: 'D', label: "20 ml"}],
+            key: 'B',
+            discuss: "1 liter = 1.000 ml."
+        },
+        {
+            id: 17, type: "PG",
+            stimulus: "Berat badan adik 8 kg.",
+            question: "Berat adik dalam ons (hg) adalah...",
+            options: [{val: 'A', label: "80 ons"}, {val: 'B', label: "800 ons"}, {val: 'C', label: "8 ons"}, {val: 'D', label: "0.8 ons"}],
+            key: 'A',
+            discuss: "1 kg = 10 ons. 8 kg = 80 ons."
+        },
+        {
+            id: 18, type: "PG",
+            stimulus: "Ibu membeli 500 gram gula dan 1 kg beras.",
+            question: "Total berat belanjaan Ibu dalam gram adalah...",
+            options: [{val: 'A', label: "600 gram"}, {val: 'B', label: "1.000 gram"}, {val: 'C', label: "1.500 gram"}, {val: 'D', label: "15.000 gram"}],
+            key: 'C',
+            discuss: "1 kg = 1.000 gram. Total = 500 + 1.000 = 1.500 gram."
+        },
+        {
+            id: 19, type: "PG",
+            stimulus: "Sekarang pukul 08.00. 3 jam kemudian pukul berapa?",
+            question: "Tentukan waktunya!",
+            options: [{val: 'A', label: "10.00"}, {val: 'B', label: "11.00"}, {val: 'C', label: "12.00"}, {val: 'D', label: "09.00"}],
+            key: 'B',
+            discuss: "08.00 + 3 jam = 11.00."
+        },
+        {
+            id: 20, type: "PG",
+            stimulus: "Ayah bekerja selama 2 tahun.",
+            question: "Berapa bulan Ayah bekerja?",
+            options: [{val: 'A', label: "12 bulan"}, {val: 'B', label: "20 bulan"}, {val: 'C', label: "24 bulan"}, {val: 'D', label: "30 bulan"}],
+            key: 'C',
+            discuss: "1 tahun = 12 bulan. 2 x 12 = 24 bulan."
+        },
+        {
+            id: 21, type: "PG",
+            stimulus: "Sebuah mobil melaju dengan kecepatan 60 km/jam.",
+            question: "Berapa jarak yang ditempuh dalam 2 jam?",
+            options: [{val: 'A', label: "30 km"}, {val: 'B', label: "100 km"}, {val: 'C', label: "120 km"}, {val: 'D', label: "150 km"}],
+            key: 'C',
+            discuss: "Jarak = Kecepatan x Waktu = 60 x 2 = 120 km."
+        },
+        {
+            id: 22, type: "PG",
+            stimulus: `<div class="shape-rect" style="width:200px; height:100px; background:transparent;">P = 10cm, L = 5cm</div>`,
+            question: "Hitunglah keliling persegi panjang di atas!",
+            options: [{val: 'A', label: "15 cm"}, {val: 'B', label: "30 cm"}, {val: 'C', label: "50 cm"}, {val: 'D', label: "25 cm"}],
+            key: 'B',
+            discuss: "Keliling = 2 x (P + L) = 2 x (10+5) = 30 cm."
+        },
+        {
+            id: 23, type: "PG",
+            stimulus: "Sebuah sawah berbentuk persegi dengan sisi 20 meter.",
+            question: "Luas sawah tersebut adalah...",
+            options: [{val: 'A', label: "40 m²"}, {val: 'B', label: "80 m²"}, {val: 'C', label: "400 m²"}, {val: 'D', label: "200 m²"}],
+            key: 'C',
+            discuss: "Luas Persegi = S x S = 20 x 20 = 400 m²."
+        },
+        {
+            id: 24, type: "PG",
+            stimulus: "Sebuah balok memiliki P=5cm, L=3cm, T=2cm.",
+            question: "Volume balok tersebut adalah...",
+            options: [{val: 'A', label: "10 cm³"}, {val: 'B', label: "30 cm³"}, {val: 'C', label: "15 cm³"}, {val: 'D', label: "25 cm³"}],
+            key: 'B',
+            discuss: "Volume = P x L x T = 5 x 3 x 2 = 30 cm³."
+        },
+        {
+            id: 25, type: "PG",
+            stimulus: `<div class="text-center" style="font-size:40px; font-weight:bold;">L</div>`,
+            question: "Sudut yang terbentuk pada huruf L kapital adalah sudut...",
+            options: [{val: 'A', label: "Lancip"}, {val: 'B', label: "Tumpul"}, {val: 'C', label: "Siku-siku"}, {val: 'D', label: "Lurus"}],
+            key: 'C',
+            discuss: "Huruf L membentuk sudut 90 derajat (siku-siku)."
+        },
+
+        // DATA (5 Soal)
+        {
+            id: 26, type: "PG",
+            stimulus: `
+                <div class="bar-chart-container">
+                    <div class="bar" style="height: 40%"><span>4</span><div class="bar-label">Apel</div></div>
+                    <div class="bar" style="height: 80%"><span>8</span><div class="bar-label">Jeruk</div></div>
+                    <div class="bar" style="height: 60%"><span>6</span><div class="bar-label">Mangga</div></div>
+                </div>
+            `,
+            question: "Berdasarkan diagram batang di atas, buah apa yang paling banyak disukai?",
+            options: [{val: 'A', label: "Apel"}, {val: 'B', label: "Jeruk"}, {val: 'C', label: "Mangga"}, {val: 'D', label: "Semua sama"}],
+            key: 'B',
+            discuss: "Batang tertinggi adalah Jeruk (8 siswa)."
+        },
+        {
+            id: 27, type: "PG",
+            stimulus: "Data nilai ulangan: 7, 8, 9, 7, 8, 8, 10.",
+            question: "Berapa banyak siswa yang mendapat nilai 8?",
+            options: [{val: 'A', label: "2"}, {val: 'B', label: "3"}, {val: 'C', label: "4"}, {val: 'D', label: "1"}],
+            key: 'B',
+            discuss: "Nilai 8 muncul 3 kali."
+        },
+        {
+            id: 28, type: "PG",
+            stimulus: `
+                <table class="table table-bordered table-sm text-center">
+                    <tr><th>Hobi</th><th>Jumlah Siswa</th></tr>
+                    <tr><td>Membaca</td><td>10</td></tr>
+                    <tr><td>Menari</td><td>5</td></tr>
+                    <tr><td>Sepak Bola</td><td>15</td></tr>
+                </table>
+            `,
+            question: "Berapa selisih siswa yang hobi Sepak Bola dan Menari?",
+            options: [{val: 'A', label: "5"}, {val: 'B', label: "10"}, {val: 'C', label: "15"}, {val: 'D', label: "20"}],
+            key: 'B',
+            discuss: "Sepak Bola (15) - Menari (5) = 10."
+        },
+        {
+            id: 29, type: "CHECKBOX",
+            stimulus: "Data Panen: Senin (10kg), Selasa (15kg), Rabu (10kg).",
+            question: "Pilih pernyataan yang benar!",
+            options: [
+                {val: 'A', label: "Panen hari Selasa paling banyak"},
+                {val: 'B', label: "Panen hari Senin sama dengan hari Rabu"},
+                {val: 'C', label: "Total panen 3 hari adalah 40kg"}
+            ],
+            key: ['A', 'B'],
+            discuss: "A Benar (15kg). B Benar (10kg=10kg). C Salah (Total 35kg)."
+        },
+        {
+            id: 30, type: "PG",
+            stimulus: "Rata-rata penjualan buku selama 3 hari adalah 10 buku. Hari pertama 8, hari kedua 10.",
+            question: "Berapa penjualan hari ketiga?",
+            options: [{val: 'A', label: "10"}, {val: 'B', label: "12"}, {val: 'C', label: "8"}, {val: 'D', label: "14"}],
+            key: 'B',
+            discuss: "Total = 3 x 10 = 30. Hari 3 = 30 - 8 - 10 = 12."
+        }
+    ];
+
+    // --- 2. LOGIC VARIABLES ---
+    let currentIndex = 0;
+    let userAnswers = {}; // { 1: 'A', 2: ['A','B'] ... }
+    let raguStatus = {};
+    let timeRemaining = 5400; // 90 menit
+    let timerInterval;
+    let peserta = { nama: "", sekolah: "" };
+
+    // --- 3. LOGIN & INIT ---
+    function startExam() {
+        const nama = $("#inputNama").val();
+        const sekolah = $("#inputSekolah").val();
+
+        if(nama && sekolah) {
+            peserta.nama = nama;
+            peserta.sekolah = sekolah;
+
+            $("#displayNama").text(nama);
+            $("#displaySekolah").text(sekolah);
+
+            $("#view-login").fadeOut(500, function() {
+                $("body").css("padding-top", "130px");
+                $("#view-exam").fadeIn(500);
+                renderGrid();
+                loadSoal(0);
+                startTimer();
+            });
+        } else {
+            alert("Harap isi semua data!");
+        }
+    }
+
+    // --- 4. NAVIGATION & DISPLAY ---
+    function loadSoal(index) {
+        currentIndex = index;
+        const soal = bankSoal[index];
+
+        $("#displayNoSoal").text(soal.id);
+        $("#stimulusArea").html(soal.stimulus);
+        $("#questionArea").html("");
+
+        let html = `<h5>${soal.question}</h5><hr>`;
+
+        if (soal.type === "PG") {
+            soal.options.forEach(opt => {
+                const checked = userAnswers[soal.id] === opt.val ? 'checked' : '';
+                const inputId = `pg_${soal.id}_${opt.val}`;
+                html += `
+                    <div class="card mb-2" onclick="saveAnswer('${soal.id}', '${opt.val}')" style="cursor:pointer">
+                        <div class="card-body p-2 d-flex align-items-center">
+                            <div class="radio icheck-primary mr-3">
+                                <input type="radio" id="${inputId}" name="pg_${soal.id}" value="${opt.val}" ${checked}>
+                                <label for="${inputId}"></label>
+                            </div>
+                            <div>${opt.label}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else if (soal.type === "CHECKBOX") {
+            soal.options.forEach(opt => {
+                const currentArr = userAnswers[soal.id] || [];
+                const checked = currentArr.includes(opt.val) ? 'checked' : '';
+                const inputId = `chk_${soal.id}_${opt.val}`;
+                html += `
+                    <div class="card mb-2">
+                        <div class="card-body p-2">
+                            <div class="checkbox icheck-primary">
+                                <input type="checkbox" id="${inputId}" onchange="saveAnswerCheckbox('${soal.id}', '${opt.val}')" ${checked}>
+                                <label for="${inputId}">${opt.label}</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else if (soal.type === "MATRIX") {
+            html += `<table class="table table-bordered text-center table-sm">
+                        <thead class="thead-light"><tr><th>Pernyataan</th><th width="60">Benar</th><th width="60">Salah</th></tr></thead>
+                        <tbody>`;
+            soal.rows.forEach(row => {
+                const saved = (userAnswers[soal.id] || {})[row.id];
+                const inputName = `mtx_${soal.id}_${row.id}`;
+                html += `
+                    <tr>
+                        <td class="text-left">${row.text}</td>
+                        <td>
+                            <div class="radio icheck-primary d-inline">
+                                <input type="radio" id="${inputName}_B" name="${inputName}" onclick="saveAnswerMatrix('${soal.id}', '${row.id}', 'B')" ${saved==='B'?'checked':''}>
+                                <label for="${inputName}_B"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="radio icheck-primary d-inline">
+                                <input type="radio" id="${inputName}_S" name="${inputName}" onclick="saveAnswerMatrix('${soal.id}', '${row.id}', 'S')" ${saved==='S'?'checked':''}>
+                                <label for="${inputName}_S"></label>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+        }
+
+        $("#questionArea").html(html);
+
+        // Update Buttons
+        $("#btnPrev").prop('disabled', index === 0);
+        if (index === bankSoal.length - 1) {
+            $("#btnNext").html('SELESAI <i class="fa fa-flag-checkered ml-2"></i>').removeClass('btn-primary').addClass('btn-success');
+        } else {
+            $("#btnNext").html('Berikutnya <i class="fa fa-chevron-right ml-2"></i>').removeClass('btn-success').addClass('btn-primary');
+        }
+
+        // Ragu status
+        $("#checkRagu").prop('checked', raguStatus[soal.id] || false);
+        updateGridUI();
+    }
+
+    function renderGrid() {
+        let html = '';
+        bankSoal.forEach((s, i) => {
+            html += `<div class="btn-grid" id="grid_btn_${s.id}" onclick="goToSoal(${i})">${s.id}</div>`;
+        });
+        $("#soalGrid").html(html);
+    }
+
+    function updateGridUI() {
+        bankSoal.forEach(s => {
+            const btn = $(`#grid_btn_${s.id}`);
+            btn.removeClass('current ragu answered');
+
+            if (userAnswers[s.id]) btn.addClass('answered');
+            if (raguStatus[s.id]) btn.addClass('ragu');
+            if (bankSoal[currentIndex].id === s.id) btn.addClass('current');
+        });
+    }
+
+    function goToSoal(i) {
+        loadSoal(i);
+        $('#modalDaftarSoal').modal('hide');
+    }
+
+    function nextSoal() {
+        if (currentIndex < bankSoal.length - 1) {
+            loadSoal(currentIndex + 1);
+        } else {
+            $('#modalSelesai').modal('show');
+        }
+    }
+
+    function prevSoal() {
+        if (currentIndex > 0) loadSoal(currentIndex - 1);
+    }
+
+    // --- 5. ANSWER HANDLING ---
+    function saveAnswer(soalId, val) {
+        userAnswers[soalId] = val;
+        // Visually check the radio button (since onclick is on parent div)
+        $(`#pg_${soalId}_${val}`).prop('checked', true);
+        updateGridUI();
+    }
+
+    function saveAnswerCheckbox(soalId, val) {
+        if (!userAnswers[soalId]) userAnswers[soalId] = [];
+        const idx = userAnswers[soalId].indexOf(val);
+        if (idx > -1) userAnswers[soalId].splice(idx, 1);
+        else userAnswers[soalId].push(val);
+        if (userAnswers[soalId].length === 0) delete userAnswers[soalId];
+        updateGridUI();
+    }
+
+    function saveAnswerMatrix(soalId, rowId, val) {
+        if (!userAnswers[soalId]) userAnswers[soalId] = {};
+        userAnswers[soalId][rowId] = val;
+        updateGridUI();
+    }
+
+    function toggleRagu() {
+        const id = bankSoal[currentIndex].id;
+        raguStatus[id] = $("#checkRagu").is(':checked');
+        updateGridUI();
+    }
+
+    // --- 6. SCORING & FINISH ---
+    function calculateAndFinish() {
+        clearInterval(timerInterval);
+        $('#modalSelesai').modal('hide');
+        $("body").css("padding-top", "50px");
+
+        let totalScore = 0;
+        let maxScore = 0;
+        let detailHtml = '';
+
+        bankSoal.forEach(soal => {
+            let soalScore = 0;
+            let soalMax = 0;
+            let userAnsDisplay = '-';
+            let keyDisplay = '-';
+            
+            // Logic Scoring: Benar +5, Salah -1 (per item)
+            
+            if (soal.type === "PG") {
+                soalMax = 5;
+                const ans = userAnswers[soal.id];
+                userAnsDisplay = ans || '(Kosong)';
+                keyDisplay = soal.key;
+
+                if (ans === soal.key) soalScore = 5;
+                else if (ans) soalScore = -1;
+                else soalScore = 0; // Kosong = 0 (biasanya) atau mau -1? Asumsi kosong = 0
+
+            } else if (soal.type === "CHECKBOX") {
+                // Checkbox: Check per item. If Correctly Checked +5, Incorrectly Checked -1.
+                // We simplify: If Answer Array Matches Key Array Exactly -> +5, Else -1? 
+                // Prompt: "dihitung tiap jawabanya". 
+                // Method: Compare User Set vs Key Set.
+                
+                const userArr = userAnswers[soal.id] || [];
+                const keyArr = soal.key;
+                userAnsDisplay = userArr.join(', ');
+                keyDisplay = keyArr.join(', ');
+
+                // Strategi: Tiap opsi Benar yang dipilih +5. Tiap opsi Salah yang dipilih -1.
+                // Misal kunci A,B. User pilih A,C.
+                // A (Benar dipilih) = +5.
+                // B (Benar tapi tidak dipilih) = 0.
+                // C (Salah tapi dipilih) = -1.
+                // Score = 4.
+                
+                soal.options.forEach(opt => {
+                    const isCorrect = keyArr.includes(opt.val);
+                    const isChecked = userArr.includes(opt.val);
+                    
+                    if (isCorrect) soalMax += 5; // Potential max
+                    
+                    if (isChecked) {
+                        if (isCorrect) soalScore += 5;
+                        else soalScore -= 1;
+                    }
+                });
+                
+            } else if (soal.type === "MATRIX") {
+                const userObj = userAnswers[soal.id] || {};
+                userAnsDisplay = "Lihat Detail";
+                keyDisplay = "Lihat Pembahasan";
+
+                soal.rows.forEach(row => {
+                    soalMax += 5;
+                    const uVal = userObj[row.id];
+                    const kVal = soal.key[row.id];
+                    
+                    if (uVal) {
+                        if (uVal === kVal) soalScore += 5;
+                        else soalScore -= 1;
+                    }
+                });
+            }
+
+            totalScore += soalScore;
+            maxScore += soalMax;
+
+            // Generate Recap Row
+            detailHtml += `
+                <tr>
+                    <td>${soal.id}</td>
+                    <td>${soal.question.substring(0, 50)}...</td>
+                    <td class="${soalScore > 0 ? 'text-success font-weight-bold' : 'text-danger'}">${userAnsDisplay}</td>
+                    <td>${keyDisplay}</td>
+                    <td>${soalScore}</td>
+                    <td>${soal.discuss}</td>
+                </tr>
+            `;
+        });
+
+        // Hitung Rata-rata (Scale 0-100)
+        // Average logic: (Total Score / Max Possible Score) * 100
+        let avg = 0;
+        if(maxScore > 0) avg = Math.round((totalScore / maxScore) * 100);
+        if(avg < 0) avg = 0; // Prevent negative average display
+
+        // Render Result View
+        $("#resNama").text(peserta.nama);
+        $("#resSekolah").text(peserta.sekolah);
+        $("#scoreTotal").text(totalScore);
+        $("#scoreAvg").text(avg);
+        $("#resultTableBody").html(detailHtml);
+
+        $("#view-exam").fadeOut(500, function() {
+            $("#view-result").fadeIn(500);
+        });
+    }
+
+    function showDetail() {
+        $("#detailSection").slideToggle();
+    }
+
+    // --- 7. UTILS ---
+    function setFontSize(size) {
+        $("#soalContainer").css("font-size", size + "px");
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            if (timeRemaining <= 0) {
+                calculateAndFinish();
+            }
+            const h = Math.floor(timeRemaining / 3600);
+            const m = Math.floor((timeRemaining % 3600) / 60);
+            const s = timeRemaining % 60;
+            $("#timer").text(`${pad(h)}:${pad(m)}:${pad(s)}`);
+        }, 1000);
+    }
+    function pad(n) { return n < 10 ? '0'+n : n; }
+
+</script>
+</body>
+</html>
