@@ -37,10 +37,6 @@
             max-width: 450px;
             text-align: center;
         }
-        .login-logo {
-            width: 80px;
-            margin-bottom: 20px;
-        }
 
         /* --- Header Styles --- */
         .top-header {
@@ -49,219 +45,111 @@
             background-size: cover;
             height: 110px;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-            color: white;
+            top: 0; left: 0; right: 0;
+            z-index: 1030; color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            padding: 15px 30px;
-        }
-
-        .logo-kemdikbud {
-            height: 55px;
-            margin-right: 15px;
-        }
-
-        .user-info {
-            position: absolute;
-            top: 30px;
-            right: 50px;
-            text-align: right;
-            display: flex;
-            align-items: center;
-        }
-
-        .cap-icon {
-            background: #74b9ff;
-            border-radius: 4px;
-            color: #326698;
-            padding: 8px;
-            margin-left: 10px;
-            font-size: 20px;
-        }
+        .logo-container { display: flex; align-items: center; padding: 15px 30px; }
+        .logo-kemdikbud { height: 55px; margin-right: 15px; }
+        .user-info { position: absolute; top: 30px; right: 50px; text-align: right; display: flex; align-items: center; }
+        .cap-icon { background: #74b9ff; border-radius: 4px; color: #326698; padding: 8px; margin-left: 10px; font-size: 20px; }
 
         /* --- Content Styles --- */
         #formContent {
-            background: #fff;
-            border-radius: 10px;
+            background: #fff; border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            padding: 30px;
-            min-height: 500px;
-            margin-top: 140px; /* Space for fixed header */
+            padding: 30px; min-height: 500px; margin-top: 140px; 
         }
-
-        .soal-header {
-            border-bottom: 1px solid #eee;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-        }
-
-        .btn-informasi {
-            border-radius: 30px;
-            font-size: 12px;
-            margin-left: 5px;
-            margin-bottom: 5px;
-        }
-
+        .soal-header { border-bottom: 1px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .btn-informasi { border-radius: 30px; font-size: 12px; margin-left: 5px; margin-bottom: 5px; }
         .isi-soal-container {
-            border: 1px solid #ddd;
-            border-top: 5px solid #326698;
-            border-radius: 5px;
-            padding: 25px;
-            background: #fff;
-            min-height: 300px;
+            border: 1px solid #ddd; border-top: 5px solid #326698;
+            border-radius: 5px; padding: 25px; background: #fff; min-height: 300px;
         }
+        .stimulus { padding-right: 20px; border-right: 2px dotted #eee; background: #fdfdfd; }
 
-        .stimulus {
-            padding-right: 20px;
-            border-right: 2px dotted #eee;
-            background: #fdfdfd;
-        }
-
-        /* --- Navigation --- */
-        .btn-navigasi {
-            min-width: 160px;
-            border-radius: 30px;
-            font-weight: 600;
-            padding: 10px 20px;
-            margin: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* --- Grid Soal Modal --- */
-        .grid-soal {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            gap: 10px;
-            padding: 15px;
-        }
-
-        .btn-grid {
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            position: relative;
-            border: 1px solid #ccc;
-            background: #fff;
-        }
-        
+        /* --- Navigation & Grid --- */
+        .btn-navigasi { min-width: 160px; border-radius: 30px; font-weight: 600; padding: 10px 20px; margin: 5px; }
+        .grid-soal { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 10px; padding: 15px; }
+        .btn-grid { height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold; cursor: pointer; border: 1px solid #ccc; background: #fff; }
         .btn-grid.answered { background: #343a40; color: white; border-color: #343a40; }
         .btn-grid.current { background: #007bff; color: white; border-color: #007bff; }
         .btn-grid.ragu { background: #ffc107; color: black; border-color: #ffc107; }
 
-        /* --- Visualisasi Data (CSS Charts & Shapes) --- */
-        .bar-chart-container {
-            display: flex;
-            align-items: flex-end;
-            height: 200px;
-            border-left: 2px solid #333;
-            border-bottom: 2px solid #333;
-            padding: 10px;
-            margin: 20px auto;
-            width: 80%;
-            gap: 15px;
-        }
-        .bar {
-            flex: 1;
-            background: #326698;
-            text-align: center;
-            color: #000;
-            position: relative;
-            margin: 0 5px;
-            transition: height 1s;
-        }
-        .bar span {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
-            font-weight: bold;
-        }
-        .bar-label {
-            position: absolute;
-            bottom: -25px;
-            width: 100%;
-            text-align: center;
-            font-size: 12px;
-        }
+        /* --- Visualisasi Data & Gambar CSS --- */
+        .visual-box { background: #eef2f5; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; border: 1px solid #cdd5dc; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         
-        .fraction-box {
-            display: inline-block;
-            border: 2px solid #333;
-            margin: 5px;
-        }
-        .fraction-row {
-            display: flex;
-        }
-        .fraction-cell {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #999;
-        }
-        .shaded { background-color: #74b9ff; }
+        /* Pecahan */
+        .fraction-circle { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #2c3e50; margin: 10px auto; position: relative; overflow: hidden; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .fraction-1-3 { background: conic-gradient(#74b9ff 0deg 120deg, #fff 120deg 360deg); }
+        .fraction-1-3::after { content: ''; position: absolute; width: 2px; height: 100%; background: #2c3e50; top: 0; left: 50%; transform: translateX(-50%); }
+        .fraction-1-3::before { content: ''; position: absolute; width: 100%; height: 2px; background: #2c3e50; top: 50%; left: 0; transform: translateY(-50%) rotate(30deg); transform-origin: center; }
+        .fraction-circle-line { position: absolute; width: 100%; height: 2px; background: #2c3e50; top: 50%; left: 0; transform: translateY(-50%) rotate(150deg); transform-origin: center; z-index: 2; }
+        
+        /* Bar Chart Data */
+        .bar-chart-container { display: flex; align-items: flex-end; height: 180px; border-left: 3px solid #2c3e50; border-bottom: 3px solid #2c3e50; padding: 10px; margin: 20px auto; gap: 20px; justify-content: center; }
+        .bar { width: 45px; background: linear-gradient(to top, #326698, #74b9ff); text-align: center; color: #000; position: relative; border-radius: 4px 4px 0 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        .bar span { position: absolute; top: -25px; left: 0; right: 0; font-weight: bold; font-size: 14px; }
+        .bar-label { position: absolute; bottom: -30px; width: 100%; text-align: center; font-size: 13px; font-weight: bold; }
 
-        .shape-rect {
-            width: 150px; height: 80px; border: 2px solid #000; background: #e2e2e2; margin: 10px auto;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .shape-triangle {
-            width: 0; height: 0; 
-            border-left: 50px solid transparent; border-right: 50px solid transparent; 
-            border-bottom: 100px solid #74b9ff;
-            margin: 10px auto;
-        }
+        /* Result Bar Chart */
+        .result-chart-wrapper { padding: 25px; background: #fff; border-radius: 12px; margin-top: 20px; border: 1px solid #e1e8ed; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .res-bar-row { display: flex; align-items: center; margin-bottom: 18px; }
+        .res-bar-label { width: 230px; text-align: right; padding-right: 20px; font-weight: 700; font-size: 15px; color: #34495e; }
+        .res-bar-track { flex-grow: 1; height: 28px; background: #ecf0f1; border-radius: 15px; overflow: hidden; position: relative; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .res-bar-fill { height: 100%; display: flex; align-items: center; padding-left: 15px; color: white; font-weight: bold; font-size: 13px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 15px 0 0 15px; }
+        
+        /* Geometri Shapes */
+        .shape-kubus { width: 80px; height: 80px; background: #74b9ff; margin: 20px auto; border: 2px solid #1a3c5e; position: relative; transform: skewX(-15deg); }
+        .shape-kubus::after { content: ''; position: absolute; width: 100%; height: 30px; background: #a2cfff; top: -32px; left: 16px; border: 2px solid #1a3c5e; transform: skewX(45deg); }
+        .shape-kubus::before { content: ''; position: absolute; width: 30px; height: 100%; background: #4a90e2; top: -16px; right: -32px; border: 2px solid #1a3c5e; transform: skewY(45deg); }
 
-        /* --- Footer --- */
-        .custom-footer {
-            text-align: center;
-            padding: 15px;
-            background: #343a40;
-            color: #aaa;
-            font-size: 0.9rem;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
+        .shape-rect { width: 140px; height: 70px; border: 3px solid #2c3e50; background: #ecf0f1; margin: 15px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
+        
+        /* Jam / Sudut */
+        .clock-face { width: 110px; height: 110px; border: 4px solid #2c3e50; border-radius: 50%; position: relative; margin: 15px auto; background: #fff; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        .clock-center { width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; position: absolute; top: 46px; left: 46px; z-index: 5;}
+        .hand-hour { width: 4px; height: 28px; background: #2c3e50; position: absolute; top: 48px; left: 49px; transform-origin: top center; transform: rotate(120deg); border-radius: 2px; }
+        .hand-min { width: 3px; height: 42px; background: #7f8c8d; position: absolute; bottom: 53px; left: 49.5px; transform-origin: bottom center; border-radius: 2px; }
 
-        /* --- Animations --- */
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .modal-cool-content {
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        /* Penggaris */
+        .ruler { width: 100%; max-width: 280px; height: 45px; background: #f1c40f; border: 2px solid #2c3e50; margin: 15px auto; position: relative; display: flex; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 3px;}
+        .ruler-tick { flex-grow: 1; border-right: 1px solid #2c3e50; height: 12px; }
+        .ruler-tick:nth-child(5n) { height: 22px; border-right: 2px solid #2c3e50; }
+        .ruler-tick:last-child { border-right: none; }
 
-        /* --- Mobile Responsiveness --- */
+        /* Beaker (Volume) */
+        .beaker { width: 60px; height: 80px; border: 3px solid #bdc3c7; border-top: none; border-radius: 0 0 10px 10px; margin: 15px auto; position: relative; overflow: hidden; background: rgba(255,255,255,0.5); }
+        .beaker-liquid { position: absolute; bottom: 0; width: 100%; height: 65%; background: rgba(52, 152, 219, 0.7); border-top: 2px solid #2980b9; transition: height 0.5s; }
+
+        /* Animasi Modal */
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .modal-cool-content { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
         @media (max-width: 768px) {
             .stimulus { border-right: none; border-bottom: 2px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px; }
-            .top-header { height: 90px; }
-            .logo-kemdikbud { height: 40px; }
+            .top-header { height: 90px; } .logo-kemdikbud { height: 40px; }
             #formContent { margin-top: 100px; padding: 15px; }
-            .user-info { display: none; }
-            .btn-navigasi { width: 100%; margin: 5px 0; }
+            .user-info { display: none; } .btn-navigasi { width: 100%; margin: 5px 0; }
+            .res-bar-row { flex-direction: column; align-items: stretch; }
+            .res-bar-label { width: 100%; text-align: left; padding-bottom: 5px; }
         }
+
+        #custom-alert { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 300px; }
     </style>
 </head>
 <body>
 
+<div id="custom-alert" class="alert alert-warning alert-dismissible fade show shadow" role="alert">
+    <span id="alert-text">Pesan peringatan.</span>
+    <button type="button" class="close" onclick="$('#custom-alert').hide()"><span aria-hidden="true">&times;</span></button>
+</div>
+
 <!-- VIEW: LOGIN -->
 <div id="view-login">
     <div class="login-card">
-        <img src="tutwuri2.png" alt="Logo" class="login-logo">
-        <h4 class="mb-4 font-weight-bold" style="color: #326698;">SIMULASI TKA<br>Tahun 2026</h4>
+        <img src="https://pusmendik.kemdikbud.go.id/tka/images/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo" class="login-logo">
+        <h4 class="mb-4 font-weight-bold" style="color: #326698;">SIMULASI TKA 2026<br><small>Matematika Paket 1</small></h4>
         <form id="loginForm" onsubmit="event.preventDefault(); startExam();">
             <div class="form-group text-left">
                 <label>Nama Peserta</label>
@@ -271,31 +159,26 @@
                 <label>Nama Sekolah</label>
                 <input type="text" class="form-control" id="inputSekolah" placeholder="Masukkan Nama Sekolah" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" style="border-radius: 30px;">
+            <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" style="border-radius: 30px; background: linear-gradient(to right, #326698, #1a3c5e); border: none;">
                 MULAI UJIAN <i class="fa fa-arrow-right ml-2"></i>
             </button>
         </form>
     </div>
 </div>
 
-<!-- VIEW: EXAM (Hidden by default) -->
+<!-- VIEW: EXAM -->
 <div id="view-exam" style="display: none;">
     <div class="top-header">
         <div class="logo-container">
-            <img class="logo-kemdikbud" src="tutwuri2.png" alt="Logo">
+            <img class="logo-kemdikbud" src="https://pusmendik.kemdikbud.go.id/tka/images/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo">
             <div>
                 <div style="font-size: 1.2rem; font-weight: bold;">SIMULASI TKA</div>
-                <div style="font-size: 0.8rem; letter-spacing: 1px;">TAHUN 2026</div>
+                <div style="font-size: 0.8rem; letter-spacing: 1px;">TAHUN 2026 - MATEMATIKA PAKET 1</div>
             </div>
         </div>
         <div class="user-info">
-            <div>
-                <small id="displayNama">Peserta</small><br>
-                <strong id="displaySekolah">Sekolah</strong>
-            </div>
-            <div class="cap-icon">
-                <i class="fa fa-user"></i>
-            </div>
+            <div><small id="displayNama">Peserta</small><br><strong id="displaySekolah">Sekolah</strong></div>
+            <div class="cap-icon"><i class="fa fa-user"></i></div>
         </div>
     </div>
 
@@ -303,23 +186,18 @@
         <div class="row justify-content-center">
             <div class="col-lg-11 col-12">
                 <div id="formContent">
-                    <!-- Toolbar Atas -->
                     <div class="row soal-header align-items-center">
                         <div class="col-md-4 col-6">
                             <span style="font-size: 18px;">Soal No.</span>
                             <span style="font-size: 26px; font-weight: bold; color: #326698;" id="displayNoSoal">1</span>
+                            <br><span id="displayElemen" class="badge badge-info mt-1">Elemen</span>
                         </div>
                         <div class="col-md-8 col-6 text-right">
-                            <button class="btn btn-outline-danger btn-informasi">
-                                Sisa Waktu : <strong id="timer">00:00:00</strong>
-                            </button>
-                            <button class="btn btn-primary btn-informasi" data-toggle="modal" data-target="#modalDaftarSoal">
-                                Daftar Soal <i class="fa fa-th"></i>
-                            </button>
+                            <button class="btn btn-outline-danger btn-informasi">Sisa Waktu : <strong id="timer">00:00:00</strong></button>
+                            <button class="btn btn-primary btn-informasi" data-toggle="modal" data-target="#modalDaftarSoal">Daftar Soal <i class="fa fa-th"></i></button>
                         </div>
                     </div>
 
-                    <!-- Font & Mapel -->
                     <div class="row mb-3">
                         <div class="col-6 font-selector">
                             <small>Ukuran Huruf:</small>
@@ -327,12 +205,9 @@
                             <span class="ml-1 btn btn-sm btn-light" onclick="setFontSize(18)">A</span>
                             <span class="ml-1 btn btn-sm btn-light" onclick="setFontSize(24)">A</span>
                         </div>
-                        <div class="col-6 text-right font-weight-bold" style="color:#326698;">
-                            Matematika - SD
-                        </div>
+                        <div class="col-6 text-right font-weight-bold" style="color:#326698;">Matematika - SD</div>
                     </div>
 
-                    <!-- Area Soal -->
                     <div class="isi-soal-container" id="soalContainer">
                         <div class="row">
                             <div class="col-md-6 stimulus" id="stimulusArea"></div>
@@ -340,15 +215,12 @@
                         </div>
                     </div>
 
-                    <!-- Navigasi -->
                     <div class="row mt-4 pt-3 border-top justify-content-center">
                         <div class="col-md-3 text-center order-2 order-md-1">
-                            <button class="btn btn-danger btn-navigasi" id="btnPrev" onclick="prevSoal()">
-                                <i class="fa fa-chevron-left"></i> Sebelumnya
-                            </button>
+                            <button class="btn btn-danger btn-navigasi" id="btnPrev" onclick="prevSoal()"><i class="fa fa-chevron-left"></i> Sebelumnya</button>
                         </div>
                         <div class="col-md-3 text-center order-1 order-md-2 mb-2">
-                            <div class="btn btn-warning btn-navigasi text-white">
+                            <div class="btn btn-warning btn-navigasi text-white" style="box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="checkRagu" onclick="toggleRagu()">
                                     <label class="custom-control-label" for="checkRagu">RAGU-RAGU</label>
@@ -356,9 +228,7 @@
                             </div>
                         </div>
                         <div class="col-md-3 text-center order-3 order-md-3">
-                            <button class="btn btn-primary btn-navigasi" id="btnNext" onclick="nextSoal()">
-                                Berikutnya <i class="fa fa-chevron-right"></i>
-                            </button>
+                            <button class="btn btn-primary btn-navigasi" id="btnNext" onclick="nextSoal()">Berikutnya <i class="fa fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
@@ -367,61 +237,69 @@
     </div>
 </div>
 
-<!-- VIEW: RESULT (Hidden by default) -->
+<!-- VIEW: RESULT -->
 <div id="view-result" style="display: none; padding-top: 150px;">
     <div class="container mb-5">
-        <div class="card shadow">
-            <div class="card-header bg-success text-white text-center">
-                <h3><i class="fa fa-trophy"></i> HASIL SIMULASI TKA 2026</h3>
+        <div class="card shadow-lg border-0">
+            <div class="card-header text-white text-center" style="background: linear-gradient(45deg, #27ae60, #2ecc71);">
+                <h3 class="m-0 py-2"><i class="fa fa-trophy"></i> HASIL SIMULASI TKA 2026</h3>
             </div>
-            <div class="card-body text-center">
-                <h5 id="resNama">Nama Peserta</h5>
-                <p id="resSekolah" class="text-muted">Nama Sekolah</p>
+            <div class="card-body">
+                <div class="text-center">
+                    <h4 id="resNama" class="font-weight-bold text-dark">Nama Peserta</h4>
+                    <p id="resSekolah" class="text-muted">Nama Sekolah</p>
+                </div>
                 <hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="alert alert-info">
-                            <h3>Total Poin</h3>
-                            <h1 id="scoreTotal" style="font-size: 4rem; font-weight: bold;">0</h1>
+                <div class="row text-center">
+                    <div class="col-md-6 mb-3">
+                        <div class="alert alert-info p-4 border-0 shadow-sm" style="background-color: #e3f2fd; color: #1565c0;">
+                            <h5 class="font-weight-bold">Total Jawaban Benar</h5>
+                            <h1 id="scoreTotal" style="font-size: 4rem; font-weight: 800; margin: 0;">0</h1>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="alert alert-warning">
-                            <h3>Nilai Rata-rata (0-100)</h3>
-                            <h1 id="scoreAvg" style="font-size: 4rem; font-weight: bold;">0</h1>
+                    <div class="col-md-6 mb-3">
+                        <div class="alert alert-warning p-4 border-0 shadow-sm" style="background-color: #fff8e1; color: #f57f17;">
+                            <h5 class="font-weight-bold">Skor Akhir (0-100)</h5>
+                            <h1 id="scoreAvg" style="font-size: 4rem; font-weight: 800; margin: 0;">0</h1>
                         </div>
                     </div>
                 </div>
                 
-                <div class="mt-4">
-                    <button class="btn btn-primary mr-2" onclick="showDetail()">Lihat Rekap Jawaban</button>
-                    <button class="btn btn-secondary" onclick="location.reload()">Kembali ke Menu Awal</button>
+                <!-- DIAGRAM BATANG PER ELEMEN -->
+                <div class="result-chart-wrapper">
+                    <h5 class="text-center font-weight-bold mb-4" style="color: #2c3e50;"><i class="fa fa-chart-bar mr-2"></i> Presentase Kompetensi per Elemen</h5>
+                    <div id="chartElemenContainer">
+                        <!-- Chart dirender melalui JS -->
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <button class="btn btn-primary mr-2 px-4 py-2" style="border-radius: 30px;" onclick="showDetail()"><i class="fa fa-list-alt mr-1"></i> Lihat Rekap Jawaban</button>
+                    <button class="btn btn-secondary px-4 py-2" style="border-radius: 30px;" onclick="location.reload()"><i class="fa fa-home mr-1"></i> Kembali ke Menu Awal</button>
                 </div>
             </div>
         </div>
 
-        <!-- Tabel Detail -->
         <div id="detailSection" class="mt-4" style="display: none;">
-            <div class="card">
+            <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white">
-                    <h5>Rekapitulasi Jawaban & Pembahasan</h5>
+                    <h5 class="m-0">Rekapitulasi Jawaban & Analisis Pembahasan</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered mb-0">
+                        <table class="table table-striped table-hover mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>No</th>
-                                    <th>Soal (Ringkasan)</th>
-                                    <th>Jawaban Anda</th>
-                                    <th>Kunci Jawaban</th>
-                                    <th>Poin</th>
-                                    <th>Pembahasan</th>
+                                    <th width="5%">No</th>
+                                    <th width="15%">Elemen & Kognitif</th>
+                                    <th width="35%">Soal (Ringkasan Cerita)</th>
+                                    <th width="10%">Jawaban Anda</th>
+                                    <th width="10%">Kunci Jawaban</th>
+                                    <th width="10%">Status</th>
+                                    <th width="15%">Pembahasan Singkat</th>
                                 </tr>
                             </thead>
-                            <tbody id="resultTableBody">
-                                <!-- Diisi JS -->
-                            </tbody>
+                            <tbody id="resultTableBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -432,31 +310,31 @@
 
 <!-- FOOTER -->
 <div class="custom-footer">
-    Dibuat oleh herisheroes @2026
+    Dibuat oleh herisheroes @2026 - TKA Berbasis Pemecahan Masalah
 </div>
 
 <!-- MODAL DAFTAR SOAL -->
 <div class="modal fade" id="modalDaftarSoal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Daftar Soal</h5>
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title font-weight-bold text-dark">Daftar Soal Ujian</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-white">
                 <div class="grid-soal" id="soalGrid"></div>
-                <div class="mt-3 small text-muted">
-                    <span class="badge badge-primary mr-1">&nbsp;</span> Sedang dikerjakan
-                    <span class="badge badge-dark mr-1 ml-2">&nbsp;</span> Sudah dijawab
-                    <span class="badge badge-warning mr-1 ml-2">&nbsp;</span> Ragu-ragu
-                    <span class="badge badge-light border mr-1 ml-2">&nbsp;</span> Belum dijawab
+                <div class="mt-4 small text-muted d-flex justify-content-center flex-wrap">
+                    <div class="mx-2 mb-2"><span class="badge badge-primary px-3 py-2 mr-1">&nbsp;</span> Sedang dikerjakan</div>
+                    <div class="mx-2 mb-2"><span class="badge badge-dark px-3 py-2 mr-1">&nbsp;</span> Sudah dijawab</div>
+                    <div class="mx-2 mb-2"><span class="badge badge-warning px-3 py-2 mr-1">&nbsp;</span> Ragu-ragu</div>
+                    <div class="mx-2 mb-2"><span class="badge badge-light border px-3 py-2 mr-1">&nbsp;</span> Belum dijawab</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- MODAL KONFIRMASI SELESAI (COOL EFFECT) -->
+<!-- MODAL KONFIRMASI SELESAI -->
 <div class="modal fade" id="modalSelesai" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-cool-content border-0 shadow-lg">
@@ -467,14 +345,14 @@
                 <div class="mb-4">
                     <i class="fa fa-flag-checkered text-success" style="font-size: 80px;"></i>
                 </div>
-                <h4>Sudah yakin ingin menyelesaikan ujian?</h4>
-                <p class="text-muted">Pastikan Anda telah memeriksa kembali jawaban yang masih ragu-ragu.</p>
+                <h4 class="font-weight-bold text-dark">Sudah yakin ingin menyelesaikan ujian?</h4>
+                <p class="text-muted">Pastikan Anda telah memeriksa kembali jawaban pada soal yang membutuhkan analisis mendalam dan soal yang masih ditandai ragu-ragu.</p>
                 <div class="mt-4 row">
                     <div class="col-6">
-                        <button class="btn btn-outline-secondary btn-block btn-lg" data-dismiss="modal">Batal</button>
+                        <button class="btn btn-outline-secondary btn-block btn-lg" style="border-radius: 20px;" data-dismiss="modal">Batal</button>
                     </div>
                     <div class="col-6">
-                        <button class="btn btn-success btn-block btn-lg shadow" onclick="calculateAndFinish()">YA, SELESAI</button>
+                        <button class="btn btn-success btn-block btn-lg shadow" style="border-radius: 20px;" onclick="calculateAndFinish()">YA, SELESAI</button>
                     </div>
                 </div>
             </div>
@@ -482,314 +360,363 @@
     </div>
 </div>
 
-<!-- SCRIPTS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // --- 1. DATA SOAL (30 Soal based on Kisi-Kisi) ---
-    // Gambar dibuat dengan HTML/CSS string
+    // --- 1. DATA SOAL SESUAI KISI-KISI (HOTS & CERITA SEHARI-HARI) ---
     const bankSoal = [
-        // BILANGAN (9 Soal)
+        // ELEMEN: BILANGAN
         {
-            id: 1, type: "PG",
-            stimulus: `<p>Perhatikan gambar pecahan berikut!</p>
-                       <div class="fraction-box"><div class="fraction-row"><div class="fraction-cell shaded"></div><div class="fraction-cell"></div></div></div>
-                       <p>Gambar A</p>
-                       <div class="fraction-box"><div class="fraction-row"><div class="fraction-cell shaded"></div><div class="fraction-cell shaded"></div></div><div class="fraction-row"><div class="fraction-cell"></div><div class="fraction-cell"></div></div></div>
-                       <p>Gambar B</p>`,
-            question: "Manakah pernyataan yang benar mengenai kedua gambar tersebut?",
-            options: [
-                {val: 'A', label: "Gambar A menunjukkan 1/3 dan Gambar B menunjukkan 2/4"},
-                {val: 'B', label: "Gambar A senilai dengan Gambar B (1/2 = 2/4)"},
-                {val: 'C', label: "Gambar A lebih besar dari Gambar B"},
-                {val: 'D', label: "Gambar B menunjukkan 3/4"}
-            ],
-            key: 'B',
-            discuss: "Gambar A mengarsir 1 dari 2 kotak (1/2). Gambar B mengarsir 2 dari 4 kotak (2/4). 1/2 senilai dengan 2/4."
+            id: 1, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <p class="font-weight-bold">Kue Loyang Budi (Sisa)</p>
+                          <div class="fraction-circle fraction-1-3"><div class="fraction-circle-line"></div></div>
+                       </div>
+                       <p class="text-justify">Ibu membuat dua buah kue bolu yang ukurannya sama persis. Kue pertama diberikan kepada Budi dan dipotong menjadi 6 bagian sama besar. Budi telah memakan 4 bagian, sehingga menyisakan 2 bagian seperti ilustrasi di atas (2/6 bagian).</p>
+                       <p class="text-justify">Kue bolu kedua diberikan kepada Siti dan dipotong menjadi 3 bagian yang sama besar.</p>`,
+            question: "Jika Siti ingin menyisakan kue bagiannya dengan nilai atau takaran yang sama persis (senilai) dengan sisa kue milik Budi, berapa potong kue yang harus disisakan Siti?",
+            options: [{val: 'A', label: "2 potong dari 3 bagian"}, {val: 'B', label: "1 potong dari 3 bagian"}, {val: 'C', label: "1,5 potong dari 3 bagian"}, {val: 'D', label: "Semua potongannya"}],
+            key: 'B', discuss: "Sisa kue Budi adalah 2/6. Pecahan yang senilai dengan 2/6 jika penyebutnya dijadikan 3 (dibagi 2) adalah 1/3. Jadi Siti menyisakan 1 potong."
         },
         {
-            id: 2, type: "PG",
-            stimulus: "Ibu membeli 3/4 kg gula, 1/2 kg tepung, dan 0.8 kg mentega.",
-            question: "Urutan belanjaan Ibu dari yang paling berat adalah...",
-            options: [
-                {val: 'A', label: "Gula, Tepung, Mentega"},
-                {val: 'B', label: "Mentega, Gula, Tepung"},
-                {val: 'C', label: "Tepung, Mentega, Gula"},
-                {val: 'D', label: "Mentega, Tepung, Gula"}
-            ],
-            key: 'B',
-            discuss: "Mentega 0.8kg. Gula 3/4 = 0.75kg. Tepung 1/2 = 0.5kg. Urutan: Mentega, Gula, Tepung."
+            id: 2, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<div class="visual-box">
+                        <i class="fa fa-book-open fa-3x text-info mb-2"></i>
+                        <p class="font-weight-bold">Resep Rahasia Kue Kering</p>
+                        <ul class="text-left bg-white p-3 border rounded d-inline-block shadow-sm">
+                            <li><i class="fa fa-check text-success"></i> Tepung Terigu: 0,5 kg</li>
+                            <li><i class="fa fa-check text-success"></i> Gula Halus: 3/4 kg</li>
+                            <li><i class="fa fa-check text-success"></i> Mentega: 20% kg</li>
+                        </ul>
+                       </div>
+                       <p class="text-justify">Kak Nisa sedang membaca resep untuk membuat pesanan kue kering. Bahan-bahan tersebut dicatat dalam bentuk bilangan yang berbeda-beda. Ia harus menimbang bahan-bahan tersebut secara berurutan mulai dari yang takarannya paling ringan agar adonan tidak rusak.</p>`,
+            question: "Berdasarkan takaran pada resep, urutan bahan yang harus ditimbang Kak Nisa dari yang paling ringan hingga paling berat adalah...",
+            options: [{val: 'A', label: "Gula Halus, Tepung Terigu, Mentega"}, {val: 'B', label: "Tepung Terigu, Mentega, Gula Halus"}, {val: 'C', label: "Mentega, Tepung Terigu, Gula Halus"}, {val: 'D', label: "Mentega, Gula Halus, Tepung Terigu"}],
+            key: 'C', discuss: "Mentega = 20% (0,2 kg). Tepung = 0,5 kg. Gula = 3/4 (0,75 kg). Urutan teringan: Mentega, Tepung, Gula."
         },
         {
-            id: 3, type: "MATRIX",
-            stimulus: "Diketahui pecahan: 25%, 0.4, dan 1/5.",
-            question: "Tentukan Benar atau Salah pernyataan berikut!",
+            id: 3, elemen: "Bilangan", sub: "Bilangan Rasional", type: "MATRIX",
+            stimulus: `<p class="text-justify">Menjelang hari raya, tiga toko sepatu di sebuah pusat perbelanjaan memberikan penawaran promosi potongan harga dengan gaya penulisan yang berbeda-beda:</p>
+                       <div class="row text-center mb-3">
+                           <div class="col-4"><div class="p-2 border rounded bg-white shadow-sm"><b>Toko A</b><br>Diskon 25%</div></div>
+                           <div class="col-4"><div class="p-2 border rounded bg-white shadow-sm"><b>Toko B</b><br>Potongan 1/4 harga</div></div>
+                           <div class="col-4"><div class="p-2 border rounded bg-white shadow-sm"><b>Toko C</b><br>Cashback 0,2 harga</div></div>
+                       </div>
+                       <p>Ayah ingin mencari potongan harga terbesar atau membandingkan promo tersebut untuk berbelanja hemat.</p>`,
+            question: "Analisis nilai potongan dari ketiga toko tersebut dan tentukan nilai kebenaran dari pernyataan berikut!",
             rows: [
-                {id: 'r1', text: "25% senilai dengan 1/4"},
-                {id: 'r2', text: "0.4 lebih kecil dari 1/5"},
-                {id: 'r3', text: "1/5 jika dijadikan desimal adalah 0.2"}
+                {id: 'r1', text: "Potongan harga di Toko A sama besarnya dengan di Toko B."},
+                {id: 'r2', text: "Promo Toko C (0,2) memberikan potongan yang lebih besar daripada Toko B (1/4)."},
+                {id: 'r3', text: "Jika diubah ke pecahan desimal, promo Toko A bernilai 0,25."}
             ],
-            key: {r1: 'B', r2: 'S', r3: 'B'}, // B=Benar, S=Salah
-            discuss: "25%=1/4 (Benar). 0.4 > 0.2 (1/5), jadi pernyataan kedua Salah. 1/5 = 0.2 (Benar)."
+            key: {r1: 'B', r2: 'S', r3: 'B'},
+            discuss: "Toko A(25%)=0,25. Toko B(1/4)=0,25. Toko C(0,2)=0,2. Toko B (0,25) lebih besar dari C (0,2), pernyataan kedua Salah."
         },
         {
-            id: 4, type: "PG",
-            stimulus: "Pak Budi memanen 1.250 kg jagung. Jagung tersebut dimasukkan ke dalam 5 karung sama rata.",
-            question: "Berapa kg isi setiap karung?",
-            options: [{val: 'A', label: "200 kg"}, {val: 'B', label: "225 kg"}, {val: 'C', label: "250 kg"}, {val: 'D', label: "300 kg"}],
-            key: 'C',
-            discuss: "1.250 / 5 = 250 kg."
+            id: 4, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <i class="fa fa-truck fa-3x text-warning mb-2"></i>
+                          <p class="font-weight-bold">Distribusi Hasil Panen</p>
+                       </div>
+                       <p class="text-justify">Kelompok tani Desa Makmur berhasil memanen apel sebanyak <b>1.250 kg</b>. Sebelum didistribusikan ke pasar induk, apel tersebut disortir. Ternyata ditemukan sebanyak <b>50 kg</b> apel busuk yang tidak layak jual sehingga harus dibuang. Sisa apel yang bagus kemudian dimasukkan ke dalam <b>6 buah peti kayu</b> dengan berat yang sama rata di setiap petinya.</p>`,
+            question: "Berapa kilogram berat apel bersih yang ada di dalam masing-masing peti kayu tersebut?",
+            options: [{val: 'A', label: "200 kg"}, {val: 'B', label: "250 kg"}, {val: 'C', label: "208 kg"}, {val: 'D', label: "300 kg"}],
+            key: 'A', discuss: "Sisa apel bagus = 1.250 kg - 50 kg = 1.200 kg. Dibagi ke 6 peti: 1.200 / 6 = 200 kg/peti."
         },
         {
-            id: 5, type: "PG",
-            stimulus: "Di toko, harga 1 buku tulis Rp3.500 dan 1 pensil Rp2.000. Ani membeli 4 buku dan 3 pensil.",
-            question: "Berapa total belanjaan Ani?",
-            options: [{val: 'A', label: "Rp18.000"}, {val: 'B', label: "Rp20.000"}, {val: 'C', label: "Rp22.000"}, {val: 'D', label: "Rp25.000"}],
-            key: 'B',
-            discuss: "(4 x 3.500) + (3 x 2.000) = 14.000 + 6.000 = Rp20.000."
+            id: 5, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<p class="text-justify">Menjelang tahun ajaran baru, Andi pergi ke toko alat tulis. Ia melihat daftar harga di etalase: sebuah buku tulis bergaris seharga <b>Rp3.500,00</b> dan sebuah pensil 2B seharga <b>Rp2.000,00</b>.</p>
+                       <p class="text-justify">Andi mengambil <b>4 buah buku tulis</b> dan <b>3 buah pensil 2B</b>. Saat di kasir, Andi menyodorkan selembar uang pecahan <b>Rp20.000,00</b> dan selembar pecahan <b>Rp5.000,00</b>.</p>`,
+            question: "Berapakah jumlah uang kembalian yang harus diterima Andi dari kasir?",
+            options: [{val: 'A', label: "Rp10.000,00"}, {val: 'B', label: "Rp5.000,00"}, {val: 'C', label: "Uangnya kurang"}, {val: 'D', label: "Tidak ada kembalian (Pas)"}],
+            key: 'B', discuss: "Total belanja = (4 x 3.500) + (3 x 2.000) = 14.000 + 6.000 = Rp20.000. Uang Andi = 20.000 + 5.000 = 25.000. Kembalian = 25.000 - 20.000 = Rp5.000."
         },
         {
-            id: 6, type: "PG",
-            stimulus: "Hasil dari 3/4 + 0.5 - 25% adalah...",
-            question: "Hitunglah hasil operasi tersebut!",
-            options: [{val: 'A', label: "0.5"}, {val: 'B', label: "1.0"}, {val: 'C', label: "1.25"}, {val: 'D', label: "0.75"}],
-            key: 'B',
-            discuss: "3/4 = 0.75. 0.5 = 0.50. 25% = 0.25. Jadi 0.75 + 0.50 - 0.25 = 1.0."
+            id: 6, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<p class="text-justify">Pak Tukang sedang memperbaiki saluran air di rumah. Ia memiliki sepotong pipa paralon dengan panjang <b>3/4 meter</b>. Merasa kurang panjang, ia menyambungnya lagi dengan pipa lain sepanjang <b>0,5 meter</b>.</p>
+                       <p class="text-justify">Namun setelah diukur ke tembok, pipa tersebut ternyata kepanjangan, sehingga Pak Tukang harus memotong dan membuang bagian ujungnya sepanjang <b>25% meter (0,25 meter)</b>.</p>`,
+            question: "Berapa meter panjang pipa paralon milik Pak Tukang sekarang yang terpasang di tembok?",
+            options: [{val: 'A', label: "0,50 meter"}, {val: 'B', label: "1,00 meter"}, {val: 'C', label: "1,25 meter"}, {val: 'D', label: "0,75 meter"}],
+            key: 'B', discuss: "Konversi ke desimal: 3/4 = 0,75. Disambung (+0,5). Dipotong (-0,25). Operasi: 0,75 + 0,5 - 0,25 = 1,25 - 0,25 = 1,00 meter."
         },
         {
-            id: 7, type: "CHECKBOX",
-            stimulus: "Ibu memiliki 2.5 liter minyak goreng. Digunakan menggoreng 1/2 liter, lalu tumpah 0.25 liter.",
-            question: "Pilih pernyataan yang benar! (Jawaban bisa lebih dari satu)",
+            id: 7, elemen: "Bilangan", sub: "Bilangan Rasional", type: "CHECKBOX",
+            stimulus: `<p class="text-justify">Di dapur, Ibu memiliki persediaan minyak goreng kemasan sebanyak <b>2,5 liter</b>. Pada pagi hari, Ibu menggunakan <b>1/2 liter (0,5 liter)</b> untuk menggoreng tempe. Sayangnya, saat menuangkan minyak, tangan ibu tersenggol botol kecap sehingga minyak goreng ikut tumpah ke meja sebanyak <b>0,25 liter</b>.</p>
+                       <p class="text-justify">Khawatir kehabisan, pada sore harinya Ibu pergi ke warung dan membeli lagi <b>1 liter</b> minyak goreng dan mencampurnya ke persediaan awal.</p>`,
+            question: "Berdasarkan kronologi kejadian di dapur tersebut, pilih semua pernyataan analisis yang benar di bawah ini!",
             options: [
-                {val: 'A', label: "Minyak yang digunakan 0.5 liter"},
-                {val: 'B', label: "Sisa minyak adalah 1.75 liter"},
-                {val: 'C', label: "Minyak yang tumpah setara 1/4 liter"}
+                {val: 'A', label: "Total persediaan akhir minyak goreng Ibu sekarang adalah 2,75 liter."},
+                {val: 'B', label: "Total keseluruhan minyak goreng yang berkurang akibat digunakan dan tumpah adalah 0,75 liter."},
+                {val: 'C', label: "Minyak goreng yang terbuang karena tumpah lebih banyak daripada yang digunakan untuk menggoreng."}
             ],
-            key: ['A', 'B', 'C'],
-            discuss: "Semua pernyataan benar. Sisa = 2.5 - 0.5 - 0.25 = 1.75."
+            key: ['A', 'B'], discuss: "Berkurang = 0,5 (dipakai) + 0,25 (tumpah) = 0,75 L (Opsi B benar). Sisa akhir = 2,5 - 0,75 + 1 (beli) = 2,75 L (Opsi A benar). Dipakai (0,5) > Tumpah (0,25) (Opsi C Salah)."
         },
         {
-            id: 8, type: "PG",
-            stimulus: "Lampu A menyala setiap 4 detik. Lampu B menyala setiap 6 detik.",
-            question: "Pada detik ke berapa kedua lampu menyala bersamaan untuk pertama kalinya?",
-            options: [{val: 'A', label: "10"}, {val: 'B', label: "12"}, {val: 'C', label: "24"}, {val: 'D', label: "16"}],
-            key: 'B',
-            discuss: "KPK dari 4 dan 6 adalah 12."
+            id: 8, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <i class="fa fa-calendar-alt fa-3x text-danger mb-2"></i>
+                          <p class="font-weight-bold">Jadwal Siskamling Desa</p>
+                       </div>
+                       <p class="text-justify">Untuk menjaga keamanan, warga dibagi menjadi dua regu ronda. Regu Rajawali mendapat giliran ronda setiap <b>4 hari sekali</b>, sedangkan Regu Merpati mendapat giliran setiap <b>6 hari sekali</b>.</p>
+                       <p class="text-justify">Pada tanggal <b>1 Maret</b>, secara kebetulan Regu Rajawali dan Regu Merpati bertugas ronda pada malam yang sama.</p>`,
+            question: "Pada tanggal berapakah di bulan Maret kedua regu tersebut akan bertemu untuk bertugas bersama-sama lagi untuk yang kedua kalinya?",
+            options: [{val: 'A', label: "10 Maret"}, {val: 'B', label: "12 Maret"}, {val: 'C', label: "13 Maret"}, {val: 'D', label: "24 Maret"}],
+            key: 'C', discuss: "KPK dari 4 dan 6 adalah 12 hari. Mereka bertemu lagi 12 hari setelah tanggal 1 Maret. Yaitu: 1 + 12 = 13 Maret."
         },
         {
-            id: 9, type: "PG",
-            stimulus: "Bu Guru memiliki 24 permen coklat dan 36 permen stroberi. Akan dibagikan ke murid dengan jumlah sama rata.",
-            question: "Berapa jumlah murid terbanyak yang bisa menerima permen?",
-            options: [{val: 'A', label: "6"}, {val: 'B', label: "8"}, {val: 'C', label: "12"}, {val: 'D', label: "4"}],
-            key: 'C',
-            discuss: "FPB dari 24 dan 36 adalah 12."
+            id: 9, elemen: "Bilangan", sub: "Bilangan Rasional", type: "PG",
+            stimulus: `<p class="text-justify">Menjelang bulan Ramadhan, Ibu Indah mengadakan program bakti sosial berbagi sembako. Ia telah menyiapkan <b>24 bungkus gula pasir</b> dan <b>36 bungkus mie instan</b>.</p>
+                       <p class="text-justify">Ibu Indah ingin membungkus semua barang tersebut ke dalam beberapa kantong plastik sedemikian rupa sehingga setiap kantong berisi gula dan mie instan dengan jumlah yang sama persis tanpa ada sisa barang.</p>`,
+            question: "Berapakah jumlah maksimal warga atau kantong plastik terbanyak yang dapat disiapkan oleh Ibu Indah?",
+            options: [{val: 'A', label: "6 kantong"}, {val: 'B', label: "8 kantong"}, {val: 'C', label: "12 kantong"}, {val: 'D', label: "24 kantong"}],
+            key: 'C', discuss: "Soal ini mencari nilai pembagi terbesar yang sama untuk kedua bilangan (FPB). FPB dari 24 dan 36 adalah 12."
         },
 
-        // GEOMETRI (16 Soal)
+        // ELEMEN: GEOMETRI DAN PENGUKURAN
         {
-            id: 10, type: "PG",
-            stimulus: `<div class="shape-rect">Persegi Panjang</div>`,
-            question: "Benda di sekitarmu yang memiliki bentuk permukaan seperti gambar di samping adalah...",
-            options: [{val: 'A', label: "Bola"}, {val: 'B', label: "Permukaan Meja"}, {val: 'C', label: "Topi Ulang Tahun"}, {val: 'D', label: "Kaleng Susu"}],
-            key: 'B',
-            discuss: "Permukaan meja umumnya berbentuk persegi panjang."
+            id: 10, elemen: "Geometri dan Pengukuran", sub: "Geometri Bangun Datar", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <div class="shape-rect" style="background:#27ae60; border-color:#fff;">
+                             <div style="border: 1px solid #fff; width: 90%; height: 80%;"></div>
+                          </div>
+                          <p class="mt-2 text-muted">Denah Kasar Lapangan</p>
+                       </div>
+                       <p class="text-justify">Di sekolah terdapat sebuah lapangan olahraga yang batas terluarnya digambar dengan garis putih lurus. Lapangan ini memiliki ukuran sisi tegak dan sisi mendatar yang berbeda panjangnya, tetapi semua sudut pojok lapangan membentuk sudut 90 derajat.</p>`,
+            question: "Berdasarkan deskripsi sifat batas terluar lapangan tersebut, bentuk geometri apakah yang paling tepat menggambarkannya?",
+            options: [{val: 'A', label: "Trapesium Sama Kaki"}, {val: 'B', label: "Persegi Panjang"}, {val: 'C', label: "Persegi (Bujur Sangkar)"}, {val: 'D', label: "Jajar Genjang"}],
+            key: 'B', discuss: "Ciri: panjang sisi berbeda (bukan persegi) dan semua sudut 90 derajat, yang merupakan sifat mutlak dari bangun Persegi Panjang."
         },
         {
-            id: 11, type: "CHECKBOX",
-            stimulus: "Sifat-sifat bangun datar.",
-            question: "Pilih sifat yang dimiliki PERSEGI!",
+            id: 11, elemen: "Geometri dan Pengukuran", sub: "Geometri Bangun Datar", type: "CHECKBOX",
+            stimulus: `<p class="text-justify">Pak Anton sedang bekerja di bengkel kayunya. Ia mendapat pesanan untuk membuat daun meja kayu yang bentuknya harus presisi berupa <b>PERSEGI (Bujur Sangkar)</b> sempurna agar pas dengan rangka mejanya.</p>
+                       <p class="text-justify">Setelah kayu dipotong, Pak Anton harus melakukan pengecekan kualitas standar geometris bangun persegi.</p>`,
+            question: "Kriteria ukur apa saja yang harus terpenuhi agar potongan kayu Pak Anton dipastikan berbentuk Persegi? (Pilih semua yang benar)",
             options: [
-                {val: 'A', label: "Memiliki 4 sisi sama panjang"},
-                {val: 'B', label: "Memiliki 4 sudut siku-siku"},
-                {val: 'C', label: "Memiliki hanya sepasang sisi sejajar"}
+                {val: 'A', label: "Panjang keempat sisi terluar kayu harus sama rata."},
+                {val: 'B', label: "Keempat sudut di ujung meja jika diukur dengan siku tukang harus menunjukkan tepat 90 derajat."},
+                {val: 'C', label: "Hanya perlu dipastikan sisi yang saling berhadapan sama panjang dan sejajar."}
             ],
-            key: ['A', 'B'],
-            discuss: "Persegi memiliki 4 sisi sama panjang dan 4 sudut siku-siku."
+            key: ['A', 'B'], discuss: "Opsi C adalah sifat jajar genjang/persegi panjang, belum tentu persegi. Syarat mutlak persegi: 4 sisi sama panjang (A) dan 4 sudut siku-siku (B)."
         },
         {
-            id: 12, type: "PG",
-            stimulus: "Sebuah kubus memiliki rusuk.",
-            question: "Jumlah rusuk pada bangun ruang kubus adalah...",
-            options: [{val: 'A', label: "8"}, {val: 'B', label: "10"}, {val: 'C', label: "12"}, {val: 'D', label: "6"}],
-            key: 'C',
-            discuss: "Kubus memiliki 12 rusuk."
+            id: 12, elemen: "Geometri dan Pengukuran", sub: "Geometri Bangun Ruang", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <div class="shape-kubus"></div>
+                       </div>
+                       <p class="text-justify">Dalam tugas keterampilan sekolah, kelompok Dini ditugaskan membuat kerangka bangun ruang berbentuk <b>Kubus</b> menggunakan bahan kawat aluminium. Guru mensyaratkan bahwa setiap potongan kawat panjangnya persis sama, yaitu 10 cm untuk membentuk satu sisi (rusuk).</p>`,
+            question: "Untuk membentuk satu kerangka kubus utuh, ada berapa potong kawat 10 cm yang harus Dini persiapkan?",
+            options: [{val: 'A', label: "8 potong"}, {val: 'B', label: "10 potong"}, {val: 'C', label: "12 potong"}, {val: 'D', label: "6 potong"}],
+            key: 'C', discuss: "Kerangka bangun adalah garis-garis rusuknya. Bangun ruang Kubus terbentuk dari tepat 12 buah rusuk yang sama panjang."
         },
         {
-            id: 13, type: "PG",
-            stimulus: "Panjang pensil Andi diukur dengan penggaris menunjukkan angka 15 cm.",
-            question: "Panjang pensil tersebut jika diubah ke milimeter adalah...",
-            options: [{val: 'A', label: "1.5 mm"}, {val: 'B', label: "150 mm"}, {val: 'C', label: "1500 mm"}, {val: 'D', label: "0.15 mm"}],
-            key: 'B',
-            discuss: "1 cm = 10 mm. 15 cm = 150 mm."
+            id: 13, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <div class="ruler">
+                            <div class="ruler-tick"></div><div class="ruler-tick"></div><div class="ruler-tick"></div><div class="ruler-tick"></div><div class="ruler-tick"></div>
+                          </div>
+                       </div>
+                       <p class="text-justify">Andi memiliki seutas tali pita berwarna merah. Saat diukur pada penggaris sekolah yang memiliki skala sentimeter, panjang pita tersebut tepat berada di angka <b>15 cm</b>.</p>
+                       <p class="text-justify">Untuk keperluan kerajinan hias, Andi menggunting ujung pita tersebut sepanjang <b>50 milimeter (mm)</b>.</p>`,
+            question: "Setelah digunting, berapakah sisa panjang pita merah milik Andi jika diukur dalam satuan sentimeter (cm)?",
+            options: [{val: 'A', label: "10 cm"}, {val: 'B', label: "5 cm"}, {val: 'C', label: "14,5 cm"}, {val: 'D', label: "100 cm"}],
+            key: 'A', discuss: "Konversi satuan: 50 mm = 5 cm. Sisa pita = Panjang awal (15 cm) - digunting (5 cm) = 10 cm."
         },
         {
-            id: 14, type: "PG",
-            stimulus: "Jarak rumah ke sekolah 2 km. Andi sudah berjalan sejauh 1.200 meter.",
-            question: "Berapa meter lagi Andi sampai ke sekolah?",
-            options: [{val: 'A', label: "800 m"}, {val: 'B', label: "1.000 m"}, {val: 'C', label: "1.200 m"}, {val: 'D', label: "200 m"}],
-            key: 'A',
-            discuss: "2 km = 2.000 m. Sisa = 2.000 - 1.200 = 800 m."
+            id: 14, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<p class="text-justify">Jarak rumah Budi ke gerbang sekolah jika ditarik garis lurus pada peta wilayah adalah sejauh <b>2 kilometer (km)</b>.</p>
+                       <p class="text-justify">Pagi ini Budi berangkat ke sekolah mengendarai sepeda. Setelah asyik mengayuh sejauh <b>1.200 meter</b>, tiba-tiba ban sepedanya bocor. Terpaksa Budi harus menuntun sepedanya sisa perjalanan menuju sekolah.</p>`,
+            question: "Berapa meter jarak yang harus ditempuh Budi dengan berjalan kaki menuntun sepeda hingga sampai ke gerbang sekolah?",
+            options: [{val: 'A', label: "800 meter"}, {val: 'B', label: "1.000 meter"}, {val: 'C', label: "1.200 meter"}, {val: 'D', label: "200 meter"}],
+            key: 'A', discuss: "Samakan satuan ukuran ke meter: 2 km = 2.000 meter. Jarak berjalan kaki = Total (2.000) - Naik sepeda (1.200) = 800 meter."
         },
         {
-            id: 15, type: "PG",
-            stimulus: `<div class="shape-rect" style="width:100px; height:100px">Kubus</div><p>Volume kubus dengan sisi 10 cm.</p>`,
-            question: "Hitung volumenya!",
-            options: [{val: 'A', label: "100 cm³"}, {val: 'B', label: "1.000 cm³"}, {val: 'C', label: "600 cm³"}, {val: 'D', label: "30 cm³"}],
-            key: 'B',
-            discuss: "Volume = s x s x s = 10 x 10 x 10 = 1.000."
+            id: 15, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <div class="shape-rect" style="width:120px; height:120px;">Sawah Kakek</div>
+                       </div>
+                       <p class="text-justify">Kakek memiliki sebidang tanah persawahan yang bentuk batas luar tanahtnya adalah persegi sempurna (keempat sisinya sama panjang). Jika Kakek berjalan menyusuri pagar luar mengelilingi sawah tersebut satu putaran penuh, jarak tempuh kelilingnya adalah <b>80 meter</b>.</p>`,
+            question: "Berdasarkan informasi keliling tersebut, berapakah luas tanah sawah peninggalan kakek?",
+            options: [{val: 'A', label: "40 meter persegi (m²)"}, {val: 'B', label: "80 meter persegi (m²)"}, {val: 'C', label: "400 meter persegi (m²)"}, {val: 'D', label: "160 meter persegi (m²)"}],
+            key: 'C', discuss: "Analisis HOTS: Keliling Persegi = 4 x Sisi. Jika Keliling = 80, maka Sisi = 80 / 4 = 20 meter. Luas = Sisi x Sisi = 20 x 20 = 400 m²."
         },
         {
-            id: 16, type: "PG",
-            stimulus: "Ibu membeli 2 liter susu cair.",
-            question: "2 liter sama dengan berapa mililiter?",
-            options: [{val: 'A', label: "200 ml"}, {val: 'B', label: "2.000 ml"}, {val: 'C', label: "20.000 ml"}, {val: 'D', label: "20 ml"}],
-            key: 'B',
-            discuss: "1 liter = 1.000 ml."
+            id: 16, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <div class="beaker"><div class="beaker-liquid"></div></div>
+                          <p class="mt-2 text-muted">Kapasitas Penuh: 2 Liter</p>
+                       </div>
+                       <p class="text-justify">Sore hari, Ibu mampir ke peternak sapi perah dan membeli susu cair segar kemasan jerigen ukuran <b>2 liter</b> penuh. Sampai di rumah, Ibu ingin menyajikan susu tersebut kepada keluarga besar yang sedang berkumpul.</p>
+                       <p class="text-justify">Ibu menuangkan susu tersebut ke dalam gelas-gelas kecil yang masing-masing memiliki kapasitas tepat <b>200 mililiter (ml)</b>.</p>`,
+            question: "Berapa banyak gelas maksimal yang bisa terisi penuh oleh susu cair dari jerigen Ibu?",
+            options: [{val: 'A', label: "2 gelas"}, {val: 'B', label: "10 gelas"}, {val: 'C', label: "20 gelas"}, {val: 'D', label: "5 gelas"}],
+            key: 'B', discuss: "Konversi satuan volume cair: 2 Liter = 2.000 ml. Banyak gelas = Total Volume (2.000 ml) dibagi kapasitas gelas (200 ml) = 10 gelas."
         },
         {
-            id: 17, type: "PG",
-            stimulus: "Berat badan adik 8 kg.",
-            question: "Berat adik dalam ons (hg) adalah...",
-            options: [{val: 'A', label: "80 ons"}, {val: 'B', label: "800 ons"}, {val: 'C', label: "8 ons"}, {val: 'D', label: "0.8 ons"}],
-            key: 'A',
-            discuss: "1 kg = 10 ons. 8 kg = 80 ons."
+            id: 17, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<p class="text-justify">Di pasar tradisional, seorang pedagang daging menggunakan timbangan kodok klasik bermeja besi. Bibi membeli daging sapi segar seberat <b>8 kilogram (kg)</b> untuk keperluan hajatan keluarga.</p>
+                       <p class="text-justify">Pedagang tersebut hanya memiliki stok anak timbangan logam bata yang semuanya berukuran <b>10 ons (1 kg)</b>.</p>`,
+            question: "Untuk menyeimbangkan pelat timbangan daging tersebut, berapa banyak anak timbangan 10 ons yang harus dinaikkan pedagang ke atas meja timbangan?",
+            options: [{val: 'A', label: "80 buah"}, {val: 'B', label: "10 buah"}, {val: 'C', label: "8 buah"}, {val: 'D', label: "18 buah"}],
+            key: 'C', discuss: "Satu anak timbangan bernilai 10 ons, yang ekuivalen (sama dengan) 1 kg. Karena berat daging 8 kg, maka dibutuhkan 8 buah anak timbangan 1 kg."
         },
         {
-            id: 18, type: "PG",
-            stimulus: "Ibu membeli 500 gram gula dan 1 kg beras.",
-            question: "Total berat belanjaan Ibu dalam gram adalah...",
-            options: [{val: 'A', label: "600 gram"}, {val: 'B', label: "1.000 gram"}, {val: 'C', label: "1.500 gram"}, {val: 'D', label: "15.000 gram"}],
-            key: 'C',
-            discuss: "1 kg = 1.000 gram. Total = 500 + 1.000 = 1.500 gram."
+            id: 18, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<p class="text-justify">Dalam buku resep masakan Nusantara, sebuah menu opor ayam lezat untuk 10 porsi membutuhkan daging ayam mentah sebanyak <b>1,5 kg</b>.</p>
+                       <p class="text-justify">Kakak memeriksa isi kulkas dan ternyata di dalam kotak pendingin baru tersedia daging ayam potong seberat <b>500 gram</b>.</p>`,
+            question: "Kakak harus pergi ke pasar untuk membeli tambahan daging ayam. Berapa gram daging ayam lagi kekurangannya agar sesuai resep?",
+            options: [{val: 'A', label: "1.000 gram"}, {val: 'B', label: "1.500 gram"}, {val: 'C', label: "500 gram"}, {val: 'D', label: "100 gram"}],
+            key: 'A', discuss: "Konversi massa: 1,5 kg = 1.500 gram. Kekurangan = Kebutuhan (1.500 gram) - Tersedia (500 gram) = 1.000 gram."
         },
         {
-            id: 19, type: "PG",
-            stimulus: "Sekarang pukul 08.00. 3 jam kemudian pukul berapa?",
-            question: "Tentukan waktunya!",
-            options: [{val: 'A', label: "10.00"}, {val: 'B', label: "11.00"}, {val: 'C', label: "12.00"}, {val: 'D', label: "09.00"}],
-            key: 'B',
-            discuss: "08.00 + 3 jam = 11.00."
+            id: 19, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<p class="text-justify">Paman sedang mudik lebaran ke kampung halaman menggunakan kereta api kelas eksekutif. Sesuai jadwal di tiket, kereta api berangkat dari stasiun tepat pada pukul <b>08.00 WIB</b> pagi.</p>
+                       <p class="text-justify">Di papan informasi tercantum bahwa estimasi lama perjalanan (durasi tempuh) kereta tersebut adalah <b>2 jam 30 menit</b> tanpa ada kendala berhenti di jalan.</p>`,
+            question: "Pada pukul berapakah perkiraan paman akan tiba turun di stasiun tujuan?",
+            options: [{val: 'A', label: "10.00 WIB"}, {val: 'B', label: "10.30 WIB"}, {val: 'C', label: "11.00 WIB"}, {val: 'D', label: "09.30 WIB"}],
+            key: 'B', discuss: "Penjumlahan waktu: 08.00 ditambah durasi 2 jam = 10.00. Ditambah lagi lebihan 30 menit = Pukul 10.30 WIB."
         },
         {
-            id: 20, type: "PG",
-            stimulus: "Ayah bekerja selama 2 tahun.",
-            question: "Berapa bulan Ayah bekerja?",
-            options: [{val: 'A', label: "12 bulan"}, {val: 'B', label: "20 bulan"}, {val: 'C', label: "24 bulan"}, {val: 'D', label: "30 bulan"}],
-            key: 'C',
-            discuss: "1 tahun = 12 bulan. 2 x 12 = 24 bulan."
+            id: 20, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<p class="text-justify">Pemerintah meresmikan proyek pembangunan jembatan layang (flyover) untuk mengurai kemacetan kota. Dari papan proyek yang dipasang di pinggir jalan, tertulis target waktu pengerjaan proyek akan memakan waktu <b>2 tahun 6 bulan</b> terhitung sejak batu pertama diletakkan.</p>`,
+            question: "Jika dievaluasi oleh mandor lapangan berdasarkan satuan bulan, berapa total bulan waktu maksimal pengerjaan proyek tersebut dari awal hingga selesai?",
+            options: [{val: 'A', label: "24 bulan"}, {val: 'B', label: "26 bulan"}, {val: 'C', label: "30 bulan"}, {val: 'D', label: "18 bulan"}],
+            key: 'C', discuss: "1 tahun terdiri atas 12 bulan. 2 tahun = 2 x 12 = 24 bulan. Ditambah sisa 6 bulan = 24 + 6 = 30 bulan."
         },
         {
-            id: 21, type: "PG",
-            stimulus: "Sebuah mobil melaju dengan kecepatan 60 km/jam.",
-            question: "Berapa jarak yang ditempuh dalam 2 jam?",
-            options: [{val: 'A', label: "30 km"}, {val: 'B', label: "100 km"}, {val: 'C', label: "120 km"}, {val: 'D', label: "150 km"}],
-            key: 'C',
-            discuss: "Jarak = Kecepatan x Waktu = 60 x 2 = 120 km."
+            id: 21, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<p class="text-justify">Pak sopir mengendarai bus Antar Kota Dalam Provinsi (AKDP) melintasi jalan tol yang bebas hambatan. Sistem pada mesin mendeteksi bus melaju secara konstan (tetap) dengan kecepatan laju <b>60 kilometer per jam (km/jam)</b>.</p>
+                       <p class="text-justify">Apabila bus tersebut berhasil mempertahankan kecepatannya tanpa merem selama durasi <b>2 jam penuh</b>.</p>`,
+            question: "Berapa panjang lintasan jarak jalan tol yang telah berhasil dilalui oleh bus tersebut?",
+            options: [{val: 'A', label: "30 km"}, {val: 'B', label: "80 km"}, {val: 'C', label: "120 km"}, {val: 'D', label: "150 km"}],
+            key: 'C', discuss: "Kecepatan adalah jarak tempuh per satuan waktu. Dalam 1 jam menempuh 60 km. Jika 2 jam, Jarak = 60 km/jam x 2 jam = 120 km."
         },
         {
-            id: 22, type: "PG",
-            stimulus: `<div class="shape-rect" style="width:200px; height:100px; background:transparent;">P = 10cm, L = 5cm</div>`,
-            question: "Hitunglah keliling persegi panjang di atas!",
-            options: [{val: 'A', label: "15 cm"}, {val: 'B', label: "30 cm"}, {val: 'C', label: "50 cm"}, {val: 'D', label: "25 cm"}],
-            key: 'B',
-            discuss: "Keliling = 2 x (P + L) = 2 x (10+5) = 30 cm."
+            id: 22, elemen: "Geometri dan Pengukuran", sub: "Geometri Bangun Datar", type: "PG",
+            stimulus: `<p class="text-justify">Pemerintah desa merancang sebuah taman desa berbentuk persegi panjang. Pada sketsa denah, taman tersebut dirancang memiliki panjang area <b>10 meter</b> dan lebar <b>5 meter</b>.</p>
+                       <p class="text-justify">Kepala Desa memerintahkan pekerja untuk menanam bibit pohon mawar hias di sepanjang garis batas keliling taman tersebut. Agar taman terlihat rapi, pohon mawar akan ditanam dengan jarak tepat setiap <b>3 meter</b> sekali.</p>`,
+            question: "Setelah area pinggiran taman dipetakan, berapakah jumlah bibit pohon mawar yang dibutuhkan oleh pekerja tersebut?",
+            options: [{val: 'A', label: "15 pohon"}, {val: 'B', label: "30 pohon"}, {val: 'C', label: "5 pohon"}, {val: 'D', label: "10 pohon"}],
+            key: 'D', discuss: "Analisis Keliling. Keliling taman = 2 x (Panjang 10m + Lebar 5m) = 2 x 15 = 30 meter keliling. Banyak pohon = 30 meter dibagi jarak 3m = 10 bibit pohon."
         },
         {
-            id: 23, type: "PG",
-            stimulus: "Sebuah sawah berbentuk persegi dengan sisi 20 meter.",
-            question: "Luas sawah tersebut adalah...",
-            options: [{val: 'A', label: "40 m²"}, {val: 'B', label: "80 m²"}, {val: 'C', label: "400 m²"}, {val: 'D', label: "200 m²"}],
-            key: 'C',
-            discuss: "Luas Persegi = S x S = 20 x 20 = 400 m²."
+            id: 23, elemen: "Geometri dan Pengukuran", sub: "Geometri Bangun Ruang", type: "PG",
+            stimulus: `<p class="text-justify">Budi baru saja membeli kotak wadah penyimpanan mainan bongkar-pasang berbahan plastik mika bening berbentuk balok. Bagian luar kotak tertulis kapasitas dimensi ruang dalamnya: panjang <b>5 cm</b>, lebar <b>3 cm</b>, dan tinggi ruang <b>2 cm</b>.</p>
+                       <p class="text-justify">Budi memiliki banyak koleksi kubus rubik miniatur (kubus satuan) yang setiap kubusnya memiliki ukuran seragam yaitu 1 cm x 1 cm x 1 cm (volume 1 cm³).</p>`,
+            question: "Jika disusun rapat tanpa celah, berapa banyak maksimal kubus miniatur yang bisa Budi masukkan hingga kotak wadah plastiknya terisi penuh?",
+            options: [{val: 'A', label: "10 buah kubus"}, {val: 'B', label: "30 buah kubus"}, {val: 'C', label: "15 buah kubus"}, {val: 'D', label: "25 buah kubus"}],
+            key: 'B', discuss: "Volume ruang kotak = P(5) x L(3) x T(2) = 30 cm³. Volume kubus kecil 1 cm³. Banyak kubus muat = 30 dibagi 1 = 30 buah kubus."
         },
         {
-            id: 24, type: "PG",
-            stimulus: "Sebuah balok memiliki P=5cm, L=3cm, T=2cm.",
-            question: "Volume balok tersebut adalah...",
-            options: [{val: 'A', label: "10 cm³"}, {val: 'B', label: "30 cm³"}, {val: 'C', label: "15 cm³"}, {val: 'D', label: "25 cm³"}],
-            key: 'B',
-            discuss: "Volume = P x L x T = 5 x 3 x 2 = 30 cm³."
+            id: 24, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <h1 style="font-size:80px; margin:0; line-height:1; font-family: monospace;">L</h1>
+                       </div>
+                       <p class="text-justify">Seorang arsitek mendesain pilar penyangga rumah yang menyiku. Saat di kertas blueprint (cetak biru), pertemuan antara garis pondasi tanah mendatar dan garis tiang vertikal ke atas digambar layaknya huruf <b>L</b> kapital tegak lurus sempurna tanpa kemiringan.</p>`,
+            question: "Dalam ilmu pengukuran geometri, jenis sudut apakah yang dibentuk pada titik sudut tumpuan pondasi (huruf L) tersebut?",
+            options: [{val: 'A', label: "Sudut Lancip"}, {val: 'B', label: "Sudut Tumpul"}, {val: 'C', label: "Sudut Siku-siku (90°)"}, {val: 'D', label: "Sudut Lurus"}],
+            key: 'C', discuss: "Huruf L kapital dengan garis vertikal dan horizontal yang tegak lurus membentuk suatu perpotongan persis 90 derajat, atau disebut sudut siku-siku."
         },
         {
-            id: 25, type: "PG",
-            stimulus: `<div class="text-center" style="font-size:40px; font-weight:bold;">L</div>`,
-            question: "Sudut yang terbentuk pada huruf L kapital adalah sudut...",
-            options: [{val: 'A', label: "Lancip"}, {val: 'B', label: "Tumpul"}, {val: 'C', label: "Siku-siku"}, {val: 'D', label: "Lurus"}],
-            key: 'C',
-            discuss: "Huruf L membentuk sudut 90 derajat (siku-siku)."
+            id: 25, elemen: "Geometri dan Pengukuran", sub: "Pengukuran", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <div class="clock-face">
+                            <div class="hand-hour"></div>
+                            <div class="hand-min"></div>
+                            <div class="clock-center"></div>
+                          </div>
+                       </div>
+                       <p class="text-justify">Sore hari, jam dinding di ruang tamu rumah kakek berdetak tepat menunjuk pukul <b>04.00 WIB</b>. Jarum pendek yang tebal menunjuk ke angka 4, dan jarum panjang (menit) menunjuk tegak lurus ke atas ke angka 12.</p>`,
+            question: "Perhatikan ruang atau jarak pemisah antara kedua jarum tersebut pada posisi lintasan terpendek. Apabila diukur dengan busur derajat, jenis sudut apakah ruang yang terbentuk di antara kedua jarum itu?",
+            options: [{val: 'A', label: "Sudut Lancip"}, {val: 'B', label: "Sudut Tumpul"}, {val: 'C', label: "Sudut Siku-siku"}, {val: 'D', label: "Sudut Lurus"}],
+            key: 'B', discuss: "Sudut satu putaran jam (12 angka) adalah 360°. Tiap 1 jam (1 angka) jaraknya 360/12 = 30°. Jarak angka 12 ke 4 adalah 4 jarak x 30° = 120°. Sudut > 90° adalah Sudut Tumpul."
         },
 
-        // DATA (5 Soal)
+        // ELEMEN: DATA
         {
-            id: 26, type: "PG",
-            stimulus: `
-                <div class="bar-chart-container">
-                    <div class="bar" style="height: 40%"><span>4</span><div class="bar-label">Apel</div></div>
-                    <div class="bar" style="height: 80%"><span>8</span><div class="bar-label">Jeruk</div></div>
-                    <div class="bar" style="height: 60%"><span>6</span><div class="bar-label">Mangga</div></div>
-                </div>
-            `,
-            question: "Berdasarkan diagram batang di atas, buah apa yang paling banyak disukai?",
-            options: [{val: 'A', label: "Apel"}, {val: 'B', label: "Jeruk"}, {val: 'C', label: "Mangga"}, {val: 'D', label: "Semua sama"}],
-            key: 'B',
-            discuss: "Batang tertinggi adalah Jeruk (8 siswa)."
+            id: 26, elemen: "Data", sub: "Penyajian dan Penggunaan Data", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <h6 class="font-weight-bold">Survei Menu Bekal Favorit Siswa Kelas 3</h6>
+                          <div class="bar-chart-container">
+                              <div class="bar" style="height: 50%"><span>5</span><div class="bar-label">Roti</div></div>
+                              <div class="bar" style="height: 80%"><span>8</span><div class="bar-label">Nasi<br>Goreng</div></div>
+                              <div class="bar" style="height: 30%"><span>3</span><div class="bar-label">Mie</div></div>
+                          </div>
+                       </div>
+                       <p class="text-justify">Ibu wali kelas sedang mendata tren bekal makanan harian siswa untuk program gizi sekolah. Hasil pendataan tersebut divisualisasikan menjadi diagram balok warna-warni yang ditempel di mading kelas.</p>`,
+            question: "Berdasarkan diagram visualisasi di atas, menu bekal apakah yang paling dominan (terbanyak) dibawa oleh siswa kelas 3?",
+            options: [{val: 'A', label: "Roti"}, {val: 'B', label: "Nasi Goreng"}, {val: 'C', label: "Mie"}, {val: 'D', label: "Telur Ceplok"}],
+            key: 'B', discuss: "Analisis grafik batang yang paling menjulang tinggi (balok tengah) menunjukkan Nasi Goreng dengan jumlah peminat tertinggi (8 anak)."
         },
         {
-            id: 27, type: "PG",
-            stimulus: "Data nilai ulangan: 7, 8, 9, 7, 8, 8, 10.",
-            question: "Berapa banyak siswa yang mendapat nilai 8?",
-            options: [{val: 'A', label: "2"}, {val: 'B', label: "3"}, {val: 'C', label: "4"}, {val: 'D', label: "1"}],
-            key: 'B',
-            discuss: "Nilai 8 muncul 3 kali."
+            id: 27, elemen: "Data", sub: "Penyajian dan Penggunaan Data", type: "PG",
+            stimulus: `<div class="visual-box bg-white p-3 border">
+                        <p class="text-muted small">Kartu Catatan Nilai Harian Guru</p>
+                        <h3 class="text-primary font-weight-bold" style="letter-spacing: 5px;">7, 8, 9, 7, 8, 8, 10</h3>
+                       </div>
+                       <p class="text-justify">Bapak Guru baru saja selesai menilai lembar ujian esai matematika dadakan dari kelompok diskusi meja depan. Beliau merekap hasil skor bulat mentah mereka pada secarik kertas secara acak dan sejajar seperti kumpulan angka di atas.</p>`,
+            question: "Bapak Guru ingin memanggil kelompok siswa dengan nilai kategori 'Tengah' (nilai 8) untuk diberikan soal remedial ringan. Ada berapa banyak siswa yang akan dipanggil beliau?",
+            options: [{val: 'A', label: "2 siswa"}, {val: 'B', label: "3 siswa"}, {val: 'C', label: "4 siswa"}, {val: 'D', label: "1 siswa"}],
+            key: 'B', discuss: "Pencarian frekuensi/kemunculan elemen dalam deret data: angka '8' tertulis sebanyak 3 kali dari urutan data, maka ada 3 siswa."
         },
         {
-            id: 28, type: "PG",
-            stimulus: `
-                <table class="table table-bordered table-sm text-center">
-                    <tr><th>Hobi</th><th>Jumlah Siswa</th></tr>
-                    <tr><td>Membaca</td><td>10</td></tr>
-                    <tr><td>Menari</td><td>5</td></tr>
-                    <tr><td>Sepak Bola</td><td>15</td></tr>
-                </table>
-            `,
-            question: "Berapa selisih siswa yang hobi Sepak Bola dan Menari?",
-            options: [{val: 'A', label: "5"}, {val: 'B', label: "10"}, {val: 'C', label: "15"}, {val: 'D', label: "20"}],
-            key: 'B',
-            discuss: "Sepak Bola (15) - Menari (5) = 10."
+            id: 28, elemen: "Data", sub: "Penyajian dan Penggunaan Data", type: "PG",
+            stimulus: `<div class="visual-box">
+                          <table class="table table-bordered table-sm text-center bg-white shadow-sm">
+                              <thead class="bg-light"><tr><th width="30%">Jenis Ekstrakurikuler</th><th>Data Pendaftar <br><span class="text-danger small">(Keterangan: <i class="fa fa-user"></i> mewakili 5 siswa)</span></th></tr></thead>
+                              <tbody>
+                                  <tr><td class="align-middle font-weight-bold">Pramuka</td><td class="text-info text-left pl-4"><i class="fa fa-user fa-lg mx-1"></i> <i class="fa fa-user fa-lg mx-1"></i></td></tr>
+                                  <tr><td class="align-middle font-weight-bold">Olahraga Futsal</td><td class="text-info text-left pl-4"><i class="fa fa-user fa-lg mx-1"></i> <i class="fa fa-user fa-lg mx-1"></i> <i class="fa fa-user fa-lg mx-1"></i></td></tr>
+                              </tbody>
+                          </table>
+                       </div>
+                       <p class="text-justify">Panitia sekolah membuat papan informasi pendaftaran ekstrakurikuler (ekskul) menggunakan piktogram (diagram ikon/gambar) agar terlihat menarik bagi siswa baru.</p>`,
+            question: "Sekolah harus menyiapkan anggaran dana pembinaan yang berbeda untuk setiap ekskul berdasarkan jumlah pesertanya. Berapakah selisih/beda jumlah siswa pendaftar antara ekskul Futsal dengan Pramuka?",
+            options: [{val: 'A', label: "1 siswa"}, {val: 'B', label: "5 siswa"}, {val: 'C', label: "10 siswa"}, {val: 'D', label: "15 siswa"}],
+            key: 'B', discuss: "Analisis ikon. Futsal = 3 ikon (3x5=15 anak). Pramuka = 2 ikon (2x5=10 anak). Selisih/beda pengurangan = 15 - 10 = 5 anak."
         },
         {
-            id: 29, type: "CHECKBOX",
-            stimulus: "Data Panen: Senin (10kg), Selasa (15kg), Rabu (10kg).",
-            question: "Pilih pernyataan yang benar!",
+            id: 29, elemen: "Data", sub: "Penyajian dan Penggunaan Data", type: "CHECKBOX",
+            stimulus: `<p class="text-justify">Koperasi Unit Desa (KUD) 'Sejahtera' mencatat rekapitulasi data hasil panen gabah basah dari lahan uji coba milik desa selama 3 hari berturut-turut pada musim penghujan minggu lalu. Laporannya ditulis tangan ke dalam buku kas:</p>
+                       <ul class="text-left font-weight-bold">
+                           <li>Hari Senin: terkumpul 10 kuintal</li>
+                           <li>Hari Selasa: terkumpul 15 kuintal</li>
+                           <li>Hari Rabu: terkumpul 10 kuintal</li>
+                       </ul>`,
+            question: "Dari rangkuman data di atas, pernyataan simpulan mana sajakah yang dapat dibenarkan? (Pilih semua yang dianggap tepat)",
             options: [
-                {val: 'A', label: "Panen hari Selasa paling banyak"},
-                {val: 'B', label: "Panen hari Senin sama dengan hari Rabu"},
-                {val: 'C', label: "Total panen 3 hari adalah 40kg"}
+                {val: 'A', label: "Hasil panen puncak (terbanyak) terjadi pada hari Selasa."},
+                {val: 'B', label: "Ada kesamaan jumlah beban panen antara hari Senin dan hari Rabu."},
+                {val: 'C', label: "Total gabah secara keseluruhan yang diperoleh KUD dalam tiga hari tersebut adalah 40 kuintal."}
             ],
-            key: ['A', 'B'],
-            discuss: "A Benar (15kg). B Benar (10kg=10kg). C Salah (Total 35kg)."
+            key: ['A', 'B'], discuss: "Opsi A benar (15 lebih tinggi dari 10). Opsi B benar (10 = 10). Opsi C keliru, karena total penjumlahan seharusnya: 10 + 15 + 10 = 35 kuintal, bukan 40."
         },
         {
-            id: 30, type: "PG",
-            stimulus: "Rata-rata penjualan buku selama 3 hari adalah 10 buku. Hari pertama 8, hari kedua 10.",
-            question: "Berapa penjualan hari ketiga?",
-            options: [{val: 'A', label: "10"}, {val: 'B', label: "12"}, {val: 'C', label: "8"}, {val: 'D', label: "14"}],
-            key: 'B',
-            discuss: "Total = 3 x 10 = 30. Hari 3 = 30 - 8 - 10 = 12."
+            id: 30, elemen: "Data", sub: "Penyajian dan Penggunaan Data", type: "PG",
+            stimulus: `<p class="text-justify">Dinda memiliki target prestasi akademik semester ini. Syarat masuk pendaftaran kelas perlombaan OSN Matematika adalah harus memiliki catatan nilai rata-rata dari <b>3 kali ujian try-out minimal menyentuh angka 85</b>.</p>
+                       <p class="text-justify">Dinda telah mengikuti dua sesi ujian. Pada ujian pertama ia hanya sanggup meraih skor <b>80</b> karena sakit. Di ujian kedua prestasinya membaik dengan perolehan skor <b>85</b>.</p>`,
+            question: "Minggu depan Dinda akan menghadapi ujian try-out yang ketiga (terakhir). Berapa skor mutlak yang harus dikejar Dinda pada ujian tersebut agar rata-rata ketiganya pas menjadi 85?",
+            options: [{val: 'A', label: "Skor 85"}, {val: 'B', label: "Skor 90"}, {val: 'C', label: "Skor 95"}, {val: 'D', label: "Skor 80"}],
+            key: 'B', discuss: "HOTS Penalaran: Rata-rata 3 ujian harus 85, berarti Total Nilai Kombinasi = 3 x 85 = 255. Dinda sudah mengantongi nilai ujian (80 + 85) = 165. Maka kekurangan ujian ketiga = 255 - 165 = Skor 90."
         }
     ];
 
     // --- 2. LOGIC VARIABLES ---
     let currentIndex = 0;
-    let userAnswers = {}; // { 1: 'A', 2: ['A','B'] ... }
+    let userAnswers = {};
     let raguStatus = {};
-    let timeRemaining = 3600; // 60 menit
+    let timeRemaining = 3600; 
     let timerInterval;
     let peserta = { nama: "", sekolah: "" };
 
-    // --- 3. LOGIN & INIT ---
+    // --- 3. UTILS ---
+    function showAlert(msg) {
+        $("#alert-text").text(msg);
+        $("#custom-alert").fadeIn().delay(3000).fadeOut();
+    }
+
+    // --- 4. LOGIN & INIT ---
     function startExam() {
         const nama = $("#inputNama").val();
         const sekolah = $("#inputSekolah").val();
@@ -809,33 +736,34 @@
                 startTimer();
             });
         } else {
-            alert("Harap isi semua data!");
+            showAlert("Harap isi semua data diri Anda terlebih dahulu!");
         }
     }
 
-    // --- 4. NAVIGATION & DISPLAY ---
+    // --- 5. NAVIGATION & DISPLAY ---
     function loadSoal(index) {
         currentIndex = index;
         const soal = bankSoal[index];
 
         $("#displayNoSoal").text(soal.id);
+        $("#displayElemen").text(soal.elemen);
         $("#stimulusArea").html(soal.stimulus);
         $("#questionArea").html("");
 
-        let html = `<h5>${soal.question}</h5><hr>`;
+        let html = `<h5 class="font-weight-bold lh-base" style="line-height: 1.6;">${soal.question}</h5><hr>`;
 
         if (soal.type === "PG") {
             soal.options.forEach(opt => {
                 const checked = userAnswers[soal.id] === opt.val ? 'checked' : '';
                 const inputId = `pg_${soal.id}_${opt.val}`;
                 html += `
-                    <div class="card mb-2" onclick="saveAnswer('${soal.id}', '${opt.val}')" style="cursor:pointer">
-                        <div class="card-body p-2 d-flex align-items-center">
+                    <div class="card mb-3 border-0 shadow-sm" onclick="saveAnswer('${soal.id}', '${opt.val}')" style="cursor:pointer; transition: all 0.2s ease-in-out; border-radius: 8px;">
+                        <div class="card-body p-3 d-flex align-items-center">
                             <div class="radio icheck-primary mr-3">
                                 <input type="radio" id="${inputId}" name="pg_${soal.id}" value="${opt.val}" ${checked}>
                                 <label for="${inputId}"></label>
                             </div>
-                            <div>${opt.label}</div>
+                            <div style="font-size: 1.1rem; color: #2c3e50;">${opt.label}</div>
                         </div>
                     </div>
                 `;
@@ -846,34 +774,34 @@
                 const checked = currentArr.includes(opt.val) ? 'checked' : '';
                 const inputId = `chk_${soal.id}_${opt.val}`;
                 html += `
-                    <div class="card mb-2">
-                        <div class="card-body p-2">
+                    <div class="card mb-3 border-0 shadow-sm" style="border-radius: 8px;">
+                        <div class="card-body p-3">
                             <div class="checkbox icheck-primary">
                                 <input type="checkbox" id="${inputId}" onchange="saveAnswerCheckbox('${soal.id}', '${opt.val}')" ${checked}>
-                                <label for="${inputId}">${opt.label}</label>
+                                <label for="${inputId}" style="font-size: 1.1rem; cursor:pointer; font-weight: normal; color: #2c3e50;">${opt.label}</label>
                             </div>
                         </div>
                     </div>
                 `;
             });
         } else if (soal.type === "MATRIX") {
-            html += `<table class="table table-bordered text-center table-sm">
-                        <thead class="thead-light"><tr><th>Pernyataan</th><th width="60">Benar</th><th width="60">Salah</th></tr></thead>
+            html += `<div class="table-responsive"><table class="table table-bordered text-center table-hover bg-white shadow-sm mt-3" style="border-radius:8px; overflow:hidden;">
+                        <thead style="background-color: #ecf0f1;"><tr><th width="70%">Pernyataan Keputusan</th><th width="15%">BENAR</th><th width="15%">SALAH</th></tr></thead>
                         <tbody>`;
             soal.rows.forEach(row => {
                 const saved = (userAnswers[soal.id] || {})[row.id];
                 const inputName = `mtx_${soal.id}_${row.id}`;
                 html += `
                     <tr>
-                        <td class="text-left">${row.text}</td>
-                        <td>
-                            <div class="radio icheck-primary d-inline">
+                        <td class="text-left text-muted align-middle" style="font-size: 0.95rem;">${row.text}</td>
+                        <td class="align-middle bg-light">
+                            <div class="radio icheck-success d-inline">
                                 <input type="radio" id="${inputName}_B" name="${inputName}" onclick="saveAnswerMatrix('${soal.id}', '${row.id}', 'B')" ${saved==='B'?'checked':''}>
                                 <label for="${inputName}_B"></label>
                             </div>
                         </td>
-                        <td>
-                            <div class="radio icheck-primary d-inline">
+                        <td class="align-middle bg-light">
+                            <div class="radio icheck-danger d-inline">
                                 <input type="radio" id="${inputName}_S" name="${inputName}" onclick="saveAnswerMatrix('${soal.id}', '${row.id}', 'S')" ${saved==='S'?'checked':''}>
                                 <label for="${inputName}_S"></label>
                             </div>
@@ -881,12 +809,11 @@
                     </tr>
                 `;
             });
-            html += `</tbody></table>`;
+            html += `</tbody></table></div>`;
         }
 
         $("#questionArea").html(html);
 
-        // Update Buttons
         $("#btnPrev").prop('disabled', index === 0);
         if (index === bankSoal.length - 1) {
             $("#btnNext").html('SELESAI <i class="fa fa-flag-checkered ml-2"></i>').removeClass('btn-primary').addClass('btn-success');
@@ -894,7 +821,6 @@
             $("#btnNext").html('Berikutnya <i class="fa fa-chevron-right ml-2"></i>').removeClass('btn-success').addClass('btn-primary');
         }
 
-        // Ragu status
         $("#checkRagu").prop('checked', raguStatus[soal.id] || false);
         updateGridUI();
     }
@@ -902,7 +828,7 @@
     function renderGrid() {
         let html = '';
         bankSoal.forEach((s, i) => {
-            html += `<div class="btn-grid" id="grid_btn_${s.id}" onclick="goToSoal(${i})">${s.id}</div>`;
+            html += `<div class="btn-grid shadow-sm" id="grid_btn_${s.id}" onclick="goToSoal(${i})">${s.id}</div>`;
         });
         $("#soalGrid").html(html);
     }
@@ -912,7 +838,9 @@
             const btn = $(`#grid_btn_${s.id}`);
             btn.removeClass('current ragu answered');
 
-            if (userAnswers[s.id]) btn.addClass('answered');
+            if (userAnswers[s.id] && (Array.isArray(userAnswers[s.id]) ? userAnswers[s.id].length > 0 : Object.keys(userAnswers[s.id]).length > 0)) {
+                btn.addClass('answered');
+            }
             if (raguStatus[s.id]) btn.addClass('ragu');
             if (bankSoal[currentIndex].id === s.id) btn.addClass('current');
         });
@@ -935,11 +863,15 @@
         if (currentIndex > 0) loadSoal(currentIndex - 1);
     }
 
-    // --- 5. ANSWER HANDLING ---
+    // --- 6. ANSWER HANDLING ---
     function saveAnswer(soalId, val) {
         userAnswers[soalId] = val;
-        // Visually check the radio button (since onclick is on parent div)
         $(`#pg_${soalId}_${val}`).prop('checked', true);
+        
+        // Visual effect for clicked card
+        $(`input[name="pg_${soalId}"]`).closest('.card').css('background-color', '#fff');
+        $(`#pg_${soalId}_${val}`).closest('.card').css('background-color', '#e3f2fd');
+        
         updateGridUI();
     }
 
@@ -948,7 +880,14 @@
         const idx = userAnswers[soalId].indexOf(val);
         if (idx > -1) userAnswers[soalId].splice(idx, 1);
         else userAnswers[soalId].push(val);
+        
         if (userAnswers[soalId].length === 0) delete userAnswers[soalId];
+        
+        // Toggling visual color
+        const card = $(`#chk_${soalId}_${val}`).closest('.card');
+        if($(`#chk_${soalId}_${val}`).is(':checked')) card.css('background-color', '#e3f2fd');
+        else card.css('background-color', '#fff');
+        
         updateGridUI();
     }
 
@@ -964,7 +903,7 @@
         updateGridUI();
     }
 
-    // --- 6. SCORING & FINISH ---
+    // --- 7. SCORING & FINISH ---
     function calculateAndFinish() {
         clearInterval(timerInterval);
         $('#modalSelesai').modal('hide');
@@ -974,102 +913,130 @@
         let maxScore = 0;
         let detailHtml = '';
 
+        // Objek pelacak statistik elemen
+        let elemenStats = {
+            "Bilangan": { benar: 0, total: 0 },
+            "Geometri dan Pengukuran": { benar: 0, total: 0 },
+            "Data": { benar: 0, total: 0 }
+        };
+
         bankSoal.forEach(soal => {
             let soalScore = 0;
-            let soalMax = 0;
+            let soalMax = 1; // Maksimal 1 poin tiap nomor
             let userAnsDisplay = '-';
             let keyDisplay = '-';
-            
-            // Logic Scoring: Benar +5, Salah -1 (per item)
+            let statusBadge = '<span class="badge badge-danger px-2 py-1">Salah (0)</span>';
             
             if (soal.type === "PG") {
-                soalMax = 5;
                 const ans = userAnswers[soal.id];
-                userAnsDisplay = ans || '(Kosong)';
+                userAnsDisplay = ans || '<i class="text-muted">Kosong</i>';
                 keyDisplay = soal.key;
-
-                if (ans === soal.key) soalScore = 5;
-                else if (ans) soalScore = -1;
-                else soalScore = 0; // Kosong = 0 (biasanya) atau mau -1? Asumsi kosong = 0
-
+                if (ans === soal.key) {
+                    soalScore = 1;
+                    statusBadge = '<span class="badge badge-success px-2 py-1"><i class="fa fa-check"></i> Benar (1)</span>';
+                }
             } else if (soal.type === "CHECKBOX") {
-                // Checkbox: Check per item. If Correctly Checked +5, Incorrectly Checked -1.
-                // We simplify: If Answer Array Matches Key Array Exactly -> +5, Else -1? 
-                // Prompt: "dihitung tiap jawabanya". 
-                // Method: Compare User Set vs Key Set.
-                
-                const userArr = userAnswers[soal.id] || [];
-                const keyArr = soal.key;
-                userAnsDisplay = userArr.join(', ');
+                const userArr = (userAnswers[soal.id] || []).sort();
+                const keyArr = [...soal.key].sort();
+                userAnsDisplay = userArr.length > 0 ? userArr.join(', ') : '<i class="text-muted">Kosong</i>';
                 keyDisplay = keyArr.join(', ');
-
-                // Strategi: Tiap opsi Benar yang dipilih +5. Tiap opsi Salah yang dipilih -1.
-                // Misal kunci A,B. User pilih A,C.
-                // A (Benar dipilih) = +5.
-                // B (Benar tapi tidak dipilih) = 0.
-                // C (Salah tapi dipilih) = -1.
-                // Score = 4.
                 
-                soal.options.forEach(opt => {
-                    const isCorrect = keyArr.includes(opt.val);
-                    const isChecked = userArr.includes(opt.val);
-                    
-                    if (isCorrect) soalMax += 5; // Potential max
-                    
-                    if (isChecked) {
-                        if (isCorrect) soalScore += 5;
-                        else soalScore -= 1;
-                    }
-                });
-                
+                if (JSON.stringify(userArr) === JSON.stringify(keyArr)) {
+                    soalScore = 1;
+                    statusBadge = '<span class="badge badge-success px-2 py-1"><i class="fa fa-check"></i> Benar (1)</span>';
+                }
             } else if (soal.type === "MATRIX") {
                 const userObj = userAnswers[soal.id] || {};
-                userAnsDisplay = "Lihat Detail";
-                keyDisplay = "Lihat Pembahasan";
+                userAnsDisplay = Object.keys(userObj).length > 0 ? "Matriks Terisi" : '<i class="text-muted">Kosong</i>';
+                keyDisplay = "Berdasarkan Matriks";
 
+                let isMatrixCorrect = true;
                 soal.rows.forEach(row => {
-                    soalMax += 5;
-                    const uVal = userObj[row.id];
-                    const kVal = soal.key[row.id];
-                    
-                    if (uVal) {
-                        if (uVal === kVal) soalScore += 5;
-                        else soalScore -= 1;
+                    if (userObj[row.id] !== soal.key[row.id]) {
+                        isMatrixCorrect = false;
                     }
                 });
+
+                if (isMatrixCorrect && Object.keys(userObj).length === soal.rows.length) {
+                    soalScore = 1;
+                    statusBadge = '<span class="badge badge-success px-2 py-1"><i class="fa fa-check"></i> Benar (1)</span>';
+                }
             }
 
+            // Update Total Scores
             totalScore += soalScore;
             maxScore += soalMax;
 
-            // Generate Recap Row
+            // Update Element Stats
+            if(elemenStats[soal.elemen]) {
+                elemenStats[soal.elemen].total += 1;
+                elemenStats[soal.elemen].benar += soalScore;
+            }
+
             detailHtml += `
                 <tr>
-                    <td>${soal.id}</td>
-                    <td>${soal.question.substring(0, 50)}...</td>
-                    <td class="${soalScore > 0 ? 'text-success font-weight-bold' : 'text-danger'}">${userAnsDisplay}</td>
-                    <td>${keyDisplay}</td>
-                    <td>${soalScore}</td>
-                    <td>${soal.discuss}</td>
+                    <td class="font-weight-bold text-center">${soal.id}</td>
+                    <td><span class="badge badge-info mb-1">${soal.elemen}</span><br><small class="text-muted">${soal.sub}</small></td>
+                    <td><small>${soal.stimulus.replace(/<[^>]*>?/gm, '').substring(0, 70)}...<br><b>Q:</b> ${soal.question}</small></td>
+                    <td class="font-weight-bold text-center">${userAnsDisplay}</td>
+                    <td class="font-weight-bold text-center">${keyDisplay}</td>
+                    <td class="text-center">${statusBadge}</td>
+                    <td><small class="text-secondary">${soal.discuss}</small></td>
                 </tr>
             `;
         });
 
-        // Hitung Rata-rata (Scale 0-100)
-        // Average logic: (Total Score / Max Possible Score) * 100
-        let avg = 0;
-        if(maxScore > 0) avg = Math.round((totalScore / maxScore) * 100);
-        if(avg < 0) avg = 0; // Prevent negative average display
+        let finalScore = 0;
+        if(maxScore > 0) finalScore = Math.round((totalScore / maxScore) * 100);
 
-        // Render Result View
         $("#resNama").text(peserta.nama);
         $("#resSekolah").text(peserta.sekolah);
-        $("#scoreTotal").text(totalScore);
-        $("#scoreAvg").text(avg);
+        $("#scoreTotal").text(totalScore + " / " + maxScore);
+        $("#scoreAvg").text(finalScore);
         $("#resultTableBody").html(detailHtml);
 
+        // GENERATE BAR CHART PER ELEMEN
+        let chartHtml = '';
+        for(let elemen in elemenStats) {
+            let s = elemenStats[elemen];
+            let percentage = s.total > 0 ? Math.round((s.benar / s.total) * 100) : 0;
+            
+            // Penentuan Warna Progress Bar Berdasarkan Pencapaian
+            let barColor = "#e74c3c"; // Merah jika < 50%
+            let gradeIcon = '<i class="fa fa-exclamation-triangle text-danger mr-1"></i>';
+            if (percentage >= 80) {
+                barColor = "#2ecc71"; // Hijau jika >= 80%
+                gradeIcon = '<i class="fa fa-star text-warning mr-1"></i>';
+            }
+            else if (percentage >= 50) {
+                barColor = "#f39c12"; // Kuning jika >= 50%
+                gradeIcon = '<i class="fa fa-info-circle text-info mr-1"></i>';
+            }
+
+            chartHtml += `
+            <div class="res-bar-row" style="align-items: flex-start;">
+                <div class="res-bar-label" style="padding-top: 4px;">${gradeIcon} ${elemen}</div>
+                <div style="flex-grow: 1;">
+                    <div class="res-bar-track">
+                        <div class="res-bar-fill shadow-sm" style="width: 0%; background-color: ${barColor};" data-width="${percentage}%"></div>
+                    </div>
+                    <div style="font-size: 13px; font-weight: bold; color: #555; margin-top: 5px; text-align: right;">
+                        ${percentage}% (Benar ${s.benar} dari ${s.total})
+                    </div>
+                </div>
+            </div>`;
+        }
+        $("#chartElemenContainer").html(chartHtml);
+
         $("#view-exam").fadeOut(500, function() {
-            $("#view-result").fadeIn(500);
+            $("#view-result").fadeIn(500, function() {
+                // Animasi Bar Chart perlahan melebar setelah view tampil
+                setTimeout(() => {
+                    $(".res-bar-fill").each(function() {
+                        $(this).css("width", $(this).attr("data-width"));
+                    });
+                }, 300);
+            });
         });
     }
 
@@ -1077,7 +1044,6 @@
         $("#detailSection").slideToggle();
     }
 
-    // --- 7. UTILS ---
     function setFontSize(size) {
         $("#soalContainer").css("font-size", size + "px");
     }
@@ -1095,7 +1061,6 @@
         }, 1000);
     }
     function pad(n) { return n < 10 ? '0'+n : n; }
-
 </script>
 </body>
 </html>
