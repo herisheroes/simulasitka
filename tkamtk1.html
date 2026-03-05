@@ -20,6 +20,15 @@
             padding-bottom: 50px; 
         }
 
+        /* --- Global Loader --- */
+        #global-loader {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1050; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .spinner-border { width: 3rem; height: 3rem; color: #326698; }
+
         /* --- Login Styles --- */
         #view-login {
             height: 100vh;
@@ -36,6 +45,7 @@
             width: 100%;
             max-width: 450px;
             text-align: center;
+            transition: all 0.3s;
         }
 
         /* --- Header Styles --- */
@@ -79,50 +89,42 @@
         /* --- Visualisasi Data & Gambar CSS --- */
         .visual-box { background: #eef2f5; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; border: 1px solid #cdd5dc; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         
-        /* Pecahan */
         .fraction-circle { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #2c3e50; margin: 10px auto; position: relative; overflow: hidden; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .fraction-1-3 { background: conic-gradient(#74b9ff 0deg 120deg, #fff 120deg 360deg); }
         .fraction-1-3::after { content: ''; position: absolute; width: 2px; height: 100%; background: #2c3e50; top: 0; left: 50%; transform: translateX(-50%); }
         .fraction-1-3::before { content: ''; position: absolute; width: 100%; height: 2px; background: #2c3e50; top: 50%; left: 0; transform: translateY(-50%) rotate(30deg); transform-origin: center; }
         .fraction-circle-line { position: absolute; width: 100%; height: 2px; background: #2c3e50; top: 50%; left: 0; transform: translateY(-50%) rotate(150deg); transform-origin: center; z-index: 2; }
         
-        /* Bar Chart Data */
         .bar-chart-container { display: flex; align-items: flex-end; height: 180px; border-left: 3px solid #2c3e50; border-bottom: 3px solid #2c3e50; padding: 10px; margin: 20px auto; gap: 20px; justify-content: center; }
         .bar { width: 45px; background: linear-gradient(to top, #326698, #74b9ff); text-align: center; color: #000; position: relative; border-radius: 4px 4px 0 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
         .bar span { position: absolute; top: -25px; left: 0; right: 0; font-weight: bold; font-size: 14px; }
         .bar-label { position: absolute; bottom: -30px; width: 100%; text-align: center; font-size: 13px; font-weight: bold; }
 
-        /* Result Bar Chart */
         .result-chart-wrapper { padding: 25px; background: #fff; border-radius: 12px; margin-top: 20px; border: 1px solid #e1e8ed; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .res-bar-row { display: flex; align-items: center; margin-bottom: 18px; }
         .res-bar-label { width: 230px; text-align: right; padding-right: 20px; font-weight: 700; font-size: 15px; color: #34495e; }
         .res-bar-track { flex-grow: 1; height: 28px; background: #ecf0f1; border-radius: 15px; overflow: hidden; position: relative; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
         .res-bar-fill { height: 100%; display: flex; align-items: center; padding-left: 15px; color: white; font-weight: bold; font-size: 13px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 15px 0 0 15px; }
         
-        /* Geometri Shapes */
         .shape-kubus { width: 80px; height: 80px; background: #74b9ff; margin: 20px auto; border: 2px solid #1a3c5e; position: relative; transform: skewX(-15deg); }
         .shape-kubus::after { content: ''; position: absolute; width: 100%; height: 30px; background: #a2cfff; top: -32px; left: 16px; border: 2px solid #1a3c5e; transform: skewX(45deg); }
         .shape-kubus::before { content: ''; position: absolute; width: 30px; height: 100%; background: #4a90e2; top: -16px; right: -32px; border: 2px solid #1a3c5e; transform: skewY(45deg); }
 
         .shape-rect { width: 140px; height: 70px; border: 3px solid #2c3e50; background: #ecf0f1; margin: 15px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
         
-        /* Jam / Sudut */
         .clock-face { width: 110px; height: 110px; border: 4px solid #2c3e50; border-radius: 50%; position: relative; margin: 15px auto; background: #fff; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
         .clock-center { width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; position: absolute; top: 46px; left: 46px; z-index: 5;}
         .hand-hour { width: 4px; height: 28px; background: #2c3e50; position: absolute; top: 48px; left: 49px; transform-origin: top center; transform: rotate(120deg); border-radius: 2px; }
         .hand-min { width: 3px; height: 42px; background: #7f8c8d; position: absolute; bottom: 53px; left: 49.5px; transform-origin: bottom center; border-radius: 2px; }
 
-        /* Penggaris */
         .ruler { width: 100%; max-width: 280px; height: 45px; background: #f1c40f; border: 2px solid #2c3e50; margin: 15px auto; position: relative; display: flex; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 3px;}
         .ruler-tick { flex-grow: 1; border-right: 1px solid #2c3e50; height: 12px; }
         .ruler-tick:nth-child(5n) { height: 22px; border-right: 2px solid #2c3e50; }
         .ruler-tick:last-child { border-right: none; }
 
-        /* Beaker (Volume) */
         .beaker { width: 60px; height: 80px; border: 3px solid #bdc3c7; border-top: none; border-radius: 0 0 10px 10px; margin: 15px auto; position: relative; overflow: hidden; background: rgba(255,255,255,0.5); }
         .beaker-liquid { position: absolute; bottom: 0; width: 100%; height: 65%; background: rgba(52, 152, 219, 0.7); border-top: 2px solid #2980b9; transition: height 0.5s; }
 
-        /* Animasi Modal */
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .modal-cool-content { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
@@ -140,6 +142,13 @@
 </head>
 <body>
 
+<!-- Global Loader -->
+<div id="global-loader">
+    <div class="spinner-border" role="status"></div>
+    <h5 class="mt-3 font-weight-bold" style="color: #326698;">Memproses Data...</h5>
+    <p class="text-muted small">Mohon tunggu sebentar.</p>
+</div>
+
 <div id="custom-alert" class="alert alert-warning alert-dismissible fade show shadow" role="alert">
     <span id="alert-text">Pesan peringatan.</span>
     <button type="button" class="close" onclick="$('#custom-alert').hide()"><span aria-hidden="true">&times;</span></button>
@@ -148,21 +157,52 @@
 <!-- VIEW: LOGIN -->
 <div id="view-login">
     <div class="login-card">
-        <img src="https://pusmendik.kemdikbud.go.id/tka/images/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo" class="login-logo">
+        <img src="https://pusmendik.kemdikbud.go.id/tka/images/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo" class="login-logo" style="width: 80px; margin-bottom: 20px;">
         <h4 class="mb-4 font-weight-bold" style="color: #326698;">SIMULASI TKA 2026<br><small>Matematika Paket 1</small></h4>
-        <form id="loginForm" onsubmit="event.preventDefault(); startExam();">
+        
+        <!-- STEP 1: PENCARIAN NISN -->
+        <div id="step-search">
             <div class="form-group text-left">
-                <label>Nama Peserta</label>
-                <input type="text" class="form-control" id="inputNama" placeholder="Masukkan Nama Lengkap" required>
+                <label class="font-weight-bold">Masukkan NISN</label>
+                <input type="number" class="form-control form-control-lg" id="inputNisnSearch" placeholder="Contoh: 0012345678" required>
             </div>
-            <div class="form-group text-left">
-                <label>Nama Sekolah</label>
-                <input type="text" class="form-control" id="inputSekolah" placeholder="Masukkan Nama Sekolah" required>
+            <button onclick="cariNisn()" class="btn btn-primary btn-block btn-lg mt-4 shadow" style="border-radius: 30px; background: linear-gradient(to right, #326698, #1a3c5e); border: none;">
+                <i class="fa fa-search mr-2"></i> CARI DATA SISWA
+            </button>
+        </div>
+
+        <!-- STEP 2: BIODATA & KONFIRMASI -->
+        <div id="step-biodata" style="display: none; text-align: left;">
+            <div id="login-msg" class="mb-3 text-center"></div>
+            
+            <div id="biodata-form" style="display: none;">
+                <div class="form-group">
+                    <label class="small font-weight-bold">Nama Lengkap</label>
+                    <input type="text" class="form-control" id="inputNama" placeholder="Ketik nama lengkap">
+                </div>
+                <div class="form-group">
+                    <label class="small font-weight-bold">Nama Sekolah</label>
+                    <input type="text" class="form-control" id="inputSekolah" placeholder="Ketik nama sekolah asal">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label class="small font-weight-bold">Kecamatan</label>
+                        <input type="text" class="form-control" id="inputKecamatan" placeholder="Kecamatan">
+                    </div>
+                    <div class="form-group col-6">
+                        <label class="small font-weight-bold">Kabupaten</label>
+                        <input type="text" class="form-control" id="inputKabupaten" placeholder="Kabupaten">
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" style="border-radius: 30px; background: linear-gradient(to right, #326698, #1a3c5e); border: none;">
+
+            <button id="btnMulai" class="btn btn-success btn-block btn-lg shadow mt-3" style="border-radius: 30px; display: none;">
                 MULAI UJIAN <i class="fa fa-arrow-right ml-2"></i>
             </button>
-        </form>
+            <button onclick="resetLogin()" class="btn btn-outline-secondary btn-block mt-2" style="border-radius: 30px;">
+                <i class="fa fa-arrow-left mr-2"></i> Kembali
+            </button>
+        </div>
     </div>
 </div>
 
@@ -365,7 +405,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // --- 1. DATA SOAL SESUAI KISI-KISI (HOTS & CERITA SEHARI-HARI) ---
+    // --- APP SCRIPT URL ---
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5iXtMBUCFba7uTCPZXWo8yF4q7KfUrrKKE6-aTXjboieEJdYjt00zyG9gIgUuqNRQpw/exec';
+
+    // --- 1. DATA SOAL SESUAI KISI-KISI ---
     const bankSoal = [
         // ELEMEN: BILANGAN
         {
@@ -708,26 +751,98 @@
     let raguStatus = {};
     let timeRemaining = 3600; 
     let timerInterval;
-    let peserta = { nama: "", sekolah: "" };
+    let peserta = { nisn: "", nama: "", sekolah: "", kecamatan: "", kabupaten: "" };
 
     // --- 3. UTILS ---
     function showAlert(msg) {
         $("#alert-text").text(msg);
         $("#custom-alert").fadeIn().delay(3000).fadeOut();
     }
+    function showLoading(show) {
+        if(show) $("#global-loader").css("display", "flex");
+        else $("#global-loader").fadeOut();
+    }
+    function pad(n) { return n < 10 ? '0'+n : n; }
 
-    // --- 4. LOGIN & INIT ---
-    function startExam() {
-        const nama = $("#inputNama").val();
-        const sekolah = $("#inputSekolah").val();
+    // --- 4. ALUR LOGIN DAN KONEKSI DATABASE ---
+    
+    // Fungsi Kembali saat di Menu Login
+    function resetLogin() {
+        $('#step-biodata').hide();
+        $('#step-search').fadeIn();
+        $('#inputNisnSearch').val('');
+    }
 
-        if(nama && sekolah) {
-            peserta.nama = nama;
-            peserta.sekolah = sekolah;
+    // Fungsi Cari NISN di Spreadsheet
+    function cariNisn() {
+        const nisn = $('#inputNisnSearch').val();
+        if(!nisn) { showAlert("Silahkan masukkan NISN!"); return; }
+        
+        showLoading(true);
+        peserta.nisn = nisn;
 
-            $("#displayNama").text(nama);
-            $("#displaySekolah").text(sekolah);
+        // Fetch Data dengan methode GET
+        fetch(`${SCRIPT_URL}?action=check&nisn=${nisn}`)
+            .then(res => res.json())
+            .then(res => {
+                showLoading(false);
+                $('#step-search').hide();
+                $('#step-biodata').fadeIn();
 
+                if (res.found) {
+                    peserta.nama = res.data.nama;
+                    peserta.sekolah = res.data.sekolah;
+                    peserta.kecamatan = res.data.kecamatan;
+                    peserta.kabupaten = res.data.kabupaten;
+
+                    if (res.hasScore) {
+                        // Skenario: Data ada, Skor ada
+                        $('#login-msg').html('<div class="alert alert-success font-weight-bold">NISN ditemukan dan skor sudah ada, silahkan cek skor dan lanjutkan simulasi ke paket selanjutnya!</div>');
+                        $('#biodata-form').hide();
+                        $('#btnMulai').hide();
+                    } else {
+                        // Skenario: Data ada, Skor belum ada
+                        $('#login-msg').html('<div class="alert alert-warning font-weight-bold">NISN ditemukan dan skor belum ada, silahkan klik mulai untuk mengerjakan simulasi!</div>');
+                        $('#inputNama').val(peserta.nama).prop('readonly', true);
+                        $('#inputSekolah').val(peserta.sekolah).prop('readonly', true);
+                        $('#inputKecamatan').val(peserta.kecamatan).prop('readonly', true);
+                        $('#inputKabupaten').val(peserta.kabupaten).prop('readonly', true);
+                        $('#biodata-form').show();
+                        
+                        $('#btnMulai').text('MULAI UJIAN').show().off('click').on('click', function() { startExam(false); });
+                    }
+                } else {
+                    // Skenario: Data tidak ada sama sekali
+                    showAlert("Silahkan isi biodata untuk memulai simulasi");
+                    $('#login-msg').html('<div class="alert alert-info font-weight-bold">NISN tidak ditemukan. Silahkan isi biodata baru di bawah ini.</div>');
+                    $('#inputNama, #inputSekolah, #inputKecamatan, #inputKabupaten').val('').prop('readonly', false);
+                    $('#biodata-form').show();
+                    
+                    $('#btnMulai').text('SIMPAN DAN MULAI').show().off('click').on('click', function() { startExam(true); });
+                }
+            })
+            .catch(err => {
+                showLoading(false);
+                showAlert("Terjadi kesalahan koneksi ke server. Pastikan URL App Script benar.");
+                console.error(err);
+            });
+    }
+
+    // Fungsi Submit Biodata & Mulai Exam
+    function startExam(isNewUser) {
+        peserta.nama = $("#inputNama").val();
+        peserta.sekolah = $("#inputSekolah").val();
+        peserta.kecamatan = $("#inputKecamatan").val();
+        peserta.kabupaten = $("#inputKabupaten").val();
+
+        if(!peserta.nama || !peserta.sekolah || !peserta.kecamatan || !peserta.kabupaten) {
+            showAlert("Harap lengkapi semua isian biodata!");
+            return;
+        }
+
+        const proceedToExam = () => {
+            $("#displayNama").text(peserta.nama);
+            $("#displaySekolah").text(peserta.sekolah);
             $("#view-login").fadeOut(500, function() {
                 $("body").css("padding-top", "130px");
                 $("#view-exam").fadeIn(500);
@@ -735,12 +850,42 @@
                 loadSoal(0);
                 startTimer();
             });
+        };
+
+        if(isNewUser) {
+            // Simpan biodata baru ke Spreadsheet
+            showLoading(true);
+            const payload = {
+                action: 'register',
+                nisn: peserta.nisn,
+                nama: peserta.nama,
+                sekolah: peserta.sekolah,
+                kecamatan: peserta.kecamatan,
+                kabupaten: peserta.kabupaten
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(res => {
+                showLoading(false);
+                if(res.status === 'success') proceedToExam();
+                else showAlert("Gagal menyimpan data.");
+            })
+            .catch(err => {
+                showLoading(false);
+                showAlert("Gagal terhubung ke database untuk menyimpan data.");
+            });
         } else {
-            showAlert("Harap isi semua data diri Anda terlebih dahulu!");
+            // User lama, langsung mulai ujian
+            proceedToExam();
         }
     }
 
-    // --- 5. NAVIGATION & DISPLAY ---
+    // --- 5. NAVIGATION & DISPLAY SOAL ---
     function loadSoal(index) {
         currentIndex = index;
         const soal = bankSoal[index];
@@ -868,7 +1013,6 @@
         userAnswers[soalId] = val;
         $(`#pg_${soalId}_${val}`).prop('checked', true);
         
-        // Visual effect for clicked card
         $(`input[name="pg_${soalId}"]`).closest('.card').css('background-color', '#fff');
         $(`#pg_${soalId}_${val}`).closest('.card').css('background-color', '#e3f2fd');
         
@@ -883,7 +1027,6 @@
         
         if (userAnswers[soalId].length === 0) delete userAnswers[soalId];
         
-        // Toggling visual color
         const card = $(`#chk_${soalId}_${val}`).closest('.card');
         if($(`#chk_${soalId}_${val}`).is(':checked')) card.css('background-color', '#e3f2fd');
         else card.css('background-color', '#fff');
@@ -903,7 +1046,7 @@
         updateGridUI();
     }
 
-    // --- 7. SCORING & FINISH ---
+    // --- 7. SCORING, DATABASE SAVING, & FINISH ---
     function calculateAndFinish() {
         clearInterval(timerInterval);
         $('#modalSelesai').modal('hide');
@@ -913,7 +1056,6 @@
         let maxScore = 0;
         let detailHtml = '';
 
-        // Objek pelacak statistik elemen
         let elemenStats = {
             "Bilangan": { benar: 0, total: 0 },
             "Geometri dan Pengukuran": { benar: 0, total: 0 },
@@ -922,7 +1064,7 @@
 
         bankSoal.forEach(soal => {
             let soalScore = 0;
-            let soalMax = 1; // Maksimal 1 poin tiap nomor
+            let soalMax = 1; 
             let userAnsDisplay = '-';
             let keyDisplay = '-';
             let statusBadge = '<span class="badge badge-danger px-2 py-1">Salah (0)</span>';
@@ -963,11 +1105,9 @@
                 }
             }
 
-            // Update Total Scores
             totalScore += soalScore;
             maxScore += soalMax;
 
-            // Update Element Stats
             if(elemenStats[soal.elemen]) {
                 elemenStats[soal.elemen].total += 1;
                 elemenStats[soal.elemen].benar += soalScore;
@@ -988,30 +1128,27 @@
 
         let finalScore = 0;
         if(maxScore > 0) finalScore = Math.round((totalScore / maxScore) * 100);
+        
+        let pBil = elemenStats["Bilangan"].total > 0 ? Math.round((elemenStats["Bilangan"].benar / elemenStats["Bilangan"].total) * 100) : 0;
+        let pGeo = elemenStats["Geometri dan Pengukuran"].total > 0 ? Math.round((elemenStats["Geometri dan Pengukuran"].benar / elemenStats["Geometri dan Pengukuran"].total) * 100) : 0;
+        let pDat = elemenStats["Data"].total > 0 ? Math.round((elemenStats["Data"].benar / elemenStats["Data"].total) * 100) : 0;
 
+        // Render hasil ke UI HTML
         $("#resNama").text(peserta.nama);
         $("#resSekolah").text(peserta.sekolah);
         $("#scoreTotal").text(totalScore + " / " + maxScore);
         $("#scoreAvg").text(finalScore);
         $("#resultTableBody").html(detailHtml);
 
-        // GENERATE BAR CHART PER ELEMEN
         let chartHtml = '';
         for(let elemen in elemenStats) {
             let s = elemenStats[elemen];
             let percentage = s.total > 0 ? Math.round((s.benar / s.total) * 100) : 0;
             
-            // Penentuan Warna Progress Bar Berdasarkan Pencapaian
-            let barColor = "#e74c3c"; // Merah jika < 50%
+            let barColor = "#e74c3c";
             let gradeIcon = '<i class="fa fa-exclamation-triangle text-danger mr-1"></i>';
-            if (percentage >= 80) {
-                barColor = "#2ecc71"; // Hijau jika >= 80%
-                gradeIcon = '<i class="fa fa-star text-warning mr-1"></i>';
-            }
-            else if (percentage >= 50) {
-                barColor = "#f39c12"; // Kuning jika >= 50%
-                gradeIcon = '<i class="fa fa-info-circle text-info mr-1"></i>';
-            }
+            if (percentage >= 80) { barColor = "#2ecc71"; gradeIcon = '<i class="fa fa-star text-warning mr-1"></i>'; }
+            else if (percentage >= 50) { barColor = "#f39c12"; gradeIcon = '<i class="fa fa-info-circle text-info mr-1"></i>'; }
 
             chartHtml += `
             <div class="res-bar-row" style="align-items: flex-start;">
@@ -1028,14 +1165,50 @@
         }
         $("#chartElemenContainer").html(chartHtml);
 
-        $("#view-exam").fadeOut(500, function() {
-            $("#view-result").fadeIn(500, function() {
-                // Animasi Bar Chart perlahan melebar setelah view tampil
-                setTimeout(() => {
-                    $(".res-bar-fill").each(function() {
-                        $(this).css("width", $(this).attr("data-width"));
-                    });
-                }, 300);
+        // -- SIMPAN SKOR KE DATABASE APP SCRIPT SEBELUM MENAMPILKAN HASIL --
+        showLoading(true);
+        const submitPayload = {
+            action: 'submit_score',
+            nisn: peserta.nisn,
+            total_benar: totalScore,
+            skor_akhir: finalScore,
+            persen_bilangan: pBil,
+            persen_geometri: pGeo,
+            persen_data: pDat
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // text/plain menghindari error CORS
+            body: JSON.stringify(submitPayload)
+        })
+        .then(res => res.json())
+        .then(res => {
+            showLoading(false);
+            // Tampilkan View Result
+            $("#view-exam").fadeOut(500, function() {
+                $("#view-result").fadeIn(500, function() {
+                    setTimeout(() => {
+                        $(".res-bar-fill").each(function() {
+                            $(this).css("width", $(this).attr("data-width"));
+                        });
+                    }, 300);
+                });
+            });
+        })
+        .catch(err => {
+            showLoading(false);
+            showAlert("Gagal menyimpan skor akhir ke Database, tetapi Anda tetap bisa melihat hasil simulasi ini.");
+            
+            // Tetap tampilkan hasil meskipun database gagal disimpan
+            $("#view-exam").fadeOut(500, function() {
+                $("#view-result").fadeIn(500, function() {
+                    setTimeout(() => {
+                        $(".res-bar-fill").each(function() {
+                            $(this).css("width", $(this).attr("data-width"));
+                        });
+                    }, 300);
+                });
             });
         });
     }
@@ -1043,11 +1216,11 @@
     function showDetail() {
         $("#detailSection").slideToggle();
     }
-
     function setFontSize(size) {
         $("#soalContainer").css("font-size", size + "px");
     }
 
+    // --- FUNGSI TIMER YANG HILANG DITAMBAHKAN DI BAWAH ---
     function startTimer() {
         timerInterval = setInterval(() => {
             timeRemaining--;
@@ -1060,7 +1233,10 @@
             $("#timer").text(`${pad(h)}:${pad(m)}:${pad(s)}`);
         }, 1000);
     }
-    function pad(n) { return n < 10 ? '0'+n : n; }
+
+    function pad(n) { 
+        return n < 10 ? '0' + n : n; 
+    }
 </script>
 </body>
 </html>
