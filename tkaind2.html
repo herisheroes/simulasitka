@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <title>Simulasi TKA SD 2026</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Updated Favicons to new logo -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <link rel="stylesheet" href="https://pusmendik.kemdikbud.go.id/tka/_assets/css/icheck-bootstrap.min.css" />
+    
+    <!-- JS Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        body { background-color: #f0f3f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .wrapper { margin-top: -80px; }
+        
+        /* Login Panel Styles */
+        #login-panel {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #0f9b0f 0%, #064d06 100%); /* Changed to Green for SD theme */
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        #formContent {
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+        
+        .footer-text {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-navigasi { width: 160px; margin: 5px; }
+        
+        /* Typography for Questions */
+        .teks-bacaan {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 6px solid #0f9b0f;
+            margin-bottom: 25px;
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            text-align: justify;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        /* --- PERBAIKAN PILIHAN GANDA (FLEXBOX) --- */
+        .opsi-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .opsi-item {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .opsi-radio {
+            flex-shrink: 0;
+            width: 24px;
+            margin-right: 10px;
+            margin-top: 2px;
+        }
+
+        .opsi-text {
+            flex-grow: 1;
+            line-height: 1.5;
+            color: #212529;
+        }
+        
+        .radio.icheck-primary { margin: 0 !important; }
+        .radio.icheck-primary > input:first-child:not(:checked):not(:disabled) + label::before, 
+        .radio.icheck-primary > input:first-child:not(:checked):not(:disabled) + input[type="hidden"] + label::before {
+            border-color: #0f9b0f;
+        }
+        .checkbox.icheck-primary > input:first-child:not(:checked):not(:disabled) + label::before {
+            border-color: #0f9b0f;
+        }
+
+        /* Custom Visuals for Charts/Data */
+        .visual-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .piring-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            height: 300px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .piring-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: 2px solid white;
+        }
+
+        /* Result & Modal Styles */
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #0f9b0f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            border: 5px solid #a3e4a3;
+            box-shadow: 0 0 20px rgba(15, 155, 15, 0.5);
+        }
+        
+        .modal-content { border-radius: 15px; border: none; }
+        .modal-header { background: #f1f1f1; border-radius: 15px 15px 0 0; }
+        .table-rekap th { background-color: #0f9b0f; color: white; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* RESPONSIVE STYLES */
+        #app-header {
+            background: #0f9b0f; 
+            height: 130px; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; 
+            z-index: 900; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        #app-content { margin-top: 140px; transition: all 0.3s ease; }
+
+        @media (max-width: 768px) {
+            #app-header { height: auto; padding-bottom: 10px; }
+            #app-header .row { padding-top: 10px !important; padding-left: 10px !important; padding-right: 10px !important; }
+            #app-header img { height: 40px !important; margin-right: 10px !important; }
+            #app-header div[style*="font-size:18px"] { font-size: 14px !important; line-height: 1.2; }
+            #app-header div[style*="font-size:12px"] { font-size: 10px !important; }
+            #app-content { margin-top: 100px !important; }
+            #noSoal { font-size: 20px !important; }
+            .cfont { font-size: 14px !important; }
+            .mataujian { text-align: left !important; font-size: 12px; margin-top: 5px; }
+            .btn-navigasi { width: 100%; margin: 5px 0; display: block; }
+            .btn-bawah .col-auto { width: 100%; flex: 0 0 100%; max-width: 100%; }
+            .cont-btn-informasi { text-align: left !important; margin-top: 10px; display: flex; gap: 5px; }
+            .cont-btn-informasi button { font-size: 11px; padding: 5px 10px; }
+            .login-box { padding: 20px; margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN PANEL -->
+<div id="login-panel">
+    <div class="login-box">
+        <img src="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png" height="60" class="mb-3">
+        <h4 style="color:#0f9b0f; font-weight:bold;">AKM SD Kelas 6</h4>
+        <p class="text-muted small">Silakan login untuk memulai ujian</p>
+        <hr>
+        <div class="form-group text-left">
+            <label class="small font-weight-bold">Nama Lengkap</label>
+            <input type="text" id="inputNama" class="form-control" placeholder="Masukkan nama Anda">
+        </div>
+        <div class="form-group text-left">
+            <label class="small font-weight-bold">Asal Sekolah</label>
+            <input type="text" id="inputSekolah" class="form-control" placeholder="Masukkan asal sekolah (SD)">
+        </div>
+        <button class="btn btn-success btn-block mt-4 shadow-sm" onclick="mulaiTes()">MULAI TES</button>
+        <div class="mt-3 text-muted" style="font-size:10px;"><small>Dikembangkan untuk Latihan Siswa SD</small></div>
+    </div>
+</div>
+
+<!-- Header Aplikasi -->
+<div id="app-header" class="container-fluid text-white" style="display:none;">
+    <div class="row pt-3 px-4 align-items-center">
+        <div class="col-8 d-flex align-items-center">
+            <img src="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png" style="height:60px; margin-right:15px;">
+            <div>
+                <div style="font-size:18px; font-weight:bold;">SIMULASI AKM (LITERASI)</div>
+                <div style="font-size:12px;">TINGKAT SD / MI KELAS 6</div>
+            </div>
+        </div>
+        <div class="col-4 text-right">
+            <div class="d-none d-md-block">
+                <div id="displayNama" style="font-weight:bold; font-size:1.1rem;">Peserta</div>
+                <small id="displaySekolah" style="opacity: 0.8;">Sekolah</small>
+            </div>
+            <div class="d-md-none">
+                <i class="fa fa-user-circle fa-lg"></i>
+                <div id="displayNamaMobile" style="font-size:10px; font-weight:bold;">Peserta</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div id="app-content" class="container mb-5" style="display:none; opacity: 0; transition: opacity 0.5s;">
+  <div class="row justify-content-center">
+    <div class="col-lg-11 col-md-12 p-0 p-md-3">
+        <div class="text-left pt-3 pb-5 mb-2 px-3 px-md-5" id="formContent">
+          
+          <!-- Top Bar Soal -->
+          <div class="row row-atas align-items-center border-bottom pb-3 mb-3"> 
+            <div class="col-6 col-md-4">
+                <span class="text-muted small">Soal No.</span> <span style="font-size:24px; font-weight:bold; color:#0f9b0f;" id="noSoal">1</span>
+            </div>
+            <div class="col-6 col-md-8 text-right cont-btn-informasi">
+                <button class="btn btn-outline-secondary btn-round btn-sm mb-1 font-weight-bold">
+                    <i class="far fa-clock mr-1"></i> <span id="countdown" class="text-danger">60:00</span>
+                </button>
+                <button class="btn btn-success btn-round btn-sm mb-1 shadow-sm" data-toggle="modal" data-target="#myModal">
+                    Daftar <i class="fa fa-th-large ml-1"></i>
+                </button>
+            </div>
+          </div>
+          
+          <div class="row pb-2 align-items-center"> 
+            <div class="col-12 col-sm-6">
+                <small class="text-muted">Ukuran font:</small> 
+                <span style="font-size:14px" class="ml-2 cfont border px-1 rounded" onclick="changeFont(14)">A</span> 
+                <span style="font-size:18px" class="ml-2 cfont border px-1 rounded" onclick="changeFont(18)">A</span> 
+                <span style="font-size:22px" class="ml-2 cfont border px-1 rounded" onclick="changeFont(22)">A</span>
+            </div>
+            <div class="col-12 col-sm-6 mt-2 mt-sm-0 mataujian text-md-right text-success font-weight-bold">
+                Literasi Membaca - Bahasa Indonesia
+            </div>
+          </div>
+
+          <!-- CONTAINER SOAL -->
+          <div id="isisoal" style="font-size:16px;">
+            
+            <!-- ===================== SOAL 1-5: TEKS FIKSI (Rusa dan Burung Jalak) ===================== -->
+            <!-- Soal 1 -->
+            <div class="soal-soal" id="soal-no-1">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold mb-3">Kesombongan Rusa Muda</h5>
+                            <p>Di sebuah sabana yang luas, hiduplah seekor Rusa muda bertanduk indah. Setiap hari, seekor Burung Jalak rajin hinggap di punggung Rusa untuk memakan kutu-kutu yang bersembunyi di balik bulunya yang tebal. Rusa merasa nyaman, dan Jalak pun selalu kenyang.</p>
+                            <p>Namun, suatu hari Rusa bercermin di air danau. "Ah, tandukku sungguh gagah! Tidak pantas burung kecil yang berisik dan kotor ini terus menempel padaku. Ia merusak penampilanku!" pikir Rusa. Dengan kasar, ia mengusir Burung Jalak pergi jauh-jauh.</p>
+                            <p>Satu minggu berlalu. Rusa muda mulai merasa gatal yang luar biasa di seluruh punggungnya. Ia menggesekkan badannya ke batang pohon hingga lecet, tapi gatalnya tak kunjung hilang. Tubuhnya kurus karena tidak bisa tidur nyenyak. Ia menangis menyadari kesombongannya dan merindukan kehadiran sahabat kecilnya itu.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Siapakah tokoh dalam cerita yang merasa penampilannya paling indah dan hebat?</p>
+                        
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(1,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s1a" name="ans1" value="A"><label for="s1a"></label></div></div>
+                                <div class="opsi-text">Burung Jalak</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(1,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s1b" name="ans1" value="B"><label for="s1b"></label></div></div>
+                                <div class="opsi-text">Kutu-kutu</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(1,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s1c" name="ans1" value="C"><label for="s1c"></label></div></div>
+                                <div class="opsi-text">Rusa Muda</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(1,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s1d" name="ans1" value="D"><label for="s1d"></label></div></div>
+                                <div class="opsi-text">Penghuni danau</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 2 -->
+            <div class="soal-soal" id="soal-no-2" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold mb-3">Kesombongan Rusa Muda</h5>
+                            <p>Di sebuah sabana yang luas, hiduplah seekor Rusa muda bertanduk indah. Setiap hari, seekor Burung Jalak rajin hinggap di punggung Rusa untuk memakan kutu-kutu yang bersembunyi di balik bulunya yang tebal. Rusa merasa nyaman, dan Jalak pun selalu kenyang.</p>
+                            <p>Namun, suatu hari Rusa bercermin di air danau. "Ah, tandukku sungguh gagah! Tidak pantas burung kecil yang berisik dan kotor ini terus menempel padaku. Ia merusak penampilanku!" pikir Rusa. Dengan kasar, ia mengusir Burung Jalak pergi jauh-jauh.</p>
+                            <p>Satu minggu berlalu. Rusa muda mulai merasa gatal yang luar biasa di seluruh punggungnya. Ia menggesekkan badannya ke batang pohon hingga lecet, tapi gatalnya tak kunjung hilang. Tubuhnya kurus karena tidak bisa tidur nyenyak. Ia menangis menyadari kesombongannya dan merindukan kehadiran sahabat kecilnya itu.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Bagaimana watak (sifat) tokoh Rusa Muda sebelum ia merasakan gatal-gatal?</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(2,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s2a" name="ans2" value="A"><label for="s2a"></label></div></div>
+                                <div class="opsi-text">Rendah hati dan pemaaf</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(2,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s2b" name="ans2" value="B"><label for="s2b"></label></div></div>
+                                <div class="opsi-text">Tinggi hati (sombong) dan mementingkan diri sendiri</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(2,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s2c" name="ans2" value="C"><label for="s2c"></label></div></div>
+                                <div class="opsi-text">Pemarah namun sangat peduli pada hewan kecil</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(2,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s2d" name="ans2" value="D"><label for="s2d"></label></div></div>
+                                <div class="opsi-text">Cerdik dan pandai mencari keuntungan</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 3 -->
+            <div class="soal-soal" id="soal-no-3" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold mb-3">Kesombongan Rusa Muda</h5>
+                            <p>Di sebuah sabana yang luas, hiduplah seekor Rusa muda bertanduk indah. Setiap hari, seekor Burung Jalak rajin hinggap di punggung Rusa untuk memakan kutu-kutu yang bersembunyi di balik bulunya yang tebal. Rusa merasa nyaman, dan Jalak pun selalu kenyang.</p>
+                            <p>Namun, suatu hari Rusa bercermin di air danau. "Ah, tandukku sungguh gagah! Tidak pantas burung kecil yang berisik dan kotor ini terus menempel padaku. Ia merusak penampilanku!" pikir Rusa. Dengan kasar, ia mengusir Burung Jalak pergi jauh-jauh.</p>
+                            <p>Satu minggu berlalu. Rusa muda mulai merasa gatal yang luar biasa di seluruh punggungnya. Ia menggesekkan badannya ke batang pohon hingga lecet, tapi gatalnya tak kunjung hilang. Tubuhnya kurus karena tidak bisa tidur nyenyak. Ia menangis menyadari kesombongannya dan merindukan kehadiran sahabat kecilnya itu.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Makna kata <b>hinggap</b> pada paragraf pertama adalah...</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(3,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s3a" name="ans3" value="A"><label for="s3a"></label></div></div>
+                                <div class="opsi-text">Terbang menjauh dengan cepat</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(3,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s3b" name="ans3" value="B"><label for="s3b"></label></div></div>
+                                <div class="opsi-text">Turun dan bertengger (berpijak) pada suatu tempat</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(3,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s3c" name="ans3" value="C"><label for="s3c"></label></div></div>
+                                <div class="opsi-text">Mematuk makanan dengan paruh</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(3,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s3d" name="ans3" value="D"><label for="s3d"></label></div></div>
+                                <div class="opsi-text">Menyanyi dengan suara yang keras</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 4: Benar Salah -->
+            <div class="soal-soal" id="soal-no-4" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold mb-3">Kesombongan Rusa Muda</h5>
+                            <p>Di sebuah sabana yang luas, hiduplah seekor Rusa muda bertanduk indah. Setiap hari, seekor Burung Jalak rajin hinggap di punggung Rusa untuk memakan kutu-kutu yang bersembunyi di balik bulunya yang tebal. Rusa merasa nyaman, dan Jalak pun selalu kenyang.</p>
+                            <p>Namun, suatu hari Rusa bercermin di air danau. "Ah, tandukku sungguh gagah! Tidak pantas burung kecil yang berisik dan kotor ini terus menempel padaku. Ia merusak penampilanku!" pikir Rusa. Dengan kasar, ia mengusir Burung Jalak pergi jauh-jauh.</p>
+                            <p>Satu minggu berlalu. Rusa muda mulai merasa gatal yang luar biasa di seluruh punggungnya. Ia menggesekkan badannya ke batang pohon hingga lecet, tapi gatalnya tak kunjung hilang. Tubuhnya kurus karena tidak bisa tidur nyenyak. Ia menangis menyadari kesombongannya dan merindukan kehadiran sahabat kecilnya itu.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan cerita "Kesombongan Rusa Muda", tentukan apakah pernyataan berikut ini <b>Benar</b> atau <b>Salah</b>!</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light"><tr><th>Pernyataan</th><th class="text-center" width="80">Benar</th><th class="text-center" width="80">Salah</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Rusa mengusir Burung Jalak karena Rusa merasa dirinya lebih indah dan hebat.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4a1" name="ans4a" value="1" onchange="pilihan3(4)"><label for="s4a1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4a2" name="ans4a" value="2" onchange="pilihan3(4)"><label for="s4a2"></label></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tubuh Rusa menjadi kurus karena ia jatuh sakit setelah minum air danau yang kotor.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4b1" name="ans4b" value="1" onchange="pilihan3(4)"><label for="s4b1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4b2" name="ans4b" value="2" onchange="pilihan3(4)"><label for="s4b2"></label></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pada akhirnya, Rusa menyesali perbuatannya dan membutuhkan Burung Jalak kembali.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4c1" name="ans4c" value="1" onchange="pilihan3(4)"><label for="s4c1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s4c2" name="ans4c" value="2" onchange="pilihan3(4)"><label for="s4c2"></label></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 5: Amanat -->
+            <div class="soal-soal" id="soal-no-5" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold mb-3">Kesombongan Rusa Muda</h5>
+                            <p>Di sebuah sabana yang luas, hiduplah seekor Rusa muda bertanduk indah. Setiap hari, seekor Burung Jalak rajin hinggap di punggung Rusa untuk memakan kutu-kutu yang bersembunyi di balik bulunya yang tebal. Rusa merasa nyaman, dan Jalak pun selalu kenyang.</p>
+                            <p>Namun, suatu hari Rusa bercermin di air danau. "Ah, tandukku sungguh gagah! Tidak pantas burung kecil yang berisik dan kotor ini terus menempel padaku. Ia merusak penampilanku!" pikir Rusa. Dengan kasar, ia mengusir Burung Jalak pergi jauh-jauh.</p>
+                            <p>Satu minggu berlalu. Rusa muda mulai merasa gatal yang luar biasa di seluruh punggungnya. Ia menggesekkan badannya ke batang pohon hingga lecet, tapi gatalnya tak kunjung hilang. Tubuhnya kurus karena tidak bisa tidur nyenyak. Ia menangis menyadari kesombongannya dan merindukan kehadiran sahabat kecilnya itu.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="mb-4 font-weight-bold">Apa pesan moral (amanat) utama yang dapat kita pelajari dari teks fabel tersebut?</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(5,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s5a" name="ans5" value="A"><label for="s5a"> Jangan sering bercermin di tepi danau yang dalam.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(5,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s5b" name="ans5" value="B"><label for="s5b"> Kita tidak boleh sombong, karena setiap makhluk saling membutuhkan satu sama lain.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(5,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s5c" name="ans5" value="C"><label for="s5c"> Hewan yang besar selalu lebih berkuasa daripada hewan yang kecil.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(5,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s5d" name="ans5" value="D"><label for="s5d"> Sebaiknya kita menggosokkan badan ke pohon saat merasa gatal.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 6-10: TEKS NON-FIKSI (Panel Surya) ===================== -->
+            <!-- Soal 6: Ide Pokok -->
+            <div class="soal-soal" id="soal-no-6" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold">Panel Surya: Energi Masa Depan</h5>
+                            <p>Panel surya adalah alat canggih yang mampu mengubah cahaya matahari menjadi energi listrik. Berbeda dengan pembangkit listrik tenaga batu bara yang menghasilkan asap polusi, panel surya sangat ramah lingkungan karena tidak mengeluarkan gas berbahaya atau limbah beracun.</p>
+                            <p>Saat ini, semakin banyak rumah dan gedung perkotaan yang memasang panel surya di atapnya. Keuntungan utamanya adalah dapat menghemat biaya tagihan listrik bulanan dalam jangka panjang. Namun, hambatan terbesarnya saat ini adalah biaya pembelian dan pemasangan alat panel surya yang masih cukup mahal bagi sebagian masyarakat.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Ide pokok paragraf pertama dari teks di atas adalah...</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(6,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s6a" name="ans6" value="A"><label for="s6a"></label></div></div>
+                                <div class="opsi-text">Asap polusi yang dihasilkan oleh pembangkit listrik batu bara.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(6,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s6b" name="ans6" value="B"><label for="s6b"></label></div></div>
+                                <div class="opsi-text">Biaya pemasangan panel surya yang masih mahal.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(6,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s6c" name="ans6" value="C"><label for="s6c"></label></div></div>
+                                <div class="opsi-text">Panel surya sebagai alat penghasil listrik yang ramah lingkungan.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(6,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s6d" name="ans6" value="D"><label for="s6d"></label></div></div>
+                                <div class="opsi-text">Cara meletakkan panel surya di atap rumah dan gedung.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 7: PG Kompleks (Keuntungan) -->
+            <div class="soal-soal" id="soal-no-7" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold">Panel Surya: Energi Masa Depan</h5>
+                            <p>Panel surya adalah alat canggih yang mampu mengubah cahaya matahari menjadi energi listrik. Berbeda dengan pembangkit listrik tenaga batu bara yang menghasilkan asap polusi, panel surya sangat ramah lingkungan karena tidak mengeluarkan gas berbahaya atau limbah beracun.</p>
+                            <p>Saat ini, semakin banyak rumah dan gedung perkotaan yang memasang panel surya di atapnya. Keuntungan utamanya adalah dapat menghemat biaya tagihan listrik bulanan dalam jangka panjang. Namun, hambatan terbesarnya saat ini adalah biaya pembelian dan pemasangan alat panel surya yang masih cukup mahal bagi sebagian masyarakat.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan teks, apa saja keuntungan menggunakan panel surya? <br><span class="text-primary small">(Pilih lebih dari satu jawaban yang benar!)</span></p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s7a', 7)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s7a" name="pilihan7" value="A"><label for="s7a"> Harganya sangat murah untuk dibeli semua orang.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s7b', 7)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s7b" name="pilihan7" value="B"><label for="s7b"> Dapat menghemat pengeluaran tagihan listrik bulanan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s7c', 7)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s7c" name="pilihan7" value="C"><label for="s7c"> Ramah lingkungan tanpa menghasilkan asap beracun.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s7d', 7)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s7d" name="pilihan7" value="D"><label for="s7d"> Menghasilkan batu bara baru untuk industri.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 8: Inferensi -->
+            <div class="soal-soal" id="soal-no-8" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold">Panel Surya: Energi Masa Depan</h5>
+                            <p>Panel surya adalah alat canggih yang mampu mengubah cahaya matahari menjadi energi listrik. Berbeda dengan pembangkit listrik tenaga batu bara yang menghasilkan asap polusi, panel surya sangat ramah lingkungan karena tidak mengeluarkan gas berbahaya atau limbah beracun.</p>
+                            <p>Saat ini, semakin banyak rumah dan gedung perkotaan yang memasang panel surya di atapnya. Keuntungan utamanya adalah dapat menghemat biaya tagihan listrik bulanan dalam jangka panjang. Namun, hambatan terbesarnya saat ini adalah biaya pembelian dan pemasangan alat panel surya yang masih cukup mahal bagi sebagian masyarakat.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Mengapa belum semua rumah tangga di Indonesia menggunakan panel surya meskipun alat ini ramah lingkungan?</p>
+                         <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(8,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s8a" name="ans8" value="A"><label for="s8a"></label></div></div>
+                                <div class="opsi-text">Karena sinar matahari di Indonesia sangat sedikit.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(8,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s8b" name="ans8" value="B"><label for="s8b"></label></div></div>
+                                <div class="opsi-text">Karena tagihan listrik dari pemerintah sudah gratis.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(8,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s8c" name="ans8" value="C"><label for="s8c"></label></div></div>
+                                <div class="opsi-text">Karena biaya awal untuk membeli dan memasangnya masih sangat mahal.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(8,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s8d" name="ans8" value="D"><label for="s8d"></label></div></div>
+                                <div class="opsi-text">Karena panel surya mudah rusak terkena hujan deras.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Soal 9: Ringkasan -->
+            <div class="soal-soal" id="soal-no-9" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold">Panel Surya: Energi Masa Depan</h5>
+                            <p>Panel surya adalah alat canggih yang mampu mengubah cahaya matahari menjadi energi listrik. Berbeda dengan pembangkit listrik tenaga batu bara yang menghasilkan asap polusi, panel surya sangat ramah lingkungan karena tidak mengeluarkan gas berbahaya atau limbah beracun.</p>
+                            <p>Saat ini, semakin banyak rumah dan gedung perkotaan yang memasang panel surya di atapnya. Keuntungan utamanya adalah dapat menghemat biaya tagihan listrik bulanan dalam jangka panjang. Namun, hambatan terbesarnya saat ini adalah biaya pembelian dan pemasangan alat panel surya yang masih cukup mahal bagi sebagian masyarakat.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Ringkasan yang paling tepat untuk mewakili isi seluruh teks tersebut adalah...</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(9,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s9a" name="ans9" value="A"><label for="s9a"> Panel surya mengubah energi cahaya menjadi energi gerak untuk menggerakkan mesin pabrik.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(9,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s9b" name="ans9" value="B"><label for="s9b"> Panel surya adalah sumber energi listrik ramah lingkungan dan hemat jangka panjang, meski biaya awalnya masih mahal.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(9,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s9c" name="ans9" value="C"><label for="s9c"> Pembangkit listrik tenaga batu bara sangat berbahaya sehingga harus segera ditutup oleh pemerintah besok pagi.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(9,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s9d" name="ans9" value="D"><label for="s9d"> Pemasangan panel surya di gedung perkotaan membuat gedung terlihat lebih modern dan mewah.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Soal 10: Prediksi -->
+            <div class="soal-soal" id="soal-no-10" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="teks-bacaan">
+                            <h5 class="text-center font-weight-bold">Panel Surya: Energi Masa Depan</h5>
+                            <p>Panel surya adalah alat canggih yang mampu mengubah cahaya matahari menjadi energi listrik. Berbeda dengan pembangkit listrik tenaga batu bara yang menghasilkan asap polusi, panel surya sangat ramah lingkungan karena tidak mengeluarkan gas berbahaya atau limbah beracun.</p>
+                            <p>Saat ini, semakin banyak rumah dan gedung perkotaan yang memasang panel surya di atapnya. Keuntungan utamanya adalah dapat menghemat biaya tagihan listrik bulanan dalam jangka panjang. Namun, hambatan terbesarnya saat ini adalah biaya pembelian dan pemasangan alat panel surya yang masih cukup mahal bagi sebagian masyarakat.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Jika di masa depan bahan bakar batu bara di bumi telah habis, apa yang kemungkinan besar akan terjadi terkait pemakaian panel surya?</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(10,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s10a" name="ans10" value="A"><label for="s10a"> Masyarakat akan berhenti menggunakan listrik sama sekali.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(10,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s10b" name="ans10" value="B"><label for="s10b"> Bumi akan menjadi gelap gulita selamanya tanpa ada penerangan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(10,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s10c" name="ans10" value="C"><label for="s10c"> Penggunaan panel surya akan semakin meningkat tajam sebagai sumber utama listrik.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(10,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s10d" name="ans10" value="D"><label for="s10d"> Panel surya tidak akan laku karena harganya tetap mahal.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 11-15: INFOGRAFIS/DATA (Pemilahan Sampah) ===================== -->
+            <!-- Soal 11: Tersurat -->
+            <div class="soal-soal" id="soal-no-11" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="visual-container">
+                            <div class="bg-success text-white text-center py-2 font-weight-bold">PANDUAN PEMILAHAN SAMPAH</div>
+                            <div class="piring-grid">
+                                <div class="piring-item" style="background-color: #2ecc71;"> <!-- Hijau -->
+                                    <i class="fas fa-apple-alt fa-2x mb-2"></i>
+                                    <span>ORGANIK</span>
+                                    <small style="font-weight:normal; margin-top:5px;">Sisa makanan, Daun, Ranting</small>
+                                </div>
+                                <div class="piring-item text-dark" style="background-color: #f1c40f;"> <!-- Kuning -->
+                                    <i class="fas fa-prescription-bottle fa-2x mb-2"></i>
+                                    <span>ANORGANIK</span>
+                                    <small style="font-weight:normal; margin-top:5px;">Plastik, Kaleng, Kaca, Karet</small>
+                                </div>
+                                <div class="piring-item bg-danger"> <!-- Merah -->
+                                    <i class="fas fa-biohazard fa-2x mb-2"></i>
+                                    <span>B3 (BERBAHAYA)</span>
+                                    <small style="font-weight:normal; margin-top:5px;">Baterai, Obat, Kabel, Lampu</small>
+                                </div>
+                                <div class="piring-item bg-primary"> <!-- Biru -->
+                                    <i class="fas fa-box-open fa-2x mb-2"></i>
+                                    <span>KERTAS</span>
+                                    <small style="font-weight:normal; margin-top:5px;">Kardus, Buku Bekas, Koran</small>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center py-1 text-muted small font-italic">Pedoman Warna Tempat Sampah Standar</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan pedoman infografis di samping, tempat sampah warna apakah yang dikhususkan untuk membuang kardus dan buku bekas?</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(11,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s11a" name="ans11" value="A"><label for="s11a"></label></div></div>
+                                <div class="opsi-text">Hijau</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(11,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s11b" name="ans11" value="B"><label for="s11b"></label></div></div>
+                                <div class="opsi-text">Kuning</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(11,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s11c" name="ans11" value="C"><label for="s11c"></label></div></div>
+                                <div class="opsi-text">Merah</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(11,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s11d" name="ans11" value="D"><label for="s11d"></label></div></div>
+                                <div class="opsi-text">Biru</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 12: Kategori -->
+            <div class="soal-soal" id="soal-no-12" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="visual-container">
+                            <div class="bg-success text-white text-center py-2 font-weight-bold">PANDUAN PEMILAHAN SAMPAH</div>
+                            <div class="piring-grid">
+                                <div class="piring-item" style="background-color: #2ecc71;">
+                                    <i class="fas fa-apple-alt fa-2x mb-2"></i><span>ORGANIK</span><small style="font-weight:normal; margin-top:5px;">Sisa makanan, Daun, Ranting</small>
+                                </div>
+                                <div class="piring-item text-dark" style="background-color: #f1c40f;">
+                                    <i class="fas fa-prescription-bottle fa-2x mb-2"></i><span>ANORGANIK</span><small style="font-weight:normal; margin-top:5px;">Plastik, Kaleng, Kaca, Karet</small>
+                                </div>
+                                <div class="piring-item bg-danger">
+                                    <i class="fas fa-biohazard fa-2x mb-2"></i><span>B3 (BERBAHAYA)</span><small style="font-weight:normal; margin-top:5px;">Baterai, Obat, Kabel, Lampu</small>
+                                </div>
+                                <div class="piring-item bg-primary">
+                                    <i class="fas fa-box-open fa-2x mb-2"></i><span>KERTAS</span><small style="font-weight:normal; margin-top:5px;">Kardus, Buku Bekas, Koran</small>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center py-1 text-muted small font-italic">Pedoman Warna Tempat Sampah Standar</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                         <p class="font-weight-bold">Rio baru saja selesai makan buah pisang. Ke dalam kotak kategori manakah Rio harus membuang kulit pisang tersebut?</p>
+                         <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(12,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s12a" name="ans12" value="A"><label for="s12a"></label></div></div>
+                                <div class="opsi-text">Anorganik, karena kulit pisang licin seperti plastik.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(12,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s12b" name="ans12" value="B"><label for="s12b"></label></div></div>
+                                <div class="opsi-text">Organik, karena kulit pisang termasuk sisa makanan yang bisa membusuk.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(12,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s12c" name="ans12" value="C"><label for="s12c"></label></div></div>
+                                <div class="opsi-text">Kertas, karena kulit pisang tipis.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(12,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s12d" name="ans12" value="D"><label for="s12d"></label></div></div>
+                                <div class="opsi-text">B3 (Berbahaya), karena kulit pisang bisa membuat orang terpeleset jatuh.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 13: Benar Salah (Interpretasi) -->
+            <div class="soal-soal" id="soal-no-13" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="visual-container">
+                            <div class="bg-success text-white text-center py-2 font-weight-bold">PANDUAN PEMILAHAN SAMPAH</div>
+                            <div class="piring-grid">
+                                <div class="piring-item" style="background-color: #2ecc71;">
+                                    <i class="fas fa-apple-alt fa-2x mb-2"></i><span>ORGANIK</span><small style="font-weight:normal; margin-top:5px;">Sisa makanan, Daun, Ranting</small>
+                                </div>
+                                <div class="piring-item text-dark" style="background-color: #f1c40f;">
+                                    <i class="fas fa-prescription-bottle fa-2x mb-2"></i><span>ANORGANIK</span><small style="font-weight:normal; margin-top:5px;">Plastik, Kaleng, Kaca, Karet</small>
+                                </div>
+                                <div class="piring-item bg-danger">
+                                    <i class="fas fa-biohazard fa-2x mb-2"></i><span>B3 (BERBAHAYA)</span><small style="font-weight:normal; margin-top:5px;">Baterai, Obat, Kabel, Lampu</small>
+                                </div>
+                                <div class="piring-item bg-primary">
+                                    <i class="fas fa-box-open fa-2x mb-2"></i><span>KERTAS</span><small style="font-weight:normal; margin-top:5px;">Kardus, Buku Bekas, Koran</small>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center py-1 text-muted small font-italic">Pedoman Warna Tempat Sampah Standar</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan visualisasi data di atas, tentukan pernyataan berikut ini bernilai <b>Benar</b> atau <b>Salah</b>!</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light"><tr><th>Pernyataan</th><th class="text-center" width="80">Benar</th><th class="text-center" width="80">Salah</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Baterai remot TV yang sudah habis harus dibuang ke tong sampah merah.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13a1" name="ans13a" value="1" onchange="pilihan3(13)"><label for="s13a1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13a2" name="ans13a" value="2" onchange="pilihan3(13)"><label for="s13a2"></label></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Botol minuman plastik mineral bekas dikategorikan sebagai sampah organik.</td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13b1" name="ans13b" value="1" onchange="pilihan3(13)"><label for="s13b1"></label></div></td>
+                                        <td class="text-center"><div class="radio icheck-primary d-inline"><input type="radio" id="s13b2" name="ans13b" value="2" onchange="pilihan3(13)"><label for="s13b2"></label></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 14: PG Kompleks (Aplikasi) -->
+            <div class="soal-soal" id="soal-no-14" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="visual-container">
+                            <div class="bg-success text-white text-center py-2 font-weight-bold">PANDUAN PEMILAHAN SAMPAH</div>
+                            <div class="piring-grid">
+                                <div class="piring-item" style="background-color: #2ecc71;">
+                                    <i class="fas fa-apple-alt fa-2x mb-2"></i><span>ORGANIK</span><small style="font-weight:normal; margin-top:5px;">Sisa makanan, Daun, Ranting</small>
+                                </div>
+                                <div class="piring-item text-dark" style="background-color: #f1c40f;">
+                                    <i class="fas fa-prescription-bottle fa-2x mb-2"></i><span>ANORGANIK</span><small style="font-weight:normal; margin-top:5px;">Plastik, Kaleng, Kaca, Karet</small>
+                                </div>
+                                <div class="piring-item bg-danger">
+                                    <i class="fas fa-biohazard fa-2x mb-2"></i><span>B3 (BERBAHAYA)</span><small style="font-weight:normal; margin-top:5px;">Baterai, Obat, Kabel, Lampu</small>
+                                </div>
+                                <div class="piring-item bg-primary">
+                                    <i class="fas fa-box-open fa-2x mb-2"></i><span>KERTAS</span><small style="font-weight:normal; margin-top:5px;">Kardus, Buku Bekas, Koran</small>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center py-1 text-muted small font-italic">Pedoman Warna Tempat Sampah Standar</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Siti baru saja membuang kaleng minuman soda ringan dan bungkus kerupuk dari plastik. Tindakan yang benar sesuai pedoman adalah membuangnya ke wadah... <br><span class="text-primary small">(Pilih lebih dari satu jawaban jika perlu!)</span></p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s14a', 14)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s14a" name="pilihan14" value="A"><label for="s14a"> Tempat sampah berwarna Hijau</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s14b', 14)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s14b" name="pilihan14" value="B"><label for="s14b"> Tempat sampah berwarna Kuning</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s14c', 14)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s14c" name="pilihan14" value="C"><label for="s14c"> Wadah kategori Anorganik</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s14d', 14)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s14d" name="pilihan14" value="D"><label for="s14d"> Wadah kategori B3 (Berbahaya)</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 15: Inferensi Sederhana -->
+            <div class="soal-soal" id="soal-no-15" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="visual-container">
+                            <div class="bg-success text-white text-center py-2 font-weight-bold">PANDUAN PEMILAHAN SAMPAH</div>
+                            <div class="piring-grid">
+                                <div class="piring-item" style="background-color: #2ecc71;">
+                                    <i class="fas fa-apple-alt fa-2x mb-2"></i><span>ORGANIK</span><small style="font-weight:normal; margin-top:5px;">Sisa makanan, Daun, Ranting</small>
+                                </div>
+                                <div class="piring-item text-dark" style="background-color: #f1c40f;">
+                                    <i class="fas fa-prescription-bottle fa-2x mb-2"></i><span>ANORGANIK</span><small style="font-weight:normal; margin-top:5px;">Plastik, Kaleng, Kaca, Karet</small>
+                                </div>
+                                <div class="piring-item bg-danger">
+                                    <i class="fas fa-biohazard fa-2x mb-2"></i><span>B3 (BERBAHAYA)</span><small style="font-weight:normal; margin-top:5px;">Baterai, Obat, Kabel, Lampu</small>
+                                </div>
+                                <div class="piring-item bg-primary">
+                                    <i class="fas fa-box-open fa-2x mb-2"></i><span>KERTAS</span><small style="font-weight:normal; margin-top:5px;">Kardus, Buku Bekas, Koran</small>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center py-1 text-muted small font-italic">Pedoman Warna Tempat Sampah Standar</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Secara nalar, apa alasan utama mengapa sampah Kertas (kardus, buku) sering kali dipisahkan sendiri dari sampah Anorganik lainnya (plastik, kaca)?</p>
+                         <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(15,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s15a" name="ans15" value="A"><label for="s15a"></label></div></div>
+                                <div class="opsi-text">Karena kertas mudah hancur jika terkena sisa cairan dari botol plastik, sehingga sulit didaur ulang jika dicampur.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(15,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s15b" name="ans15" value="B"><label for="s15b"></label></div></div>
+                                <div class="opsi-text">Karena kertas memiliki harga jual yang jauh lebih murah daripada plastik.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(15,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s15c" name="ans15" value="C"><label for="s15c"></label></div></div>
+                                <div class="opsi-text">Karena kotak warna biru lebih bagus daripada kotak kuning.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(15,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s15d" name="ans15" value="D"><label for="s15d"></label></div></div>
+                                <div class="opsi-text">Karena sampah kertas sangat berbahaya jika dipegang dengan tangan kosong.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 16-20: PUISI (Rintihan Hutan) ===================== -->
+            <!-- Soal 16: Tema -->
+            <div class="soal-soal" id="soal-no-16" style="display:none;">
+                 <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan text-center">
+                            <h5>Rintihan Sang Hutan</h5>
+                            <p>Dulu tubuhku hijau dan rimbun<br>Tempat bernaung rusa dan burung bersusun<br>Kini rantingku patah, batinku nelangsa<br>Paru-paruku ditebang demi gedung perkasa</p>
+                            <p>Tidakkah kau dengar isak tangisku?<br>Wahai manusia, selamatkan sisa napasku</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Apa tema utama dari puisi "Rintihan Sang Hutan" di samping?</p>
+                         <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(16,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s16a" name="ans16" value="A"><label for="s16a"></label></div></div>
+                                <div class="opsi-text">Keindahan alam pegunungan yang memukau</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(16,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s16b" name="ans16" value="B"><label for="s16b"></label></div></div>
+                                <div class="opsi-text">Kegembiraan hewan-hewan saat bermain di hutan</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(16,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s16c" name="ans16" value="C"><label for="s16c"></label></div></div>
+                                <div class="opsi-text">Kerusakan alam dan penebangan hutan oleh manusia</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(16,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s16d" name="ans16" value="D"><label for="s16d"></label></div></div>
+                                <div class="opsi-text">Pembangunan gedung megah di tengah kota</div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Soal 17: Makna Kiasan -->
+            <div class="soal-soal" id="soal-no-17" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan text-center">
+                            <h5>Rintihan Sang Hutan</h5>
+                            <p>Dulu tubuhku hijau dan rimbun<br>Tempat bernaung rusa dan burung bersusun<br>Kini rantingku patah, batinku nelangsa<br>Paru-paruku ditebang demi gedung perkasa</p>
+                            <p>Tidakkah kau dengar isak tangisku?<br>Wahai manusia, selamatkan sisa napasku</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Pada baris keempat, terdapat kalimat "Paru-paruku ditebang". Apa makna kiasan dari "Paru-paruku" dalam puisi tersebut?</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(17,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s17a" name="ans17" value="A"><label for="s17a"> Organ tubuh manusia yang digunakan untuk bernapas.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(17,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s17b" name="ans17" value="B"><label for="s17b"> Gedung perkasa yang menjulang tinggi.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(17,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s17c" name="ans17" value="C"><label for="s17c"> Pohon-pohon di hutan yang menghasilkan udara segar (oksigen).</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(17,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s17d" name="ans17" value="D"><label for="s17d"> Hewan-hewan yang tinggal dan berlari di dalam hutan.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 18: Suasana Puisi -->
+            <div class="soal-soal" id="soal-no-18" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan text-center">
+                            <h5>Rintihan Sang Hutan</h5>
+                            <p>Dulu tubuhku hijau dan rimbun<br>Tempat bernaung rusa dan burung bersusun<br>Kini rantingku patah, batinku nelangsa<br>Paru-paruku ditebang demi gedung perkasa</p>
+                            <p>Tidakkah kau dengar isak tangisku?<br>Wahai manusia, selamatkan sisa napasku</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Suasana (perasaan) yang tergambar jelas saat membaca bait kedua puisi tersebut adalah...</p>
+                         <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(18,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s18a" name="ans18" value="A"><label for="s18a"></label></div></div>
+                                <div class="opsi-text">Gembira dan penuh harapan</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(18,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s18b" name="ans18" value="B"><label for="s18b"></label></div></div>
+                                <div class="opsi-text">Sedih, memelas, dan putus asa</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(18,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s18c" name="ans18" value="C"><label for="s18c"></label></div></div>
+                                <div class="opsi-text">Menyeramkan dan menakutkan</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(18,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s18d" name="ans18" value="D"><label for="s18d"></label></div></div>
+                                <div class="opsi-text">Santai dan menenangkan jiwa</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 19: Pasangkan (Rima) -->
+            <div class="soal-soal" id="soal-no-19" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan text-center">
+                            <h5>Rintihan Sang Hutan</h5>
+                            <p>Dulu tubuhku hijau dan rimbun<br>Tempat bernaung rusa dan burung bersusun<br>Kini rantingku patah, batinku nelangsa<br>Paru-paruku ditebang demi gedung perkasa</p>
+                            <p>Tidakkah kau dengar isak tangisku?<br>Wahai manusia, selamatkan sisa napasku</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Manakah pasangan kata di bawah ini yang membentuk pola rima akhir yang sama pada puisi tersebut?</p>
+                        <div class="card p-2 mb-1 shadow-sm" onclick="pilihan(19,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s19a" name="ans19" value="A"><label for="s19a"> Hijau - Patah</label></div></div>
+                        <div class="card p-2 mb-1 shadow-sm" onclick="pilihan(19,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s19b" name="ans19" value="B"><label for="s19b"> Tangisku - Manusia</label></div></div>
+                        <div class="card p-2 mb-1 shadow-sm" onclick="pilihan(19,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s19c" name="ans19" value="C"><label for="s19c"> Nelangsa - Perkasa</label></div></div>
+                        <div class="card p-2 mb-1 shadow-sm" onclick="pilihan(19,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s19d" name="ans19" value="D"><label for="s19d"> Rimbun - Paru-paru</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 20: Respons Emosional/Tindakan -->
+            <div class="soal-soal" id="soal-no-20" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan text-center">
+                            <h5>Rintihan Sang Hutan</h5>
+                            <p>Dulu tubuhku hijau dan rimbun<br>Tempat bernaung rusa dan burung bersusun<br>Kini rantingku patah, batinku nelangsa<br>Paru-paruku ditebang demi gedung perkasa</p>
+                            <p>Tidakkah kau dengar isak tangisku?<br>Wahai manusia, selamatkan sisa napasku</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Setelah membaca jeritan hati "Sang Hutan", tindakan nyata apa yang sebaiknya kita lakukan sebagai manusia untuk membantunya?</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(20,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s20a" name="ans20" value="A"><label for="s20a"></label></div></div>
+                                <div class="opsi-text">Mengabaikan saja karena kita butuh banyak gedung bertingkat.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(20,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s20b" name="ans20" value="B"><label for="s20b"></label></div></div>
+                                <div class="opsi-text">Menangkap rusa dan burung agar mereka tidak bersedih di hutan.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(20,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s20c" name="ans20" value="C"><label for="s20c"></label></div></div>
+                                <div class="opsi-text">Melakukan reboisasi (penanaman pohon kembali) dan tidak menebang pohon sembarangan.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(20,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s20d" name="ans20" value="D"><label for="s20d"></label></div></div>
+                                <div class="opsi-text">Membuang sampah kertas di area hutan agar hancur menjadi tanah.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 21-25: TEKS PROSEDUR (Pot Botol Bekas) ===================== -->
+            <!-- Soal 21: Urutan -->
+            <div class="soal-soal" id="soal-no-21" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5>Cara Membuat Pot Tanaman dari Botol Bekas</h5>
+                            <ol>
+                                <li>Siapkan botol air mineral bekas, gunting, paku, dan cat warna-warni.</li>
+                                <li>Potong bagian tengah botol air mineral menjadi dua bagian menggunakan gunting.</li>
+                                <li><strong>( ... Titik-titik ... )</strong></li>
+                                <li>Warnai permukaan luar botol dengan cat sesuai seleramu agar terlihat menarik.</li>
+                                <li>Masukkan tanah pupuk dan bibit tanaman ke dalam pot botol, lalu siram perlahan.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Kalimat yang tepat untuk mengisi langkah nomor 3 yang rumpang (kosong) adalah...</p>
+                         <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(21,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s21a" name="ans21" value="A"><label for="s21a"></label></div></div>
+                                <div class="opsi-text">Lempar potongan botol bagian atas ke tempat sampah plastik.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(21,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s21b" name="ans21" value="B"><label for="s21b"></label></div></div>
+                                <div class="opsi-text">Jemur botol di bawah sinar matahari sampai kering kerontang.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(21,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s21c" name="ans21" value="C"><label for="s21c"></label></div></div>
+                                <div class="opsi-text">Beri pupuk tambahan agar tanaman cepat tumbuh besar.</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(21,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s21d" name="ans21" value="D"><label for="s21d"></label></div></div>
+                                <div class="opsi-text">Lubangi bagian bawah dasar botol dengan paku sebagai jalan keluar air.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 22: Alat dan Bahan -->
+            <div class="soal-soal" id="soal-no-22" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5>Cara Membuat Pot Tanaman dari Botol Bekas</h5>
+                            <ol>
+                                <li>Siapkan botol air mineral bekas, gunting, paku, dan cat warna-warni.</li>
+                                <li>Potong bagian tengah botol air mineral menjadi dua bagian menggunakan gunting.</li>
+                                <li>Lubangi bagian bawah dasar botol dengan paku sebagai jalan keluar air.</li>
+                                <li>Warnai permukaan luar botol dengan cat sesuai seleramu agar terlihat menarik.</li>
+                                <li>Masukkan tanah pupuk dan bibit tanaman ke dalam pot botol, lalu siram perlahan.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Alat pemotong apa saja yang secara tersirat maupun tersurat digunakan dalam teks prosedur di atas? <br><span class="text-primary small">(Pilih lebih dari satu!)</span></p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s22a', 22)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s22a" name="pilihan22" value="A"><label for="s22a"> Gunting tajam</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s22b', 22)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s22b" name="pilihan22" value="B"><label for="s22b"> Paku besi</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s22c', 22)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s22c" name="pilihan22" value="C"><label for="s22c"> Gergaji mesin</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="toggleCheck('s22d', 22)" style="cursor:pointer;"><div class="checkbox icheck-primary"><input type="checkbox" id="s22d" name="pilihan22" value="D"><label for="s22d"> Pisau dapur</label></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 23: Tujuan Teks -->
+            <div class="soal-soal" id="soal-no-23" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5>Cara Membuat Pot Tanaman dari Botol Bekas</h5>
+                            <ol>
+                                <li>Siapkan botol air mineral bekas, gunting, paku, dan cat warna-warni.</li>
+                                <li>Potong bagian tengah botol air mineral menjadi dua bagian menggunakan gunting.</li>
+                                <li>Lubangi bagian bawah dasar botol dengan paku sebagai jalan keluar air.</li>
+                                <li>Warnai permukaan luar botol dengan cat sesuai seleramu agar terlihat menarik.</li>
+                                <li>Masukkan tanah pupuk dan bibit tanaman ke dalam pot botol, lalu siram perlahan.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Apa tujuan utama sang penulis menyajikan teks prosedur ini kepada pembaca?</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(23,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s23a" name="ans23" value="A"><label for="s23a"> Mengajari pembaca cara menjual botol air mineral bekas.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(23,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s23b" name="ans23" value="B"><label for="s23b"> Memberi panduan mendaur ulang sampah plastik menjadi barang berguna.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(23,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s23c" name="ans23" value="C"><label for="s23c"> Mengiklankan produk cat warna-warni yang bagus untuk tanaman.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(23,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s23d" name="ans23" value="D"><label for="s23d"> Membuktikan bahwa bunga matahari bisa hidup di dalam botol.</label></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 24: Kebahasaan (Kata Benda) -->
+            <div class="soal-soal" id="soal-no-24" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5>Cara Membuat Pot Tanaman dari Botol Bekas</h5>
+                            <ol>
+                                <li>Siapkan botol air mineral bekas, gunting, paku, dan cat warna-warni.</li>
+                                <li>Potong bagian tengah botol air mineral menjadi dua bagian menggunakan gunting.</li>
+                                <li>Lubangi bagian bawah dasar botol dengan paku sebagai jalan keluar air.</li>
+                                <li>Warnai permukaan luar botol dengan cat sesuai seleramu agar terlihat menarik.</li>
+                                <li>Masukkan tanah pupuk dan bibit tanaman ke dalam pot botol, lalu siram perlahan.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Kata kerja perintah (imperatif) yang digunakan penulis untuk menuntun pembaca melakukan aksi dalam teks di atas adalah...</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(24,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s24a" name="ans24" value="A"><label for="s24a"></label></div></div>
+                                <div class="opsi-text">Botol, paku, tanah, bibit</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(24,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s24b" name="ans24" value="B"><label for="s24b"></label></div></div>
+                                <div class="opsi-text">Menjadi, dengan, sebagai, lalu</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(24,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s24c" name="ans24" value="C"><label for="s24c"></label></div></div>
+                                <div class="opsi-text">Menarik, warna-warni, bekas, perlahan</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(24,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s24d" name="ans24" value="D"><label for="s24d"></label></div></div>
+                                <div class="opsi-text">Siapkan, potong, lubangi, masukkan</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soal 25: Evaluasi (HOTS Mengapa) -->
+            <div class="soal-soal" id="soal-no-25" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="teks-bacaan">
+                            <h5>Cara Membuat Pot Tanaman dari Botol Bekas</h5>
+                            <ol>
+                                <li>Siapkan botol air mineral bekas, gunting, paku, dan cat warna-warni.</li>
+                                <li>Potong bagian tengah botol air mineral menjadi dua bagian menggunakan gunting.</li>
+                                <li>Lubangi bagian bawah dasar botol dengan paku sebagai jalan keluar air.</li>
+                                <li>Warnai permukaan luar botol dengan cat sesuai seleramu agar terlihat menarik.</li>
+                                <li>Masukkan tanah pupuk dan bibit tanaman ke dalam pot botol, lalu siram perlahan.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="font-weight-bold">Berdasarkan pengetahuanmu tentang menanam, apa yang kemungkinan akan terjadi jika kita <b>melewati (tidak melakukan) langkah nomor 3</b>?</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(25,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s25a" name="ans25" value="A"><label for="s25a"> Tanah di dalam botol akan mengeras dan menjadi batu bata.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(25,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s25b" name="ans25" value="B"><label for="s25b"> Air siraman akan menggenang di dalam botol, menyebabkan akar tanaman busuk dan mati.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(25,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s25c" name="ans25" value="C"><label for="s25c"> Cat warna-warni pada botol akan luntur terkena uap air tanah.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(25,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s25d" name="ans25" value="D"><label for="s25d"> Tanaman akan tumbuh dua kali lebih cepat dari biasanya.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SOAL 26-30: KOSAKATA & BAHASA ===================== -->
+            <!-- Soal 26: Ungkapan -->
+            <div class="soal-soal" id="soal-no-26" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="teks-bacaan mb-4">Ayah sering sekali menugaskan pekerjaan penting pada Pak Hasan, karena Pak Hasan merupakan <b>tangan kanan</b> Ayah di perusahaan tersebut.</div>
+                        <p class="font-weight-bold">Arti ungkapan <b>tangan kanan</b> pada kalimat di atas adalah...</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(26,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s26a" name="ans26" value="A"><label for="s26a"></label></div></div>
+                                <div class="opsi-text">Orang yang sombong</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(26,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s26b" name="ans26" value="B"><label for="s26b"></label></div></div>
+                                <div class="opsi-text">Orang yang pandai menulis</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(26,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s26c" name="ans26" value="C"><label for="s26c"></label></div></div>
+                                <div class="opsi-text">Orang kepercayaan atau asisten andalan</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(26,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s26d" name="ans26" value="D"><label for="s26d"></label></div></div>
+                                <div class="opsi-text">Orang yang suka memerintah</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 27: Sinonim -->
+            <div class="soal-soal" id="soal-no-27" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="teks-bacaan mb-4">Tim SAR segera melakukan <b>evakuasi</b> terhadap warga desa yang terjebak banjir akibat luapan sungai.</div>
+                        <p class="font-weight-bold">Sinonim (persamaan makna) dari kata <b>evakuasi</b> adalah...</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(27,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s27a" name="ans27" value="A"><label for="s27a"></label></div></div>
+                                <div class="opsi-text">Pengobatan massal</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(27,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s27b" name="ans27" value="B"><label for="s27b"></label></div></div>
+                                <div class="opsi-text">Pemindahan ke tempat yang lebih aman</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(27,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s27c" name="ans27" value="C"><label for="s27c"></label></div></div>
+                                <div class="opsi-text">Pembagian bantuan makanan</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(27,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s27d" name="ans27" value="D"><label for="s27d"></label></div></div>
+                                <div class="opsi-text">Pengamatan lokasi bencana</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 28: Antonim -->
+            <div class="soal-soal" id="soal-no-28" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="teks-bacaan mb-4">Dahulu kala, masyarakat membajak sawah menggunakan alat <b>tradisional</b> bertenaga kerbau. Kini mereka memakai traktor.</div>
+                        <p class="font-weight-bold">Antonim (lawan kata) dari kata <b>tradisional</b> yang bercetak tebal adalah...</p>
+                        <div class="opsi-container">
+                            <div class="opsi-item" onclick="pilihan(28,'A')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s28a" name="ans28" value="A"><label for="s28a"></label></div></div>
+                                <div class="opsi-text">Klasik</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(28,'B')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s28b" name="ans28" value="B"><label for="s28b"></label></div></div>
+                                <div class="opsi-text">Kuno</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(28,'C')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s28c" name="ans28" value="C"><label for="s28c"></label></div></div>
+                                <div class="opsi-text">Manual</div>
+                            </div>
+                            <div class="opsi-item" onclick="pilihan(28,'D')">
+                                <div class="opsi-radio"><div class="radio icheck-primary"><input type="radio" id="s28d" name="ans28" value="D"><label for="s28d"></label></div></div>
+                                <div class="opsi-text">Modern</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 29: Peribahasa -->
+            <div class="soal-soal" id="soal-no-29" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="teks-bacaan mb-4">Nenek sudah merawat Doni sejak bayi dengan penuh kasih sayang. Namun setelah dewasa dan kaya raya, Doni justru menelantarkan neneknya dan bersikap sangat kasar.</div>
+                        <p class="font-weight-bold">Peribahasa yang paling tepat untuk menggambarkan kelakuan Doni terhadap Neneknya adalah...</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(29,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s29a" name="ans29" value="A"><label for="s29a"> Besar pasak daripada tiang.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(29,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s29b" name="ans29" value="B"><label for="s29b"> Air susu dibalas dengan air tuba.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(29,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s29c" name="ans29" value="C"><label for="s29c"> Bagai pungguk merindukan bulan.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(29,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s29d" name="ans29" value="D"><label for="s29d"> Seperti katak dalam tempurung.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soal 30: Ejaan / Huruf Kapital -->
+            <div class="soal-soal" id="soal-no-30" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="teks-bacaan mb-4">Ujian ejaan nama geografi dan nama tempat. Pilihlah kalimat yang penulisannya sesuai pedoman.</div>
+                        <p class="font-weight-bold">Manakah penulisan kalimat di bawah ini yang menggunakan huruf kapital secara benar?</p>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(30,'A')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s30a" name="ans30" value="A"><label for="s30a"> Rombongan siswa sd permata berwisata ke gunung Bromo.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(30,'B')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s30b" name="ans30" value="B"><label for="s30b"> Paman pergi memancing Ikan di sungai Kapuas.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(30,'C')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s30c" name="ans30" value="C"><label for="s30c"> Keluargaku sedang menikmati pemandangan di Danau Toba.</label></div></div>
+                        <div class="card p-3 mb-2 shadow-sm" onclick="pilihan(30,'D')" style="cursor:pointer;"><div class="radio icheck-primary"><input type="radio" id="s30d" name="ans30" value="D"><label for="s30d"> kapal itu berlayar melintasi selat Sunda dengan hati-hati.</label></div></div>
+                    </div>
+                </div>
+            </div>
+
+          </div> <!-- End Isisoal -->
+          
+          <div class="row pl-3 pr-3 pb-1 mb-0 border-top mt-4"></div>
+          
+          <!-- Bottom Navigation (Stacked on Mobile) -->
+          <div class="row pb-0 pt-2 mt-2 btn-bawah justify-content-center"> 
+            <div class="col-12 col-md-auto text-center mb-2 mb-md-0">
+                <button class="btn btn-danger btn-round btn-navigasi shadow-sm" onClick="prevSoal()"><i class="fa fa-chevron-circle-left"></i> Sebelumnya</button>
+            </div>
+            <div class="col-12 col-md-auto text-center mb-2 mb-md-0">
+                <button class="btn btn-warning btn-round btn-navigasi text-white shadow-sm"><input type="checkbox" onClick="raguRagu()" id="c_ragu_ragu"> Ragu-ragu</button>
+            </div>
+            <div class="col-12 col-md-auto text-center">
+                <button class="btn btn-primary btn-round btn-navigasi shadow-sm" onClick="nextSoal()" id="nextSoal">Berikutnya <i class="fa fa-chevron-circle-right"></i></button>
+            </div>
+          </div>
+          
+        </div>
+        <div class="footer-text">Dikembangkan untuk Latihan Siswa SD @2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Daftar Soal -->
+<div class="modal fadeIn" id="myModal">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Daftar Soal</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body text-center pb-5 pt-5">
+        <div id="nav-soal-container" class="row justify-content-center">
+            <!-- JS will populate this -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Konfirmasi Selesai -->
+<div class="modal fade" id="confirmFinishModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content text-center">
+      <div class="modal-body p-5">
+        <div class="mb-4">
+            <i class="fas fa-check-circle text-success" style="font-size: 80px;"></i>
+        </div>
+        <h3 class="mb-3">Konfirmasi Selesai</h3>
+        <p class="mb-4 text-muted">Apakah kamu yakin ingin mengakhiri tes ini? <br>Pastikan semua jawaban sudah kamu periksa kembali.</p>
+        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-success px-4" onclick="hitungNilai()">Ya, Kumpulkan Jawaban</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Hasil & Rekap -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title"><i class="fas fa-poll"></i> Hasil Simulasi AKM Literasi SD</h5>
+      </div>
+      <div class="modal-body p-4">
+        <!-- Result Summary -->
+        <div id="resultSummary" class="text-center mb-5">
+            <h4 class="mb-4">Nilai Akhir Kamu</h4>
+            <div class="score-circle">
+                <span id="finalScore">0</span>
+            </div>
+            <p>Total Poin yang Didapat: <span id="totalPoints" class="font-weight-bold">0</span></p>
+            <div class="mt-4">
+                <button class="btn btn-success px-4 mr-2 mb-2" onclick="showRecap()">Lihat Pembahasan Soal</button>
+                <button class="btn btn-secondary px-4 mb-2" onclick="location.reload()">Selesai & Keluar</button>
+            </div>
+        </div>
+
+        <!-- Recap Table (Hidden initially) -->
+        <div id="recapSection" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                <h5 class="text-success m-0">Rekapitulasi dan Pembahasan</h5>
+                <button class="btn btn-sm btn-secondary" onclick="hideRecap()"><i class="fas fa-arrow-left"></i> Kembali ke Nilai</button>
+            </div>
+            
+            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-bordered table-striped table-hover table-rekap">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="text-center">No</th>
+                            <th width="15%" class="text-center">Status</th>
+                            <th width="10%" class="text-center">Poin</th>
+                            <th>Pembahasan & Kunci Jawaban</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recapTableBody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Timeout -->
+<div class="modal fadeIn" id="timeoutDialog" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center pb-2 pt-5">
+        <h5 class="modal-title text-danger">WAKTU HABIS !!</h5>
+        <p>Batas waktu 60 menit untuk mengerjakan soal telah selesai.</p>
+      </div>
+      <div class="modal-footer text-center justify-content-center">
+        <button class="btn btn-danger" onClick="hitungNilai()">Lihat Hasil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    var totalSoal = 30;
+    var currentSoal = 1;
+    var jawabanUser = {}; 
+    var raguUser = {};
+    var timeLeft = 3600; // 60 menit
+    var timerInterval;
+
+    // KUNCI JAWABAN
+    const kunciJawaban = {
+        1: 'C', 2: 'B', 3: 'B', 
+        4: { 'a': '1', 'b': '2', 'c': '1' },
+        5: 'B', 6: 'C', 
+        7: ['B', 'C'], 
+        8: 'C', 9: 'B', 10: 'C',
+        11: 'D', 12: 'B', 
+        13: { 'a': '1', 'b': '2' },
+        14: ['B', 'C'],
+        15: 'A', 16: 'C', 17: 'C', 18: 'B', 19: 'C', 20: 'C',
+        21: 'D', 
+        22: ['A', 'B'],
+        23: 'B', 24: 'D', 25: 'B', 26: 'C', 27: 'B', 28: 'D', 29: 'B', 30: 'C'
+    };
+
+    // PEMBAHASAN UNTUK SISWA SD KELAS 6 (HOTS EXPLANATIONS)
+    const pembahasanSoal = {
+        1: "Rusa muda merasa tanduknya sangat gagah dan penampilannya paling hebat, sehingga ia meremehkan burung jalak.",
+        2: "Rusa mengusir burung Jalak karena merasa dirinya paling bagus. Ini menunjukkan watak tinggi hati (sombong) dan egois.",
+        3: "Kata 'hinggap' biasa digunakan untuk burung yang turun terbang lalu berpijak/bertengger pada dahan pohon atau punggung hewan.",
+        4: "Pernyataan (A) Benar. Pernyataan (B) Salah, karena Rusa kurus akibat gatal dan tidak bisa tidur. Pernyataan (C) Benar.",
+        5: "Amanat cerita adalah betapapun hebatnya kita, kita tetap membutuhkan orang lain (Simbiosis mutualisme). Tidak boleh sombong.",
+        6: "Paragraf pertama fokus menjelaskan bahwa panel surya adalah alat canggih pengubah sinar matahari menjadi listrik yang ramah lingkungan.",
+        7: "Keuntungan panel surya tertulis di teks: menghemat tagihan listrik (B) dan ramah lingkungan/tidak beracun (C).",
+        8: "Dalam teks dijelaskan bahwa hambatan utamanya adalah 'biaya pembelian dan pemasangan alat panel surya yang masih cukup mahal'.",
+        9: "Ringkasan yang tepat harus merangkum kelebihan (ramah lingkungan & hemat) dan kekurangannya (biaya awal mahal).",
+        10: "Berdasarkan analisis logika, jika batu bara habis, manusia akan beralih memaksimalkan panel surya sebagai sumber listrik utama.",
+        11: "Di infografis, kardus dan buku bekas masuk ke kategori Kertas yang memiliki wadah berwarna Biru.",
+        12: "Kulit pisang adalah sisa makanan dari alam yang mudah membusuk, sehingga termasuk jenis sampah Organik.",
+        13: "Baterai adalah bahan Berbahaya/B3 (Kotak Merah -> Benar). Botol plastik adalah sampah Anorganik, bukan Organik (Salah).",
+        14: "Kaleng dan plastik kemasan makanan termasuk kategori sampah Anorganik (Wadah Kuning).",
+        15: "Kertas sangat mudah rusak, basah, atau hancur jika tercampur sampah lain yang berair (seperti botol sisa minum), sehingga harus dipisah agar bisa didaur ulang.",
+        16: "Puisi mengeluhkan hutan yang ditebang untuk pembangunan gedung, mencerminkan tema kerusakan alam.",
+        17: "Hutan sering disebut sebagai 'paru-paru dunia' karena pohon-pohon menyerap karbon dioksida dan menghasilkan oksigen untuk bernapas.",
+        18: "Bait kedua 'Tidakkah kau dengar isak tangisku?' menunjukkan perasaan yang sedih dan memelas memohon pertolongan.",
+        19: "Rima akhir yang sama terdapat pada baris 3 dan 4 (nelangs**a** - perkas**a**).",
+        20: "Tindakan nyata menyelamatkan hutan adalah dengan gerakan menanam kembali (reboisasi).",
+        21: "Setelah botol dipotong (langkah 2), sebelum memasukkan tanah (langkah 5), botol harus dilubangi dulu agar air bisa keluar.",
+        22: "Alat pemotong/pelubang keras yang disinggung secara eksplisit di teks adalah gunting (memotong) dan paku (melubangi).",
+        23: "Teks prosedur ini bertujuan memandu pembaca agar bisa mengolah (mendaur ulang) barang bekas (botol) menjadi pot.",
+        24: "Kata perintah (imperatif) menyuruh pembaca melakukan sesuatu: siapkan, potong, lubangi, masukkan.",
+        25: "Analisis Biologi: Jika dasar pot tidak berlubang, air siraman tidak bisa mengalir keluar, akan menggenang, membusukkan akar, dan tanaman mati.",
+        26: "Ungkapan 'tangan kanan' bermakna kiasan sebagai orang kepercayaan atau orang yang selalu diandalkan.",
+        27: "Evakuasi dalam konteks bencana berarti proses penyelamatan dan pemindahan korban ke lokasi yang aman.",
+        28: "Tradisional berkaitan dengan cara lama/kuno, lawan katanya adalah modern (cara masa kini/canggih).",
+        29: "Kebaikan (susu) dibalas kejahatan/kasar (tuba) sangat tepat menggambarkan perbuatan Doni yang durhaka.",
+        30: "Huruf kapital dipakai pada huruf pertama unsur nama geografi. A, B, dan D salah eja pada penulisan singkatan/kata awal/tengah."
+    };
+
+    $(document).ready(function() {
+        generateNav();
+    });
+
+    function mulaiTes() {
+        var nama = $('#inputNama').val();
+        var sekolah = $('#inputSekolah').val();
+
+        if(nama === "" || sekolah === "") {
+            alert("Harap isi Nama dan Asal Sekolahmu terlebih dahulu, ya!");
+            return;
+        }
+
+        $('#displayNama').text(nama);
+        $('#displaySekolah').text(sekolah);
+        // Mobile display
+        $('#displayNamaMobile').text(nama);
+
+        $('#login-panel').fadeOut();
+        $('#app-header').fadeIn();
+        $('#app-content').css('display', 'block');
+        setTimeout(function(){ $('#app-content').css('opacity', 1); }, 100);
+
+        startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(function() {
+            if(timeLeft > 0) {
+                timeLeft--;
+                var m = Math.floor(timeLeft / 60);
+                var s = timeLeft % 60;
+                $('#countdown').html((m<10?'0':'')+m + ':' + (s<10?'0':'')+s);
+            } else {
+                clearInterval(timerInterval);
+                $('#timeoutDialog').modal('show');
+            }
+        }, 1000);
+    }
+
+    function generateNav() {
+        var navHtml = '';
+        for(var i=1; i<=totalSoal; i++) {
+            navHtml += `
+            <div class="col-2 col-md-1 mb-2 px-1">
+                <div id="jawaban-no-${i}" class="btn btn-outline-dark btn-sm btn-block btn-lihat-soal shadow-sm" style="height:40px; position:relative; font-weight:500;" onClick="lihatSoal(${i})" data-dismiss="modal">
+                    ${i}
+                    <span id="answer${i}" class="badge badge-success d-none" style="position:absolute; top:-5px; right:-5px; font-size:8px;"><i class="fa fa-check"></i></span>
+                </div>
+            </div>`;
+        }
+        $('#nav-soal-container').html(navHtml);
+    }
+
+    function lihatSoal(no) {
+        $('.soal-soal').hide();
+        $('#soal-no-'+no).fadeIn();
+        currentSoal = no;
+        $('#noSoal').text(no);
+
+        // Update tombol navigasi
+        $('.btn-lihat-soal').removeClass('btn-success text-white').addClass('btn-outline-dark');
+        
+        for(var i=1; i<=totalSoal; i++) {
+            var btn = $('#jawaban-no-'+i);
+            btn.removeClass('btn-success btn-warning btn-dark text-white');
+            
+            if(raguUser[i]) {
+                btn.addClass('btn-warning text-white');
+            } else if(jawabanUser[i]) {
+                btn.addClass('btn-dark text-white');
+            } else {
+                btn.addClass('btn-outline-dark');
+            }
+        }
+
+        $('#jawaban-no-'+no).removeClass('btn-outline-dark btn-dark').addClass('btn-success text-white');
+        $('#c_ragu_ragu').prop('checked', raguUser[no] ? true : false);
+        
+        if(currentSoal == totalSoal) {
+            $('#nextSoal').html('Kumpulkan <i class="fa fa-check"></i>').removeClass('btn-primary').addClass('btn-success').attr('onclick', 'konfirmasiSelesai()');
+        } else {
+            $('#nextSoal').html('Berikutnya <i class="fa fa-chevron-circle-right"></i>').removeClass('btn-success').addClass('btn-primary').attr('onclick', 'nextSoal()');
+        }
+    }
+
+    function nextSoal() {
+        if(currentSoal < totalSoal) {
+            lihatSoal(currentSoal + 1);
+        }
+    }
+
+    function prevSoal() {
+        if(currentSoal > 1) {
+            lihatSoal(currentSoal - 1);
+        }
+    }
+
+    function pilihan(no, val) {
+        $('#s'+no+val.toLowerCase()).prop('checked', true); 
+        jawabanUser[no] = val;
+        updateStatus(no);
+    }
+
+    function toggleCheck(id, no) {
+        var cb = $('#' + id);
+        cb.prop('checked', !cb.prop('checked'));
+        pilihan2(no);
+    }
+
+    function pilihan2(no) {
+        var checkedValues = [];
+        $('input[name="pilihan'+no+'"]:checked').each(function() {
+            checkedValues.push($(this).val());
+        });
+        if(checkedValues.length > 0) {
+            jawabanUser[no] = checkedValues;
+        } else {
+            delete jawabanUser[no];
+        }
+        updateStatus(no);
+    }
+    
+    function pilihan3(no) {
+        if (!jawabanUser[no] || typeof jawabanUser[no] !== 'object') jawabanUser[no] = {};
+        $('input[name^="ans'+no+'"]:checked').each(function() {
+            var name = $(this).attr('name');
+            var rowKey = name.substr(name.length - 1); 
+            jawabanUser[no][rowKey] = $(this).val();
+        });
+        updateStatus(no);
+    }
+
+    function updateStatus(no) {
+        var btn = $('#jawaban-no-'+no);
+        var badge = $('#answer'+no);
+        var hasAnswer = false;
+        
+        if(jawabanUser[no]) {
+            if(Array.isArray(jawabanUser[no])) {
+                if(jawabanUser[no].length > 0) hasAnswer = true;
+            } else if(typeof jawabanUser[no] === 'object') {
+                if(Object.keys(jawabanUser[no]).length > 0) hasAnswer = true;
+            } else {
+                hasAnswer = true;
+            }
+        }
+
+        if(hasAnswer) {
+            badge.removeClass('d-none');
+            if(!raguUser[no]) {
+                btn.removeClass('btn-outline-dark').addClass('btn-dark text-white');
+            }
+        } else {
+            badge.addClass('d-none');
+            btn.removeClass('btn-dark text-white').addClass('btn-outline-dark');
+        }
+        
+        if(currentSoal == no) btn.removeClass('btn-dark btn-outline-dark').addClass('btn-success text-white');
+    }
+
+    function raguRagu() {
+        var isRagu = $('#c_ragu_ragu').is(':checked');
+        raguUser[currentSoal] = isRagu;
+        var btn = $('#jawaban-no-'+currentSoal);
+        if(isRagu) {
+            btn.removeClass('btn-success btn-dark').addClass('btn-warning text-white');
+        } else {
+            btn.removeClass('btn-warning text-white').addClass('btn-success');
+        }
+    }
+
+    function changeFont(size) {
+        $('#isisoal').css('font-size', size + 'px');
+    }
+
+    function konfirmasiSelesai() {
+        $('#confirmFinishModal').modal('show');
+    }
+
+    function hitungNilai() {
+        $('#confirmFinishModal').modal('hide');
+        $('#timeoutDialog').modal('hide');
+        clearInterval(timerInterval);
+
+        let totalPoin = 0;
+        let recapHtml = '';
+
+        for (let i = 1; i <= totalSoal; i++) {
+            let key = kunciJawaban[i];
+            let userAns = jawabanUser[i];
+            let scoreSoal = 0;
+            let statusBadge = '';
+            let detailJawaban = '';
+
+            if (Array.isArray(key)) { 
+                let userArr = userAns || [];
+                let correctCount = 0;
+                let wrongCount = 0;
+
+                userArr.forEach(val => {
+                    if (key.includes(val)) {
+                        totalPoin += 5;
+                        correctCount++;
+                    } else {
+                        totalPoin -= 1;
+                        wrongCount++;
+                    }
+                });
+
+                scoreSoal = (correctCount * 5) + (wrongCount * -1);
+                if (correctCount === key.length && wrongCount === 0 && userArr.length === key.length) 
+                    statusBadge = '<span class="badge badge-success">Benar</span>';
+                else if (correctCount > 0) 
+                    statusBadge = '<span class="badge badge-warning">Sebagian</span>';
+                else 
+                    statusBadge = '<span class="badge badge-danger">Salah</span>';
+                
+                detailJawaban = `Kamu menjawab: <b>${userArr.join(', ') || '-'}</b> <br>Kunci yang benar: <b>${key.join(', ')}</b>`;
+
+            } else if (typeof key === 'object') {
+                let userObj = userAns || {};
+                let subCorrect = 0;
+                let subWrong = 0;
+
+                for (let subKey in key) {
+                    if (userObj[subKey] === key[subKey]) {
+                        totalPoin += 5;
+                        subCorrect++;
+                    } else if (userObj[subKey]) {
+                        totalPoin -= 1;
+                        subWrong++;
+                    }
+                }
+                
+                scoreSoal = (subCorrect * 5) + (subWrong * -1);
+                statusBadge = subWrong === 0 && subCorrect === Object.keys(key).length ? '<span class="badge badge-success">Benar</span>' : '<span class="badge badge-warning">Parsial</span>';
+                detailJawaban = "Tipe Tabel: Cek di Pembahasan.";
+
+            } else {
+                if (userAns === key) {
+                    totalPoin += 5;
+                    scoreSoal = 5;
+                    statusBadge = '<span class="badge badge-success">Benar</span>';
+                } else if (userAns) {
+                    totalPoin -= 1;
+                    scoreSoal = -1;
+                    statusBadge = '<span class="badge badge-danger">Salah</span>';
+                } else {
+                    statusBadge = '<span class="badge badge-secondary">Kosong</span>';
+                }
+                detailJawaban = `Kamu menjawab: <b>${userAns || '-'}</b> <br> Kunci yang benar: <b>${key}</b>`;
+            }
+
+            recapHtml += `
+                <tr>
+                    <td class="text-center font-weight-bold">${i}</td>
+                    <td class="text-center">${statusBadge}</td>
+                    <td class="text-center font-weight-bold text-${scoreSoal > 0 ? 'success' : 'danger'}">${scoreSoal > 0 ? '+'+scoreSoal : scoreSoal}</td>
+                    <td>
+                        <div class="mb-1 small text-dark" style="background: #f8f9fa; padding:5px; border-radius:4px;">${detailJawaban}</div>
+                        <div class="text-muted small border-top pt-2 mt-2">
+                            <b class="text-success"><i class="fas fa-lightbulb"></i> Pembahasan:</b><br>
+                            ${pembahasanSoal[i] || 'Tidak ada pembahasan.'}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+        
+        let maxPossibleScore = 180; 
+        let finalScore100 = Math.round((totalPoin > 0 ? totalPoin : 0) / maxPossibleScore * 100);
+
+        $('#totalPoints').text(totalPoin);
+        $('#finalScore').text(finalScore100);
+        $('#recapTableBody').html(recapHtml);
+        $('#resultModal').modal('show');
+    }
+
+    function showRecap() {
+        $('#resultSummary').slideUp();
+        $('#recapSection').slideDown();
+    }
+
+    function hideRecap() {
+        $('#recapSection').slideUp();
+        $('#resultSummary').slideDown();
+    }
+</script>
+
+</body>
+</html>
