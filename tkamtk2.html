@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Simulasi TKA HOTS 2026 - Matematika SD</title>
+    <title>Simulasi TKA 2026 - Matematika SD</title>
     
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="https://pusmendik.kemdikbud.go.id/tka/fav/favicon-32x32.png">
@@ -50,7 +50,7 @@
 
         /* --- Header Styles --- */
         .top-header {
-            background: #343a40; /* Darker header like standard CBT */
+            background: #343a40;
             height: 70px;
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -74,7 +74,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 20px;
             min-height: 500px;
-            margin-top: 90px; /* Space for fixed header */
+            margin-top: 90px;
             position: relative;
         }
 
@@ -98,7 +98,7 @@
         }
         .stimulus-col {
             flex: 1;
-            min-width: 300px; /* Agar tidak terlalu gepeng di HP */
+            min-width: 300px;
             background: #f8f9fa;
             padding: 15px;
             border: 1px solid #dee2e6;
@@ -110,16 +110,16 @@
         }
         .question-text { font-weight: 600; margin-bottom: 15px; color: #2c3e50; font-size: 1.05rem; }
 
-        /* --- CUSTOM NAV BUTTONS (Sesuai Request Gambar) --- */
+        /* --- CUSTOM NAV BUTTONS --- */
         .nav-container {
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #eee;
             display: flex;
-            justify-content: center; /* Center buttons visually */
+            justify-content: center;
             align-items: center;
-            gap: 20px; /* Jarak antar tombol */
-            flex-wrap: wrap; /* Agar turun ke bawah di HP */
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .btn-custom-nav {
@@ -128,7 +128,7 @@
             justify-content: center;
             height: 45px;
             padding: 0 25px;
-            border-radius: 5px; /* Rounded kotak, bukan pill */
+            border-radius: 5px;
             border: none;
             color: white;
             font-weight: 600;
@@ -136,71 +136,71 @@
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            min-width: 140px; /* Lebar minimum biar seragam */
+            min-width: 140px;
         }
 
-        /* Tombol SEBELUMNYA (Merah) */
-        .btn-prev-custom {
-            background-color: #dc3545; 
-        }
+        .btn-prev-custom { background-color: #dc3545; }
         .btn-prev-custom:hover:not(:disabled) { background-color: #c82333; transform: translateY(-1px); }
         .btn-prev-custom:disabled { background-color: #e9ecef; color: #adb5bd; cursor: not-allowed; box-shadow: none; }
 
-        /* Tombol BERIKUTNYA (Biru) */
-        .btn-next-custom {
-            background-color: #007bff;
-        }
+        .btn-next-custom { background-color: #007bff; }
         .btn-next-custom:hover { background-color: #0069d9; transform: translateY(-1px); }
-        .btn-finish-custom { background-color: #28a745; } /* Hijau kalau selesai */
+        .btn-finish-custom { background-color: #28a745; }
 
-        /* Tombol RAGU-RAGU (Kuning) */
         .label-ragu-custom {
             background-color: #ffc107;
-            color: white; /* Teks putih agar kontras dengan kuning gelap atau sesuai gambar */
-            margin-bottom: 0; /* Override bootstrap label margin */
+            color: white;
+            margin-bottom: 0;
             user-select: none;
         }
         .label-ragu-custom:hover { background-color: #e0a800; }
         .label-ragu-custom input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-            cursor: pointer;
+            width: 18px; height: 18px; margin-right: 10px; cursor: pointer;
         }
 
-        /* Icons inside buttons */
         .btn-custom-nav i { font-size: 0.9em; }
         .btn-prev-custom i { margin-right: 8px; }
         .btn-next-custom i { margin-left: 8px; }
 
-        /* --- Responsive Tweaks for Buttons --- */
+        /* --- VISUALISASI DIAGRAM (Perbaikan Soal 26) --- */
+        .chart-box {
+            display: flex; align-items: flex-end; justify-content: space-around;
+            height: 180px; border-bottom: 2px solid #555; border-left: 2px solid #555;
+            padding: 10px 10px 0; margin: 20px auto; width: 90%;
+            background: repeating-linear-gradient(0deg, #f0f0f0, #f0f0f0 1px, transparent 1px, transparent 20%);
+            background-size: 100% 40px;
+        }
+        .chart-bar {
+            width: 40px; background: #3498db; position: relative;
+            transition: height 0.5s ease; border-radius: 4px 4px 0 0;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .chart-bar span {
+            position: absolute; top: -25px; width: 100%; text-align: center; font-weight: bold; font-size: 12px;
+        }
+        .chart-label {
+            position: absolute; bottom: -25px; width: 100%; text-align: center; font-size: 11px;
+            white-space: nowrap;
+        }
+
         @media (max-width: 576px) {
-            .nav-container {
-                flex-direction: column; /* Tombol tumpuk ke bawah di HP */
-                gap: 10px;
-            }
-            .btn-custom-nav {
-                width: 100%; /* Full width di HP */
-            }
-            .isi-soal-container {
-                flex-direction: column;
-            }
-            .stimulus-col, .question-col {
-                min-width: 100%;
-            }
-            .user-info-badge { display: none; } /* Hide user info di header HP */
+            .nav-container { flex-direction: column; gap: 10px; }
+            .btn-custom-nav { width: 100%; }
+            .isi-soal-container { flex-direction: column; }
+            .stimulus-col, .question-col { min-width: 100%; }
+            .user-info-badge { display: none; }
+            /* Mobile adjustment for charts */
+            .chart-bar { width: 30px; }
+            .chart-label { font-size: 9px; }
         }
 
         /* --- Grid Soal Modal --- */
         .grid-soal {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            gap: 10px;
-            padding: 10px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px; padding: 10px;
         }
         .btn-grid-item {
-            height: 45px;
-            display: flex; align-items: center; justify-content: center;
+            height: 45px; display: flex; align-items: center; justify-content: center;
             border: 1px solid #ccc; background: #fff; font-weight: bold;
             cursor: pointer; border-radius: 4px;
         }
@@ -225,7 +225,8 @@
 <div id="view-login">
     <div class="login-card">
         <img src="https://pusmendik.kemdikbud.go.id/tka/images/logo-kemdikbud-71x72.png" alt="Logo" class="login-logo">
-        <h4 class="mb-2 font-weight-bold" style="color: #2c3e50;">SIMULASI TKA HOTS</h4>
+        <!-- FIXED TITLE -->
+        <h4 class="mb-2 font-weight-bold" style="color: #2c3e50;">SIMULASI TKA</h4>
         <p class="text-muted mb-4">Literasi Matematika SD Tahun 2026</p>
         
         <form id="loginForm" onsubmit="event.preventDefault(); startExam();">
@@ -295,19 +296,15 @@
 
             <!-- CUSTOM NAVIGATION BUTTONS -->
             <div class="nav-container">
-                <!-- Tombol Sebelumnya (Merah) -->
                 <button class="btn-custom-nav btn-prev-custom" id="btnPrev" onclick="prevSoal()">
                     <i class="fas fa-chevron-circle-left"></i> Sebelumnya
                 </button>
                 
-                <!-- Tombol Ragu-ragu (Kuning/Orange + Checkbox) -->
-                <!-- Menggunakan Label agar klik teks juga mencentang checkbox -->
                 <label class="btn-custom-nav label-ragu-custom" for="checkRagu">
                     <input type="checkbox" id="checkRagu" onchange="toggleRagu()"> 
                     Ragu-ragu
                 </label>
 
-                <!-- Tombol Berikutnya (Biru) -->
                 <button class="btn-custom-nav btn-next-custom" id="btnNext" onclick="nextSoal()">
                     Berikutnya <i class="fas fa-chevron-circle-right"></i>
                 </button>
@@ -396,7 +393,7 @@
 
 <!-- FOOTER -->
 <div class="custom-footer">
-    &copy; 2026 Simulasi Literasi Numerasi SD - Responsive Platform
+    &copy; 2026 Aplikasi Simulasi TKA Matematika oleh herisheroes
 </div>
 
 <!-- SCRIPTS -->
