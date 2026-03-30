@@ -180,7 +180,7 @@
 
                         <div class="relative z-10 flex flex-col flex-grow">
                             <div class="flex justify-between items-start mb-4">
-                                <!-- Ganti ikon dengan gambar Tut Wuri -->
+                                <!-- Menggunakan Ikon Tut Wuri sesuai permintaan -->
                                 <div class="p-2 bg-blue-50 rounded-lg">
                                     <img src="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png" alt="Gambar Tut Wuri" class="w-8 h-8 object-contain">
                                 </div>
@@ -193,7 +193,7 @@
                                 TKA ${titleText} Simulasi Paket ${i}
                             </h3>
 
-                            <!-- Tambah tombol Mulai Simulasi dan atur menjadi kolom -->
+                            <!-- Tombol Mulai Simulasi & Cek Nilai -->
                             <div class="flex flex-col gap-2 mt-auto">
                                 <button class="w-full py-2 bg-blue-600 text-white font-bold rounded-lg flex items-center justify-center hover:bg-blue-700 transition shadow-sm">
                                     <i data-lucide="play" class="mr-2 w-4 h-4"></i>
@@ -246,26 +246,37 @@
             }, 300);
         }
 
-        // 3. Logika Klik Paket
-        function handlePacketClick(prefix, packetNumber) {
-            const availablePackets = [1, 2]; // Hanya paket 1 & 2 yang "ada"
+        // 3. Logika Klik Paket (DIPERBARUI DENGAN PENGECEKAN FILE OTOMATIS)
+        async function handlePacketClick(prefix, packetNumber) {
+            const fileName = prefix + packetNumber + '.html';
             
-            if (availablePackets.includes(packetNumber)) {
-                const fileName = prefix + packetNumber + '.html';
+            // Cek jika sedang berjalan di dalam preview editor lokal
+            if (window.location.protocol === 'blob:' || (window.location.hostname === 'localhost' && !window.location.port)) {
+                 showPopup("Info Simulasi", "Paket Sedang Dikembangkan", "wrench");
+                 return;
+            }
+
+            try {
+                // Mengecek ke server (GitHub) apakah file tersebut ada (status 200) tanpa memuat seluruh halamannya
+                const response = await fetch(fileName, { method: 'HEAD' });
                 
-                // Cek preview mode
-                if (window.location.protocol === 'blob:' || (window.location.hostname === 'localhost' && !window.location.port)) {
-                     // Gunakan Popup juga untuk info di mode preview, dengan teks yang diminta
-                     showPopup("Info Simulasi", "Paket Sedang di Kembangkan", "wrench");
+                if (response.ok) {
+                    // Jika file berhasil ditemukan, pindah halaman
+                    window.location.href = fileName;
                 } else {
-                     window.location.href = fileName;
+                    // Jika file tidak ditemukan (contoh: 404 Not Found), tampilkan Popup
+                    showPopup(
+                        "Paket Sedang Dikembangkan", 
+                        `Mohon maaf, <b>Paket ${packetNumber}</b> saat ini belum tersedia.<br>Tim kami sedang menyusun soal terbaik untuk Anda.`, 
+                        "hammer" 
+                    );
                 }
-            } else {
-                // Tampilkan Popup jika file "tidak ada"
+            } catch (error) {
+                // Jika terjadi error saat mengecek (misal masalah jaringan internet), tampilkan Popup
                 showPopup(
                     "Paket Sedang Dikembangkan", 
                     `Mohon maaf, <b>Paket ${packetNumber}</b> saat ini belum tersedia.<br>Tim kami sedang menyusun soal terbaik untuk Anda.`, 
-                    "hammer" // Ikon palu/obeng
+                    "hammer" 
                 );
             }
         }
