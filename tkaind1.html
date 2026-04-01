@@ -154,7 +154,7 @@
         <div id="step-search">
             <div class="form-group text-left">
                 <label class="font-weight-bold">Masukkan NISN</label>
-                <input type="number" class="form-control form-control-lg" id="inputNisnSearch" placeholder="Contoh: 0012345678" required>
+                <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control form-control-lg" id="inputNisnSearch" placeholder="Contoh: 0012345678" required>
             </div>
             <button onclick="cariNisn()" class="btn btn-primary btn-block btn-lg mt-4 shadow" style="border-radius: 30px; background: linear-gradient(to right, #326698, #1a3c5e); border: none;">
                 <i class="fa fa-search mr-2"></i> CARI DATA SISWA
