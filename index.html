@@ -48,7 +48,7 @@
         
         <!-- Judul -->
         <h1 class="text-3xl md:text-4xl font-extrabold text-white drop-shadow-md tracking-tight">
-            Simulasi TKA SD Kabupaten Ciamis <br/> Tahun 2026
+            Kumpulan Simulasi TKA SD <br/> Tahun 2026
         </h1>
         <div class="h-1 w-20 bg-yellow-400 mt-4 rounded-full"></div>
     </header>
@@ -104,6 +104,7 @@
                 icon: 'calculator', 
                 colorClass: 'text-blue-600',
                 filePrefix: 'tkamtk', 
+                scorePrefix: 'dashmtk',
                 description: 'Latihan soal berhitung dan logika matematika.'
             },
             {
@@ -112,6 +113,7 @@
                 icon: 'book-open',
                 colorClass: 'text-green-600',
                 filePrefix: 'tkaind', 
+                scorePrefix: 'dashindo',
                 description: 'Latihan pemahaman bacaan dan tata bahasa.'
             }
         ];
@@ -199,7 +201,7 @@
                                     <i data-lucide="play" class="mr-2 w-4 h-4"></i>
                                     Mulai Simulasi
                                 </button>
-                                <div onclick="handleCheckScore(event)" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-500 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition">
+                                <div onclick="handleCheckScore(event, '${subject.scorePrefix}', ${i})" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-500 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition z-20 hover:cursor-pointer">
                                     <i data-lucide="check-circle" class="mr-2 w-4 h-4"></i>
                                     Cek Nilai
                                 </div>
@@ -281,10 +283,37 @@
             }
         }
 
-        // 4. Logika Cek Nilai
-        function handleCheckScore(e) {
+        // 4. Logika Cek Nilai (DIPERBARUI)
+        async function handleCheckScore(e, prefix, packetNumber) {
             e.stopPropagation(); 
-            showPopup("Segera Hadir", "Fitur <b>Cek Nilai</b> sedang dalam tahap pengembangan.<br>Nantikan update selanjutnya!", "clipboard-list");
+            const fileName = prefix + packetNumber + '.html';
+
+            // Cek jika sedang berjalan di dalam preview editor lokal
+            if (window.location.protocol === 'blob:' || (window.location.hostname === 'localhost' && !window.location.port)) {
+                 showPopup("Info Simulasi", "Halaman Cek Nilai Sedang Dikembangkan", "clipboard-list");
+                 return;
+            }
+
+            try {
+                // Mengecek ketersediaan file rekap nilai ke server
+                const response = await fetch(fileName, { method: 'HEAD' });
+                
+                if (response.ok) {
+                    window.location.href = fileName; // Buka jika file ada
+                } else {
+                    showPopup(
+                        "Halaman Belum Tersedia", 
+                        `Mohon maaf, rekap nilai untuk <b>Paket ${packetNumber}</b> saat ini belum tersedia.`, 
+                        "clipboard-list" 
+                    );
+                }
+            } catch (error) {
+                showPopup(
+                    "Halaman Belum Tersedia", 
+                    `Mohon maaf, rekap nilai untuk <b>Paket ${packetNumber}</b> saat ini belum tersedia.`, 
+                    "clipboard-list" 
+                );
+            }
         }
 
         // --- JALANKAN SAAT PERTAMA KALI ---
