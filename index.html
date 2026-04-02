@@ -148,11 +148,12 @@
             lucide.createIcons();
         }
 
-        // 2. Tampilkan Daftar Paket
-        function renderPackets(subjectId) {
+        // 2. Tampilkan Daftar Paket secara Asinkronus (Cek File Terlebih Dahulu)
+        async function renderPackets(subjectId) {
             const subject = subjects.find(s => s.id === subjectId);
             if (!subject) return;
 
+            // Render struktur dasar dengan loading animasi
             let html = `
                 <div class="w-full max-w-5xl px-4 animate-slideUp">
                     <button onclick="renderHome()" class="mb-6 flex items-center text-white hover:text-yellow-300 transition font-semibold">
@@ -167,12 +168,53 @@
                         <p class="text-blue-100">Silakan pilih paket soal untuk memulai simulasi.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div id="packets-container" class="w-full text-center py-12">
+                        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4"></div>
+                        <p class="text-white font-medium text-lg">Mengecek ketersediaan paket...</p>
+                    </div>
+                </div>
             `;
+            appContainer.innerHTML = html;
+            lucide.createIcons();
 
+            // Lakukan pengecekan file secara otomatis ke server (1 sampai 6)
+            const availablePackets = [];
+
+            // Pengecekan murni ke server asli (GitHub)
+            const checks = [];
             for (let i = 1; i <= 6; i++) {
+                const fileName = subject.filePrefix + i + '.html';
+                checks.push(
+                    fetch(fileName, { method: 'HEAD' })
+                    .then(res => {
+                        if (res.ok) availablePackets.push(i);
+                    })
+                    .catch(() => {}) // Jika error/404, diabaikan (tidak masuk list)
+                );
+            }
+            await Promise.all(checks); // Tunggu semua proses cek selesai
+            availablePackets.sort((a, b) => a - b); // Urutkan nomor paket
+
+            const packetsContainer = document.getElementById('packets-container');
+
+            // Jika sama sekali tidak ada file yang ditemukan
+            if (availablePackets.length === 0) {
+                packetsContainer.innerHTML = `
+                    <div class="bg-white/10 rounded-xl p-8 border border-white/20 text-center animate-fadeIn">
+                        <i data-lucide="package-x" class="w-16 h-16 text-yellow-300 mx-auto mb-4"></i>
+                        <h3 class="text-2xl font-bold text-white mb-2">Belum Ada Paket Tersedia</h3>
+                        <p class="text-blue-100">Tim kami sedang mengembangkan paket simulasi untuk mata pelajaran ini. Mohon bersabar ya!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Jika file ditemukan, render HANYA kartu yang filenya ada
+            let cardsHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 animate-fadeIn text-left">';
+            for (let i of availablePackets) {
                 const titleText = subject.id === 'mtk' ? 'Matematika' : 'Bahasa Indonesia';
-                html += `
+                cardsHtml += `
                     <div onclick="handlePacketClick('${subject.filePrefix}', ${i})" 
                         class="bg-white rounded-xl shadow-lg p-5 cursor-pointer transform transition hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group flex flex-col">
                         
@@ -182,7 +224,6 @@
 
                         <div class="relative z-10 flex flex-col flex-grow">
                             <div class="flex justify-between items-start mb-4">
-                                <!-- Menggunakan Ikon Tut Wuri sesuai permintaan -->
                                 <div class="p-2 bg-blue-50 rounded-lg">
                                     <img src="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png" alt="Gambar Tut Wuri" class="w-8 h-8 object-contain">
                                 </div>
@@ -195,7 +236,6 @@
                                 TKA ${titleText} Simulasi Paket ${i}
                             </h3>
 
-                            <!-- Tombol Mulai Simulasi & Cek Nilai -->
                             <div class="flex flex-col gap-2 mt-auto">
                                 <button class="w-full py-2 bg-blue-600 text-white font-bold rounded-lg flex items-center justify-center hover:bg-blue-700 transition shadow-sm">
                                     <i data-lucide="play" class="mr-2 w-4 h-4"></i>
@@ -210,29 +250,25 @@
                     </div>
                 `;
             }
-
-            html += `</div></div>`;
-            appContainer.innerHTML = html;
+            cardsHtml += '</div>';
+            
+            packetsContainer.className = "w-full"; // reset class agar grid merentang
+            packetsContainer.innerHTML = cardsHtml;
             lucide.createIcons();
         }
 
         // --- LOGIKA MODAL POPUP ---
-        
         function showPopup(title, message, iconName = 'wrench') {
             const modal = document.getElementById('info-modal');
             const iconElem = document.getElementById('modal-icon');
             
-            // Set konten modal
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-message').innerHTML = message;
             
-            // Set icon
             iconElem.setAttribute('data-lucide', iconName);
             lucide.createIcons();
 
-            // Tampilkan modal dengan animasi
             modal.classList.remove('hidden');
-            // Sedikit delay agar transisi CSS berjalan
             setTimeout(() => {
                 modal.classList.add('modal-active');
             }, 10);
@@ -242,64 +278,26 @@
             const modal = document.getElementById('info-modal');
             modal.classList.remove('modal-active');
             
-            // Tunggu animasi selesai baru hide element
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
         }
 
-        // 3. Logika Klik Paket (DIPERBARUI DENGAN PENGECEKAN FILE OTOMATIS)
-        async function handlePacketClick(prefix, packetNumber) {
+        // 3. Logika Klik Paket (Kini Langsung Buka Karena Kartu Pasti Tersedia)
+        function handlePacketClick(prefix, packetNumber) {
             const fileName = prefix + packetNumber + '.html';
-            
-            // Cek jika sedang berjalan di dalam preview editor lokal
-            if (window.location.protocol === 'blob:' || (window.location.hostname === 'localhost' && !window.location.port)) {
-                 showPopup("Info Simulasi", "Paket Sedang Dikembangkan", "wrench");
-                 return;
-            }
-
-            try {
-                // Mengecek ke server (GitHub) apakah file tersebut ada (status 200) tanpa memuat seluruh halamannya
-                const response = await fetch(fileName, { method: 'HEAD' });
-                
-                if (response.ok) {
-                    // Jika file berhasil ditemukan, pindah halaman
-                    window.location.href = fileName;
-                } else {
-                    // Jika file tidak ditemukan (contoh: 404 Not Found), tampilkan Popup
-                    showPopup(
-                        "Paket Sedang Dikembangkan", 
-                        `Mohon maaf, <b>Paket ${packetNumber}</b> saat ini belum tersedia.<br>Tim kami sedang menyusun soal terbaik untuk Anda.`, 
-                        "hammer" 
-                    );
-                }
-            } catch (error) {
-                // Jika terjadi error saat mengecek (misal masalah jaringan internet), tampilkan Popup
-                showPopup(
-                    "Paket Sedang Dikembangkan", 
-                    `Mohon maaf, <b>Paket ${packetNumber}</b> saat ini belum tersedia.<br>Tim kami sedang menyusun soal terbaik untuk Anda.`, 
-                    "hammer" 
-                );
-            }
+            window.location.href = fileName;
         }
 
-        // 4. Logika Cek Nilai (DIPERBARUI)
+        // 4. Logika Cek Nilai (Tetap Memeriksa karena file nilai mungkin di-upload terpisah)
         async function handleCheckScore(e, prefix, packetNumber) {
             e.stopPropagation(); 
             const fileName = prefix + packetNumber + '.html';
 
-            // Cek jika sedang berjalan di dalam preview editor lokal
-            if (window.location.protocol === 'blob:' || (window.location.hostname === 'localhost' && !window.location.port)) {
-                 showPopup("Info Simulasi", "Halaman Cek Nilai Sedang Dikembangkan", "clipboard-list");
-                 return;
-            }
-
             try {
-                // Mengecek ketersediaan file rekap nilai ke server
                 const response = await fetch(fileName, { method: 'HEAD' });
-                
                 if (response.ok) {
-                    window.location.href = fileName; // Buka jika file ada
+                    window.location.href = fileName; 
                 } else {
                     showPopup(
                         "Halaman Belum Tersedia", 
