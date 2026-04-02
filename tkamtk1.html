@@ -157,14 +157,15 @@
 <!-- VIEW: LOGIN -->
 <div id="view-login">
     <div class="login-card">
-        <img src="https://pusmendik.kemdikbud.go.id/tka/images/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo" class="login-logo" style="width: 80px; margin-bottom: 20px;">
+        <img src="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo" class="login-logo" style="width: 80px; margin-bottom: 20px;">
         <h4 class="mb-4 font-weight-bold" style="color: #326698;">SIMULASI TKA 2026<br><small>Matematika Paket 1</small></h4>
         
         <!-- STEP 1: PENCARIAN NISN -->
         <div id="step-search">
             <div class="form-group text-left">
                 <label class="font-weight-bold">Masukkan NISN</label>
-                <input type="number" class="form-control form-control-lg" id="inputNisnSearch" placeholder="Contoh: 0012345678" required>
+                <!-- type text agar angka 0 tidak hilang di input browser, inputmode numeric memunculkan numpad HP -->
+                <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control form-control-lg" id="inputNisnSearch" placeholder="Contoh: 0012345678" required>
             </div>
             <button onclick="cariNisn()" class="btn btn-primary btn-block btn-lg mt-4 shadow" style="border-radius: 30px; background: linear-gradient(to right, #326698, #1a3c5e); border: none;">
                 <i class="fa fa-search mr-2"></i> CARI DATA SISWA
@@ -187,11 +188,47 @@
                 <div class="form-row">
                     <div class="form-group col-6">
                         <label class="small font-weight-bold">Kecamatan</label>
-                        <input type="text" class="form-control" id="inputKecamatan" placeholder="Kecamatan">
+                        <select id="selectKecamatan" class="form-control" onchange="toggleLainnya('Kecamatan')">
+                            <option value="">Pilih...</option>
+                            <option value="Banjaranyar">Banjaranyar</option>
+                            <option value="Banjarsari">Banjarsari</option>
+                            <option value="Baregbeg">Baregbeg</option>
+                            <option value="Ciamis">Ciamis</option>
+                            <option value="Cidolog">Cidolog</option>
+                            <option value="Cihaurbeuti">Cihaurbeuti</option>
+                            <option value="Cijeungjing">Cijeungjing</option>
+                            <option value="Cikoneng">Cikoneng</option>
+                            <option value="Cimaragas">Cimaragas</option>
+                            <option value="Cipaku">Cipaku</option>
+                            <option value="Cisaga">Cisaga</option>
+                            <option value="Jatinagara">Jatinagara</option>
+                            <option value="Kawali">Kawali</option>
+                            <option value="Lakbok">Lakbok</option>
+                            <option value="Lumbung">Lumbung</option>
+                            <option value="Pamarican">Pamarican</option>
+                            <option value="Panawangan">Panawangan</option>
+                            <option value="Panjalu">Panjalu</option>
+                            <option value="Panumbangan">Panumbangan</option>
+                            <option value="Purwadadi">Purwadadi</option>
+                            <option value="Rajadesa">Rajadesa</option>
+                            <option value="Rancah">Rancah</option>
+                            <option value="Sadananya">Sadananya</option>
+                            <option value="Sindangkasih">Sindangkasih</option>
+                            <option value="Sukadana">Sukadana</option>
+                            <option value="Sukamantri">Sukamantri</option>
+                            <option value="Tambaksari">Tambaksari</option>
+                            <option value="Lainnya">Lainnya...</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="inputKecamatan" placeholder="Ketik Kecamatan" style="display:none;">
                     </div>
                     <div class="form-group col-6">
                         <label class="small font-weight-bold">Kabupaten</label>
-                        <input type="text" class="form-control" id="inputKabupaten" placeholder="Kabupaten">
+                        <select id="selectKabupaten" class="form-control" onchange="toggleLainnya('Kabupaten')">
+                            <option value="">Pilih...</option>
+                            <option value="Kabupaten Ciamis">Kabupaten Ciamis</option>
+                            <option value="Lainnya">Lainnya...</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="inputKabupaten" placeholder="Ketik Kabupaten" style="display:none;">
                     </div>
                 </div>
             </div>
@@ -210,7 +247,7 @@
 <div id="view-exam" style="display: none;">
     <div class="top-header">
         <div class="logo-container">
-            <img class="logo-kemdikbud" src="https://pusmendik.kemdikbud.go.id/tka/images/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo">
+            <img class="logo-kemdikbud" src="https://raw.githubusercontent.com/herisheroes/simulasitka/refs/heads/main/tutwuri2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png'" alt="Logo">
             <div>
                 <div style="font-size: 1.2rem; font-weight: bold;">SIMULASI TKA</div>
                 <div style="font-size: 0.8rem; letter-spacing: 1px;">TAHUN 2026 - MATEMATIKA PAKET 1</div>
@@ -766,6 +803,16 @@
 
     // --- 4. ALUR LOGIN DAN KONEKSI DATABASE ---
     
+    // Fungsi Toggle Input Lainnya
+    function toggleLainnya(type) {
+        const selectVal = $('#select' + type).val();
+        if(selectVal === 'Lainnya') {
+            $('#input' + type).show().val('').prop('disabled', false);
+        } else {
+            $('#input' + type).hide().val(selectVal).prop('disabled', true);
+        }
+    }
+
     // Fungsi Kembali saat di Menu Login
     function resetLogin() {
         $('#step-biodata').hide();
@@ -775,13 +822,12 @@
 
     // Fungsi Cari NISN di Spreadsheet
     function cariNisn() {
-        const nisn = $('#inputNisnSearch').val();
+        let nisn = $('#inputNisnSearch').val();
         if(!nisn) { showAlert("Silahkan masukkan NISN!"); return; }
         
         showLoading(true);
         peserta.nisn = nisn;
 
-        // Fetch Data dengan methode GET
         fetch(`${SCRIPT_URL}?action=check&nisn=${nisn}`)
             .then(res => res.json())
             .then(res => {
@@ -803,10 +849,29 @@
                     } else {
                         // Skenario: Data ada, Skor belum ada
                         $('#login-msg').html('<div class="alert alert-warning font-weight-bold">NISN ditemukan dan skor belum ada, silahkan klik mulai untuk mengerjakan simulasi!</div>');
+                        
                         $('#inputNama').val(peserta.nama).prop('readonly', true);
                         $('#inputSekolah').val(peserta.sekolah).prop('readonly', true);
-                        $('#inputKecamatan').val(peserta.kecamatan).prop('readonly', true);
-                        $('#inputKabupaten').val(peserta.kabupaten).prop('readonly', true);
+                        
+                        // Set dropdown Kecamatan
+                        if($("#selectKecamatan option[value='" + peserta.kecamatan + "']").length > 0) {
+                            $("#selectKecamatan").val(peserta.kecamatan);
+                            $("#inputKecamatan").hide().val(peserta.kecamatan);
+                        } else {
+                            $("#selectKecamatan").val('Lainnya');
+                            $("#inputKecamatan").show().val(peserta.kecamatan).prop('readonly', true);
+                        }
+                        
+                        // Set dropdown Kabupaten
+                        if($("#selectKabupaten option[value='" + peserta.kabupaten + "']").length > 0) {
+                            $("#selectKabupaten").val(peserta.kabupaten);
+                            $("#inputKabupaten").hide().val(peserta.kabupaten);
+                        } else {
+                            $("#selectKabupaten").val('Lainnya');
+                            $("#inputKabupaten").show().val(peserta.kabupaten).prop('readonly', true);
+                        }
+                        
+                        $('#selectKecamatan, #selectKabupaten').prop('disabled', true);
                         $('#biodata-form').show();
                         
                         $('#btnMulai').text('MULAI UJIAN').show().off('click').on('click', function() { startExam(false); });
@@ -815,9 +880,12 @@
                     // Skenario: Data tidak ada sama sekali
                     showAlert("Silahkan isi biodata untuk memulai simulasi");
                     $('#login-msg').html('<div class="alert alert-info font-weight-bold">NISN tidak ditemukan. Silahkan isi biodata baru di bawah ini.</div>');
-                    $('#inputNama, #inputSekolah, #inputKecamatan, #inputKabupaten').val('').prop('readonly', false);
-                    $('#biodata-form').show();
                     
+                    $('#inputNama, #inputSekolah').val('').prop('readonly', false);
+                    $('#selectKecamatan, #selectKabupaten').val('').prop('disabled', false);
+                    $('#inputKecamatan, #inputKabupaten').hide().val('').prop('readonly', false);
+                    
+                    $('#biodata-form').show();
                     $('#btnMulai').text('SIMPAN DAN MULAI').show().off('click').on('click', function() { startExam(true); });
                 }
             })
@@ -830,13 +898,22 @@
 
     // Fungsi Submit Biodata & Mulai Exam
     function startExam(isNewUser) {
-        peserta.nama = $("#inputNama").val();
-        peserta.sekolah = $("#inputSekolah").val();
-        peserta.kecamatan = $("#inputKecamatan").val();
-        peserta.kabupaten = $("#inputKabupaten").val();
+        if(isNewUser) {
+            peserta.nama = $("#inputNama").val();
+            peserta.sekolah = $("#inputSekolah").val();
+            
+            let valKec = $('#selectKecamatan').val();
+            if(valKec === 'Lainnya') valKec = $('#inputKecamatan').val();
+            
+            let valKab = $('#selectKabupaten').val();
+            if(valKab === 'Lainnya') valKab = $('#inputKabupaten').val();
+            
+            peserta.kecamatan = valKec;
+            peserta.kabupaten = valKab;
+        }
 
         if(!peserta.nama || !peserta.sekolah || !peserta.kecamatan || !peserta.kabupaten) {
-            showAlert("Harap lengkapi semua isian biodata!");
+            showAlert("Harap lengkapi semua isian biodata secara manual atau pilih dropdown!");
             return;
         }
 
@@ -857,7 +934,8 @@
             showLoading(true);
             const payload = {
                 action: 'register',
-                nisn: peserta.nisn,
+                // Trik: Tambahkan tanda kutip agar AppScript / Google Sheet mencatatnya sebagai teks murni (mencegah hilangnya 0)
+                nisn: "'" + peserta.nisn, 
                 nama: peserta.nama,
                 sekolah: peserta.sekolah,
                 kecamatan: peserta.kecamatan,
@@ -1220,7 +1298,7 @@
         $("#soalContainer").css("font-size", size + "px");
     }
 
-    // --- FUNGSI TIMER YANG HILANG DITAMBAHKAN DI BAWAH ---
+    // --- FUNGSI TIMER ---
     function startTimer() {
         timerInterval = setInterval(() => {
             timeRemaining--;
