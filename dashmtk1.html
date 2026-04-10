@@ -71,7 +71,7 @@
                 <h1 class="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">Dashboard Nilai Simulasi TKA</h1>
                 <h2 class="text-xl md:text-3xl font-medium text-blue-200 mb-6 uppercase tracking-widest">Matematika • Paket 1</h2>
                 
-                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 text-indigo-50">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 text-indigo-50 shadow-sm">
                     <i data-lucide="users" class="w-5 h-5"></i>
                     <span class="font-semibold">Total Peserta: <span id="valTotalSiswa">0</span> Siswa</span>
                 </div>
@@ -80,6 +80,36 @@
 
         <main class="max-w-6xl w-full mx-auto px-6 -mt-10 relative z-20 flex-1">
             
+            <!-- MENU FILTER & PENCARIAN -->
+            <div class="bg-white p-4 rounded-2xl shadow-lg border border-slate-100 mb-8 flex flex-col lg:flex-row gap-4 items-center justify-between">
+                
+                <!-- Filter Kecamatan -->
+                <div class="w-full lg:w-1/3 flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 transition-all">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-indigo-500 shrink-0"></i>
+                    <select id="kecamatanFilter" class="w-full bg-transparent p-2 outline-none text-slate-700 font-medium cursor-pointer">
+                        <option value="Semua">Semua Kecamatan</option>
+                    </select>
+                </div>
+
+                <!-- Kolom Pencarian -->
+                <div class="w-full lg:w-1/3 flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 transition-all">
+                    <i data-lucide="search" class="w-5 h-5 text-indigo-500 shrink-0"></i>
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Cari Nama / NISN / Sekolah..." 
+                        class="w-full bg-transparent p-2 outline-none text-slate-700"
+                    />
+                </div>
+
+                <!-- Tombol Unduh Rekap -->
+                <div class="w-full lg:w-auto flex shrink-0">
+                    <button onclick="downloadRecapPDF()" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        <i data-lucide="file-down" class="w-5 h-5"></i> Unduh Rekap Data
+                    </button>
+                </div>
+            </div>
+
             <!-- KPI CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex items-center gap-5 transform hover:-translate-y-1 transition-transform">
@@ -115,7 +145,7 @@
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-10">
                 <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <i data-lucide="bar-chart-3" class="w-6 h-6 text-indigo-600"></i>
-                    Rata-rata Penguasaan Kompetensi (Keseluruhan)
+                    Rata-rata Penguasaan Kompetensi (Filter Aktif)
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
@@ -157,44 +187,31 @@
                 </div>
             </div>
 
-            <!-- FITUR PENCARIAN & DATA INDIVIDU -->
-            <div class="mb-10">
-                <div class="bg-indigo-600 p-1 rounded-2xl shadow-lg mb-8">
-                    <div class="bg-white rounded-xl flex items-center p-2">
-                        <i data-lucide="search" class="w-6 h-6 text-indigo-400 ml-3 shrink-0"></i>
-                        <input 
-                            type="text" 
-                            id="searchInput"
-                            placeholder="Cari berdasarkan Nama, NISN, atau Sekolah..." 
-                            class="w-full p-4 outline-none text-slate-700 text-lg rounded-xl"
-                        />
-                    </div>
-                </div>
-
-                <div id="searchResultsContainer" class="mb-10 hidden">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                        <i data-lucide="user" class="w-5 h-5"></i> Hasil Pencarian: <span id="searchCount">0</span> Siswa Ditemukan
-                    </h3>
-                    
-                    <div id="searchResults" class="grid grid-cols-1 gap-6">
-                        <!-- Kartu hasil pencarian akan dirender di sini via JS -->
-                    </div>
+            <!-- HASIL PENCARIAN INDIVIDU (KARTU) -->
+            <div id="searchResultsContainer" class="mb-10 hidden">
+                <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5"></i> Disorot dari Pencarian:
+                </h3>
+                <div id="searchResults" class="grid grid-cols-1 gap-6">
+                    <!-- Kartu hasil pencarian akan dirender di sini via JS -->
                 </div>
             </div>
 
             <!-- TABEL DATA KESELURUHAN -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-12">
-                <div class="p-6 border-b border-slate-200 bg-slate-50">
-                    <h3 class="text-lg font-bold text-slate-800">Peringkat & Data Keseluruhan</h3>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-12 flex flex-col">
+                <div class="p-5 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-slate-800">Data & Peringkat Siswa</h3>
                 </div>
-                <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
+                
+                <div class="overflow-x-auto min-h-[400px]">
                     <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-slate-100 text-slate-600 text-sm uppercase tracking-wider z-10 shadow-sm">
+                        <thead class="bg-slate-100 text-slate-600 text-sm uppercase tracking-wider shadow-sm">
                             <tr>
-                                <th class="p-4 font-semibold border-b">No.</th>
+                                <th class="p-4 font-semibold border-b">Peringkat</th>
                                 <th class="p-4 font-semibold border-b whitespace-nowrap">NISN</th>
                                 <th class="p-4 font-semibold border-b whitespace-nowrap">Nama Siswa</th>
                                 <th class="p-4 font-semibold border-b whitespace-nowrap">Sekolah</th>
+                                <th class="p-4 font-semibold border-b whitespace-nowrap">Kecamatan</th>
                                 <th class="p-4 font-semibold border-b text-center whitespace-nowrap">Total Benar</th>
                                 <th class="p-4 font-semibold border-b text-center whitespace-nowrap">Skor Akhir</th>
                                 <th class="p-4 font-semibold border-b text-center whitespace-nowrap">Sertifikat</th>
@@ -204,6 +221,33 @@
                             <!-- Baris tabel akan dirender di sini via JS -->
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Paginasi -->
+                <div class="p-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-2 text-sm text-slate-600">
+                        <span>Tampilkan</span>
+                        <select id="rowsPerPage" class="border border-slate-300 rounded-lg p-1.5 bg-white outline-none cursor-pointer focus:border-indigo-500">
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span>data</span>
+                    </div>
+                    
+                    <div class="text-sm font-medium text-slate-600" id="paginationInfo">
+                        Menampilkan 0 - 0 dari 0 data
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="btnPrev" class="px-4 py-2 border border-slate-300 rounded-lg bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-slate-700 text-sm font-medium transition-colors">
+                            Sebelumnya
+                        </button>
+                        <button id="btnNext" class="px-4 py-2 border border-slate-300 rounded-lg bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-slate-700 text-sm font-medium transition-colors">
+                            Selanjutnya
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -236,23 +280,26 @@
 
     <!-- SCRIPT APLIKASI -->
     <script>
-        // Inisialisasi ikon Lucide
         lucide.createIcons();
 
-        // API URL Baru untuk Matematika
         const API_URL = 'https://script.google.com/macros/s/AKfycbzPHofVva3O5QeBkmw3exaFtthz1-zoxBQpvwdoq3rHsd_v36hu723pc5PownS528KPHQ/exec';
         let globalData = [];
+        let filteredData = []; // Menyimpan data yang sudah difilter
+        
+        // Konfigurasi Paginasi
+        let currentPage = 1;
+        let rowsPerPage = 10;
 
         // DOM Elements
         const loadingScreen = document.getElementById('loadingScreen');
         const errorScreen = document.getElementById('errorScreen');
         const mainContent = document.getElementById('mainContent');
         const searchInput = document.getElementById('searchInput');
+        const kecamatanFilter = document.getElementById('kecamatanFilter');
 
         // Fungsi fetch data
         async function fetchData() {
             try {
-                // Tampilkan loading, sembunyikan error & konten
                 loadingScreen.classList.remove('hidden');
                 loadingScreen.classList.add('flex');
                 errorScreen.classList.add('hidden');
@@ -261,19 +308,19 @@
                 const response = await fetch(API_URL);
                 const result = await response.json();
                 
-                // Mendukung berbagai kemungkinan struktur respons JSON
                 let rawData = [];
                 if (Array.isArray(result)) rawData = result;
                 else if (result && Array.isArray(result.data)) rawData = result.data;
                 else if (result && result.result && Array.isArray(result.result)) rawData = result.result;
 
-                // Memproses dan membersihkan data sesuai kolom Spreadsheet Matematika
+                // Mengambil kolom yang diperlukan termasuk Kecamatan
                 globalData = rawData.filter(row => 
                     row.Nama && row['Skor Akhir'] !== '' && row['Skor Akhir'] !== undefined
                 ).map(row => ({
                     NISN: row.NISN || '-',
                     Nama: row.Nama,
                     Sekolah: row.Sekolah || '-',
+                    Kecamatan: row.Kecamatan || '-',
                     'Skor Akhir': Number(row['Skor Akhir']) || 0,
                     '% Bilangan': Number(row['% Bilangan']) || 0,
                     '% Geometri': Number(row['% Geometri']) || 0,
@@ -281,10 +328,14 @@
                     'Total Benar': Number(row['Total Benar']) || 0,
                 }));
 
-                // Urutkan berdasarkan Skor Akhir (Peringkat) dari besar ke kecil
+                // Urutkan berdasarkan Skor Akhir (Peringkat) 
                 globalData.sort((a, b) => b['Skor Akhir'] - a['Skor Akhir']);
 
-                renderDashboard(globalData);
+                // Mengisi Dropdown Filter Kecamatan
+                populateKecamatanDropdown();
+
+                // Terapkan filter pertama kali (menampilkan semua)
+                applyFilters();
 
                 // Tampilkan konten
                 loadingScreen.classList.add('hidden');
@@ -292,71 +343,122 @@
                 mainContent.classList.remove('hidden');
                 mainContent.classList.add('flex');
                 
-                // Re-init lucide icons incase dynamic elements need it
                 lucide.createIcons();
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('errorMessage').textContent = 'Gagal mengambil data. Pastikan link API Anda valid dan memiliki izin akses "Anyone".';
+                document.getElementById('errorMessage').textContent = 'Gagal mengambil data. Pastikan link API Anda valid.';
                 loadingScreen.classList.add('hidden');
                 loadingScreen.classList.remove('flex');
                 errorScreen.classList.remove('hidden');
             }
         }
 
-        function renderDashboard(data) {
-            if (data.length === 0) return;
-
-            // 1. Kalkulasi Statistik
-            const totalSiswa = data.length;
-            const avgSkor = (data.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
-            const highest = Math.max(...data.map(d => d['Skor Akhir']));
-            const lowest = Math.min(...data.map(d => d['Skor Akhir']));
+        function populateKecamatanDropdown() {
+            // Dapatkan list kecamatan unik, buang nilai '-', sort urut abjad
+            const kecamatans = [...new Set(globalData.map(d => d.Kecamatan))]
+                                .filter(k => k && k !== '-')
+                                .sort();
             
-            const avgBilangan = (data.reduce((acc, curr) => acc + curr['% Bilangan'], 0) / totalSiswa).toFixed(1);
-            const avgGeometri = (data.reduce((acc, curr) => acc + curr['% Geometri'], 0) / totalSiswa).toFixed(1);
-            const avgData = (data.reduce((acc, curr) => acc + curr['% Data'], 0) / totalSiswa).toFixed(1);
+            kecamatans.forEach(kec => {
+                const opt = document.createElement('option');
+                opt.value = kec;
+                opt.textContent = kec;
+                kecamatanFilter.appendChild(opt);
+            });
+        }
 
-            // 2. Update KPI DOM
+        // Fungsi Filter Global (Dipanggil setiap input pencarian atau ubah dropdown)
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase();
+            const selectedKecamatan = kecamatanFilter.value;
+
+            // Filter data
+            filteredData = globalData.filter(item => {
+                const matchKecamatan = selectedKecamatan === 'Semua' || item.Kecamatan === selectedKecamatan;
+                const matchSearch = query === '' || 
+                    (item.Nama && item.Nama.toLowerCase().includes(query)) || 
+                    (item.NISN && item.NISN.toString().toLowerCase().includes(query)) ||
+                    (item.Sekolah && item.Sekolah.toLowerCase().includes(query));
+                
+                return matchKecamatan && matchSearch;
+            });
+
+            // 1. Update Skor & Grafik KPI
+            renderKPI(filteredData);
+
+            // 2. Render Tabel dengan Paginasi
+            currentPage = 1; // Reset ke halaman pertama setiap kali filter berubah
+            renderTablePaginasi();
+
+            // 3. Render Kartu Individu (jika sedang mengetik di kolom pencarian)
+            renderSearchCards(filteredData, query);
+        }
+
+        function renderKPI(data) {
+            const totalSiswa = data.length;
+            
+            let avgSkor = 0, highest = 0, lowest = 0;
+            let avgBil = 0, avgGeo = 0, avgData = 0;
+
+            if (totalSiswa > 0) {
+                avgSkor = (data.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
+                highest = Math.max(...data.map(d => d['Skor Akhir']));
+                lowest = Math.min(...data.map(d => d['Skor Akhir']));
+                
+                avgBil = (data.reduce((acc, curr) => acc + curr['% Bilangan'], 0) / totalSiswa).toFixed(1);
+                avgGeo = (data.reduce((acc, curr) => acc + curr['% Geometri'], 0) / totalSiswa).toFixed(1);
+                avgData = (data.reduce((acc, curr) => acc + curr['% Data'], 0) / totalSiswa).toFixed(1);
+            }
+
             document.getElementById('valTotalSiswa').textContent = totalSiswa;
             document.getElementById('valAvgSkor').textContent = avgSkor;
             document.getElementById('valHighest').textContent = highest;
             document.getElementById('valLowest').textContent = lowest;
 
-            // Update Progress Bar Text
-            document.getElementById('txtValBilangan').textContent = avgBilangan;
-            document.getElementById('txtValGeometri').textContent = avgGeometri;
+            document.getElementById('txtValBilangan').textContent = avgBil;
+            document.getElementById('txtValGeometri').textContent = avgGeo;
             document.getElementById('txtValData').textContent = avgData;
 
-            // Beri sedikit jeda agar animasi progress bar terlihat mulus setelah DOM load
             setTimeout(() => {
-                document.getElementById('barValBilangan').style.width = `${avgBilangan}%`;
-                document.getElementById('barValGeometri').style.width = `${avgGeometri}%`;
+                document.getElementById('barValBilangan').style.width = `${avgBil}%`;
+                document.getElementById('barValGeometri').style.width = `${avgGeo}%`;
                 document.getElementById('barValData').style.width = `${avgData}%`;
             }, 100);
-
-            // 3. Render Tabel Keseluruhan
-            renderTable(data);
         }
 
-        function renderTable(data) {
+        function renderTablePaginasi() {
             const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = ''; // Kosongkan tabel
-            
-            data.forEach((row, idx) => {
+            tbody.innerHTML = ''; 
+
+            const totalFiltered = filteredData.length;
+
+            if (totalFiltered === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-500 font-medium">Tidak ada data yang sesuai dengan filter.</td></tr>`;
+                updatePaginationInfo(0, 0, 0);
+                return;
+            }
+
+            // Hitung Index Slice array
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            pageData.forEach((row, i) => {
+                const globalRank = globalData.findIndex(g => g.NISN === row.NISN && g.Nama === row.Nama) + 1;
+                
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-indigo-50 transition-colors border-b border-slate-100 last:border-0 items-center';
+                tr.className = 'hover:bg-indigo-50/50 transition-colors border-b border-slate-100 last:border-0 items-center';
                 
-                const rankClass = idx < 3 ? 'bg-amber-100 text-amber-700' : 'bg-indigo-100 text-indigo-700';
-                
-                // Escape special characters for string literal argument
+                const rankClass = globalRank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-indigo-100 text-indigo-700';
                 const safeNISN = String(row.NISN).replace(/'/g, "\\'");
 
                 tr.innerHTML = `
-                    <td class="p-4 text-slate-500 font-medium">${idx + 1}</td>
+                    <td class="p-4 text-slate-500 font-bold">#${globalRank}</td>
                     <td class="p-4 text-slate-500 text-sm whitespace-nowrap">${row.NISN}</td>
                     <td class="p-4 font-bold text-slate-800">${row.Nama}</td>
-                    <td class="p-4 text-slate-500 text-sm">${row.Sekolah}</td>
+                    <td class="p-4 text-slate-500 text-sm max-w-[200px] truncate" title="${row.Sekolah}">${row.Sekolah}</td>
+                    <td class="p-4 text-slate-500 text-sm">${row.Kecamatan}</td>
                     <td class="p-4 text-center font-semibold text-slate-700">${row['Total Benar']}</td>
                     <td class="p-4 text-center">
                         <span class="py-1.5 px-3 rounded-lg text-sm font-bold shadow-sm inline-block ${rankClass}">
@@ -364,56 +466,98 @@
                         </span>
                     </td>
                     <td class="p-4 text-center">
-                        <button onclick="downloadCertificate('${safeNISN}')" class="inline-flex items-center gap-1 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border border-rose-200 hover:border-rose-600 shadow-sm">
-                            <i data-lucide="download" class="w-4 h-4"></i> Unduh
+                        <button onclick="downloadCertificate('${safeNISN}')" class="inline-flex items-center gap-1 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border border-rose-200 hover:border-rose-600 shadow-sm">
+                            <i data-lucide="download" class="w-3 h-3"></i> Sertifikat
                         </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            updatePaginationInfo(startIndex + 1, Math.min(endIndex, totalFiltered), totalFiltered);
+            lucide.createIcons();
         }
 
-        function renderSearchResults(filteredData) {
+        function updatePaginationInfo(start, end, total) {
+            const info = document.getElementById('paginationInfo');
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+
+            if (total === 0) {
+                info.textContent = `Menampilkan 0 data`;
+                btnPrev.disabled = true;
+                btnNext.disabled = true;
+                return;
+            }
+
+            info.textContent = `Menampilkan ${start} - ${end} dari ${total} data`;
+            
+            btnPrev.disabled = currentPage === 1;
+            btnNext.disabled = end >= total;
+        }
+
+        // EVENT LISTENER UNTUK PAGINASI & FILTER
+        document.getElementById('rowsPerPage').addEventListener('change', (e) => {
+            rowsPerPage = parseInt(e.target.value);
+            currentPage = 1;
+            renderTablePaginasi();
+        });
+
+        document.getElementById('btnPrev').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTablePaginasi();
+            }
+        });
+
+        document.getElementById('btnNext').addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTablePaginasi();
+            }
+        });
+
+        searchInput.addEventListener('input', applyFilters);
+        kecamatanFilter.addEventListener('change', applyFilters);
+
+        // KARTU PENCARIAN (Hanya tampil jika ada text di Search Input)
+        function renderSearchCards(dataToRender, query) {
             const container = document.getElementById('searchResultsContainer');
             const resultsDiv = document.getElementById('searchResults');
-            const searchCount = document.getElementById('searchCount');
 
-            // Jika input kosong, sembunyikan area hasil pencarian
-            if (searchInput.value.trim() === '') {
+            if (query.trim() === '') {
                 container.classList.add('hidden');
                 return;
             }
 
             container.classList.remove('hidden');
-            searchCount.textContent = filteredData.length;
             resultsDiv.innerHTML = '';
 
-            if (filteredData.length > 0) {
-                filteredData.forEach(student => {
+            // Batasi render kartu maksimal 5 agar tidak memberatkan browser
+            const cardData = dataToRender.slice(0, 5); 
+
+            if (cardData.length > 0) {
+                cardData.forEach(student => {
                     const card = document.createElement('div');
                     card.className = 'bg-white p-6 md:p-8 rounded-2xl shadow-md border-l-4 border-indigo-500 flex flex-col lg:flex-row gap-8';
-                    
                     const initial = student.Nama.charAt(0).toUpperCase();
                     const safeNISN = String(student.NISN).replace(/'/g, "\\'");
                     
                     card.innerHTML = `
-                        <!-- Profil & Skor Utama -->
                         <div class="flex-1">
                             <div class="flex items-start gap-4 mb-6">
-                                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-black shrink-0">
-                                    ${initial}
-                                </div>
+                                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-black shrink-0">${initial}</div>
                                 <div>
                                     <h3 class="text-2xl font-bold text-slate-900 mb-1">${student.Nama}</h3>
                                     <p class="text-sm font-medium text-slate-500 flex items-center gap-2 mb-3">
-                                        <i data-lucide="book-open" class="w-4 h-4"></i> ${student.NISN} • ${student.Sekolah}
+                                        <i data-lucide="book-open" class="w-4 h-4"></i> ${student.NISN} • ${student.Sekolah} • Kec. ${student.Kecamatan}
                                     </p>
                                     <button onclick="downloadCertificate('${safeNISN}')" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                         <i data-lucide="file-badge-2" class="w-4 h-4"></i> Unduh Sertifikat
                                     </button>
                                 </div>
                             </div>
-                            
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="bg-gradient-to-br from-indigo-50 to-blue-50 p-5 rounded-xl border border-indigo-100 text-center">
                                     <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-1">Skor Akhir</p>
@@ -426,67 +570,206 @@
                             </div>
                         </div>
 
-                        <!-- Detail Kompetensi -->
                         <div class="flex-1 bg-slate-50 p-6 rounded-xl border border-slate-100">
-                            <h4 class="font-bold text-slate-800 mb-5 pb-3 border-b border-slate-200">Rapor Detail Kompetensi</h4>
-                            
-                            <!-- Progress 1 -->
-                            <div class="mb-5">
-                                <div class="flex justify-between mb-1.5">
-                                    <span class="text-sm font-semibold text-slate-700">Bilangan</span>
-                                    <span class="text-sm font-bold text-slate-900">${student['% Bilangan']}%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-3 shadow-inner">
-                                    <div class="h-3 rounded-full bg-blue-500 progress-bar" style="width: ${student['% Bilangan']}%"></div>
-                                </div>
+                            <h4 class="font-bold text-slate-800 mb-5 pb-3 border-b border-slate-200">Detail Kompetensi</h4>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1"><span class="text-sm font-semibold">Bilangan</span><span class="text-sm font-bold">${student['% Bilangan']}%</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="h-2 rounded-full bg-blue-500" style="width: ${student['% Bilangan']}%"></div></div>
                             </div>
-
-                            <!-- Progress 2 -->
-                            <div class="mb-5">
-                                <div class="flex justify-between mb-1.5">
-                                    <span class="text-sm font-semibold text-slate-700">Geometri</span>
-                                    <span class="text-sm font-bold text-slate-900">${student['% Geometri']}%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-3 shadow-inner">
-                                    <div class="h-3 rounded-full bg-indigo-500 progress-bar" style="width: ${student['% Geometri']}%"></div>
-                                </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1"><span class="text-sm font-semibold">Geometri</span><span class="text-sm font-bold">${student['% Geometri']}%</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="h-2 rounded-full bg-indigo-500" style="width: ${student['% Geometri']}%"></div></div>
                             </div>
-
-                            <!-- Progress 3 -->
-                            <div class="mb-5">
-                                <div class="flex justify-between mb-1.5">
-                                    <span class="text-sm font-semibold text-slate-700">Data & Peluang</span>
-                                    <span class="text-sm font-bold text-slate-900">${student['% Data']}%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-3 shadow-inner">
-                                    <div class="h-3 rounded-full bg-purple-500 progress-bar" style="width: ${student['% Data']}%"></div>
-                                </div>
+                            <div>
+                                <div class="flex justify-between mb-1"><span class="text-sm font-semibold">Data & Peluang</span><span class="text-sm font-bold">${student['% Data']}%</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="h-2 rounded-full bg-purple-500" style="width: ${student['% Data']}%"></div></div>
                             </div>
-
                         </div>
                     `;
                     resultsDiv.appendChild(card);
                 });
                 
-                // Render icons inside newly created dynamic elements
-                lucide.createIcons();
+                if(dataToRender.length > 5) {
+                    const infoMore = document.createElement('div');
+                    infoMore.className = "text-center text-sm text-slate-500 mt-2 font-medium";
+                    infoMore.textContent = `+ ${dataToRender.length - 5} siswa lainnya sesuai pencarian (lihat pada tabel di bawah).`;
+                    resultsDiv.appendChild(infoMore);
+                }
 
+                lucide.createIcons();
             } else {
-                // Tampilan jika tidak ditemukan
                 resultsDiv.innerHTML = `
                     <div class="bg-white p-10 rounded-2xl shadow-sm text-center border border-slate-200">
-                        <i data-lucide="user" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
+                        <i data-lucide="user-x" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
                         <h3 class="text-xl font-bold text-slate-700">Siswa tidak ditemukan</h3>
-                        <p class="text-slate-500 mt-1">Coba gunakan kata kunci nama atau NISN yang lain.</p>
+                        <p class="text-slate-500 mt-1">Siswa tidak ditemukan untuk filter ini.</p>
                     </div>
                 `;
                 lucide.createIcons();
             }
         }
 
-        // Fungsi Generate & Download PDF
+        // ==========================================
+        // FITUR UNDUH REKAPITULASI (PDF BERGRAFIS)
+        // ==========================================
+        function downloadRecapPDF() {
+            if (filteredData.length === 0) {
+                alert("Tidak ada data untuk diunduh pada filter ini.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', format: 'a4' });
+            
+            const selectedKecamatan = kecamatanFilter.value;
+            const totalSiswa = filteredData.length;
+            
+            // Hitung rata-rata
+            const avgSkor = (filteredData.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
+            const avgBil = (filteredData.reduce((acc, curr) => acc + curr['% Bilangan'], 0) / totalSiswa).toFixed(1);
+            const avgGeo = (filteredData.reduce((acc, curr) => acc + curr['% Geometri'], 0) / totalSiswa).toFixed(1);
+            const avgData = (filteredData.reduce((acc, curr) => acc + curr['% Data'], 0) / totalSiswa).toFixed(1);
+
+            // -- HEADER DESAIN --
+            doc.setFillColor(30, 58, 138); // Indigo 900
+            doc.rect(0, 0, 297, 35, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text('REKAPITULASI HASIL SIMULASI TKA MATEMATIKA', 148.5, 18, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Filter Kecamatan: ${selectedKecamatan.toUpperCase()}`, 148.5, 27, { align: 'center' });
+
+            // -- KPI CARDS DESAIN --
+            // Kotak 1: Total Peserta
+            doc.setDrawColor(226, 232, 240);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(14, 45, 55, 30, 3, 3, 'FD');
+            doc.setTextColor(100, 116, 139);
+            doc.setFontSize(10);
+            doc.text('TOTAL PESERTA', 41.5, 55, {align: 'center'});
+            doc.setTextColor(15, 23, 42);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${totalSiswa}`, 41.5, 67, {align: 'center'});
+
+            // Kotak 2: Rata-Rata Skor
+            doc.setDrawColor(226, 232, 240);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(74, 45, 55, 30, 3, 3, 'FD');
+            doc.setTextColor(100, 116, 139);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('RATA-RATA SKOR', 101.5, 55, {align: 'center'});
+            doc.setTextColor(15, 23, 42);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${avgSkor}`, 101.5, 67, {align: 'center'});
+
+            // Kotak 3: Grafik Kompetensi (Visual Progress Bar di PDF)
+            doc.setDrawColor(226, 232, 240);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(134, 45, 149, 30, 3, 3, 'FD');
+            doc.setTextColor(30, 58, 138);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Rata-rata Kompetensi:', 140, 53);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            
+            // Bar Bilangan
+            doc.setTextColor(50, 50, 50);
+            doc.text('Bilangan', 140, 60);
+            doc.setFillColor(226, 232, 240); // Base bar
+            doc.rect(160, 57, 100, 3.5, 'F');
+            doc.setFillColor(59, 130, 246); // Blue
+            doc.rect(160, 57, (avgBil/100) * 100, 3.5, 'F');
+            doc.setTextColor(50, 50, 50);
+            doc.text(`${avgBil}%`, 263, 60);
+
+            // Bar Geometri
+            doc.setTextColor(50, 50, 50);
+            doc.text('Geometri', 140, 66);
+            doc.setFillColor(226, 232, 240);
+            doc.rect(160, 63, 100, 3.5, 'F');
+            doc.setFillColor(99, 102, 241); // Indigo
+            doc.rect(160, 63, (avgGeo/100) * 100, 3.5, 'F');
+            doc.setTextColor(50, 50, 50);
+            doc.text(`${avgGeo}%`, 263, 66);
+
+            // Bar Data
+            doc.setTextColor(50, 50, 50);
+            doc.text('Data', 140, 72);
+            doc.setFillColor(226, 232, 240);
+            doc.rect(160, 69, 100, 3.5, 'F');
+            doc.setFillColor(168, 85, 247); // Purple
+            doc.rect(160, 69, (avgData/100) * 100, 3.5, 'F');
+            doc.setTextColor(50, 50, 50);
+            doc.text(`${avgData}%`, 263, 72);
+
+
+            // -- DATA TABEL --
+            // Konversi data array of object ke array of array untuk AutoTable
+            const tableData = filteredData.map((s, index) => {
+                const globalRank = globalData.findIndex(g => g.NISN === s.NISN && g.Nama === s.Nama) + 1;
+                return [
+                    globalRank, 
+                    s.NISN, 
+                    s.Nama, 
+                    s.Sekolah, 
+                    s.Kecamatan,
+                    `${s['% Bilangan']}%`, 
+                    `${s['% Geometri']}%`, 
+                    `${s['% Data']}%`, 
+                    s['Total Benar'], 
+                    s['Skor Akhir']
+                ];
+            });
+
+            doc.autoTable({
+                startY: 85,
+                head: [['Rank', 'NISN', 'Nama Siswa', 'Sekolah', 'Kecamatan', 'Bilangan', 'Geometri', 'Data', 'Benar', 'Skor']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [67, 56, 202], textColor: [255, 255, 255], fontSize: 9, halign: 'center' },
+                bodyStyles: { fontSize: 8, textColor: [50, 50, 50], valign: 'middle' },
+                alternateRowStyles: { fillColor: [248, 250, 252] },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 12 },
+                    1: { halign: 'center', cellWidth: 25 },
+                    2: { cellWidth: 50 },
+                    3: { cellWidth: 50 },
+                    4: { cellWidth: 35 },
+                    5: { halign: 'center' },
+                    6: { halign: 'center' },
+                    7: { halign: 'center' },
+                    8: { halign: 'center' },
+                    9: { halign: 'center', fontStyle: 'bold' }
+                },
+                margin: { left: 14, right: 14 }
+            });
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            const finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFontSize(9);
+            doc.setTextColor(100, 116, 139);
+            doc.text(`Dokumen diunduh pada: ${dateStr}`, 14, finalY);
+
+            // Generate nama file
+            const fileNameKec = selectedKecamatan === 'Semua' ? 'Semua_Wilayah' : selectedKecamatan.replace(/\s+/g, '_');
+            doc.save(`Rekap_Matematika_${fileNameKec}.pdf`);
+        }
+
+        // ==========================================
+        // FITUR UNDUH SERTIFIKAT INDIVIDU
+        // ==========================================
         function downloadCertificate(nisn) {
-            // Cari data siswa berdasarkan NISN
             const student = globalData.find(s => String(s.NISN) === String(nisn));
             if (!student) {
                 alert('Data siswa tidak ditemukan!');
@@ -494,53 +777,41 @@
             }
 
             const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
             
-            // Inisialisasi PDF: Ukuran A4, orientasi Landscape untuk sertifikat
-            const doc = new jsPDF({
-                orientation: 'landscape',
-                unit: 'mm',
-                format: 'a4'
-            });
-
-            // Dimensi A4 Landscape: 297mm x 210mm
-            
-            // 1. Tambahkan Bingkai (Border)
-            doc.setDrawColor(67, 56, 202); // Warna Indigo
+            // Bingkai
+            doc.setDrawColor(67, 56, 202); 
             doc.setLineWidth(2);
             doc.rect(10, 10, 277, 190);
-            
-            doc.setDrawColor(200, 200, 200); // Warna abu-abu
+            doc.setDrawColor(200, 200, 200); 
             doc.setLineWidth(0.5);
             doc.rect(12, 12, 273, 186);
 
-            // 2. Header / Judul
+            // Judul
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(30, 58, 138); 
             doc.text("SERTIFIKAT PENGHARGAAN", 148.5, 35, { align: 'center' });
-
             doc.setFontSize(16);
             doc.setTextColor(71, 85, 105);
             doc.text("SIMULASI TKA MATEMATIKA - PAKET 1", 148.5, 45, { align: 'center' });
 
-            // 3. Teks Penghargaan
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0);
             doc.text("Sertifikat ini diberikan dengan bangga kepada:", 148.5, 65, { align: 'center' });
 
-            // 4. Data Siswa
+            // Data Siswa
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(32);
             doc.setTextColor(30, 58, 138);
             doc.text(student.Nama.toUpperCase(), 148.5, 80, { align: 'center' });
-
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(14);
             doc.setTextColor(71, 85, 105);
             doc.text(`NISN: ${student.NISN} | Sekolah: ${student.Sekolah}`, 148.5, 90, { align: 'center' });
 
-            // 5. Tabel Nilai Kompetensi
+            // Tabel Nilai
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
             doc.text("Atas partisipasinya dengan rincian perolehan skor:", 148.5, 105, { align: 'center' });
@@ -563,37 +834,21 @@
                 alternateRowStyles: { fillColor: [248, 250, 252] }
             });
 
-            // 6. Footer / Tanggal & Tanda Tangan
             const today = new Date();
             const dateString = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             
             doc.setFontSize(12);
             doc.text(`Diterbitkan tanggal: ${dateString}`, 235, 172, { align: 'center' });
-            
-            // Garis Tanda Tangan
             doc.setDrawColor(0, 0, 0);
             doc.setLineWidth(0.5);
             doc.line(205, 188, 265, 188);
-            
             doc.setFont('helvetica', 'bold');
             doc.text("Penyelenggara Simulasi", 235, 193, { align: 'center' });
 
-            // 7. Simpan file PDF
             doc.save(`Sertifikat_${student.Nama}_${student.NISN}.pdf`);
         }
 
-        // Event Listener Pencarian
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const filteredData = globalData.filter(item => 
-                (item.Nama && item.Nama.toLowerCase().includes(query)) || 
-                (item.NISN && item.NISN.toString().toLowerCase().includes(query)) ||
-                (item.Sekolah && item.Sekolah.toLowerCase().includes(query))
-            );
-            renderSearchResults(filteredData);
-        });
-
-        // Panggil fungsi saat halaman pertama kali dimuat
+        // Jalankan fetch saat onload
         document.addEventListener('DOMContentLoaded', fetchData);
 
     </script>
