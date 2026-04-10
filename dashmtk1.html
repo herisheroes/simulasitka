@@ -35,6 +35,35 @@
         .progress-bar {
             transition: width 1s ease-in-out;
         }
+        
+        /* Checkbox styling */
+        .school-checkbox {
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.25rem;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            background-color: white;
+            transition: all 0.2s;
+        }
+        .school-checkbox:checked {
+            background-color: #4f46e5; /* Indigo 600 */
+            border-color: #4f46e5;
+        }
+        .school-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 4px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
     </style>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen flex flex-col">
@@ -81,32 +110,67 @@
         <main class="max-w-6xl w-full mx-auto px-6 -mt-10 relative z-20 flex-1">
             
             <!-- MENU FILTER & PENCARIAN -->
-            <div class="bg-white p-4 rounded-2xl shadow-lg border border-slate-100 mb-8 flex flex-col lg:flex-row gap-4 items-center justify-between">
+            <div class="bg-white p-4 rounded-2xl shadow-lg border border-slate-100 mb-8 flex flex-col gap-4">
+                <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                    <!-- Filter Kecamatan -->
+                    <div class="w-full lg:w-1/4 flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 transition-all">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-indigo-500 shrink-0"></i>
+                        <select id="kecamatanFilter" class="w-full bg-transparent p-2 outline-none text-slate-700 font-medium cursor-pointer">
+                            <option value="Semua">Semua Kecamatan</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Sekolah (Multiselect Custom) -->
+                    <div class="w-full lg:w-1/4 relative">
+                        <div id="schoolDropdownToggle" class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 cursor-pointer hover:border-indigo-500 transition-all">
+                            <div class="flex items-center flex-1 overflow-hidden">
+                                <i data-lucide="school" class="w-5 h-5 text-indigo-500 shrink-0 mr-2"></i>
+                                <span id="schoolDropdownLabel" class="text-slate-700 font-medium truncate">Pilih Sekolah...</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 ml-2"></i>
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="schoolDropdownMenu" class="absolute z-30 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl hidden max-h-80 flex flex-col overflow-hidden">
+                            <div class="p-2 border-b border-slate-100 bg-slate-50 shrink-0 flex flex-col gap-2 z-10">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-semibold text-slate-700">Filter Sekolah</span>
+                                    <button id="selectAllSchools" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Pilih Semua</button>
+                                </div>
+                                <div class="relative">
+                                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+                                    <input type="text" id="schoolSearchInput" placeholder="Cari sekolah..." class="w-full pl-8 pr-3 py-1.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-indigo-500 bg-white transition-colors">
+                                </div>
+                            </div>
+                            <div id="schoolList" class="p-2 flex flex-col gap-1 overflow-y-auto max-h-60">
+                                <!-- Checkboxes will be injected here -->
+                                <div class="text-sm text-slate-500 p-2 italic text-center">Pilih kecamatan terlebih dahulu</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Pencarian -->
+                    <div class="w-full lg:w-1/4 flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 transition-all">
+                        <i data-lucide="search" class="w-5 h-5 text-indigo-500 shrink-0"></i>
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Cari Nama / NISN..." 
+                            class="w-full bg-transparent p-2 outline-none text-slate-700"
+                        />
+                    </div>
+
+                    <!-- Tombol Unduh Rekap -->
+                    <div class="w-full lg:w-1/4 flex shrink-0">
+                        <button onclick="downloadRecapPDF()" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <i data-lucide="file-down" class="w-5 h-5"></i> Unduh Rekap Data
+                        </button>
+                    </div>
+                </div>
                 
-                <!-- Filter Kecamatan -->
-                <div class="w-full lg:w-1/3 flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 transition-all">
-                    <i data-lucide="map-pin" class="w-5 h-5 text-indigo-500 shrink-0"></i>
-                    <select id="kecamatanFilter" class="w-full bg-transparent p-2 outline-none text-slate-700 font-medium cursor-pointer">
-                        <option value="Semua">Semua Kecamatan</option>
-                    </select>
-                </div>
-
-                <!-- Kolom Pencarian -->
-                <div class="w-full lg:w-1/3 flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 transition-all">
-                    <i data-lucide="search" class="w-5 h-5 text-indigo-500 shrink-0"></i>
-                    <input 
-                        type="text" 
-                        id="searchInput"
-                        placeholder="Cari Nama / NISN / Sekolah..." 
-                        class="w-full bg-transparent p-2 outline-none text-slate-700"
-                    />
-                </div>
-
-                <!-- Tombol Unduh Rekap -->
-                <div class="w-full lg:w-auto flex shrink-0">
-                    <button onclick="downloadRecapPDF()" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                        <i data-lucide="file-down" class="w-5 h-5"></i> Unduh Rekap Data
-                    </button>
+                <!-- Chips for selected schools -->
+                <div id="selectedSchoolsChips" class="flex flex-wrap gap-2 hidden">
+                    <!-- Chips will be inserted here -->
                 </div>
             </div>
 
@@ -286,6 +350,10 @@
         let globalData = [];
         let filteredData = []; // Menyimpan data yang sudah difilter
         
+        // State Filter Sekolah
+        let availableSchools = [];
+        let selectedSchools = new Set();
+        
         // Konfigurasi Paginasi
         let currentPage = 1;
         let rowsPerPage = 10;
@@ -296,6 +364,48 @@
         const mainContent = document.getElementById('mainContent');
         const searchInput = document.getElementById('searchInput');
         const kecamatanFilter = document.getElementById('kecamatanFilter');
+        
+        // School Dropdown Elements
+        const schoolDropdownToggle = document.getElementById('schoolDropdownToggle');
+        const schoolDropdownMenu = document.getElementById('schoolDropdownMenu');
+        const schoolDropdownLabel = document.getElementById('schoolDropdownLabel');
+        const schoolList = document.getElementById('schoolList');
+        const selectAllSchoolsBtn = document.getElementById('selectAllSchools');
+        const selectedSchoolsChips = document.getElementById('selectedSchoolsChips');
+        const schoolSearchInput = document.getElementById('schoolSearchInput');
+
+        // Toggle School Dropdown
+        schoolDropdownToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            schoolDropdownMenu.classList.toggle('hidden');
+        });
+
+        // Prevent closing when clicking inside the dropdown search
+        schoolSearchInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Filter schools inside dropdown
+        schoolSearchInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase();
+            const labels = schoolList.querySelectorAll('label');
+            
+            labels.forEach(label => {
+                const schoolName = label.querySelector('span').textContent.toLowerCase();
+                if (schoolName.includes(keyword)) {
+                    label.style.display = 'flex';
+                } else {
+                    label.style.display = 'none';
+                }
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!schoolDropdownToggle.contains(e.target) && !schoolDropdownMenu.contains(e.target)) {
+                schoolDropdownMenu.classList.add('hidden');
+            }
+        });
 
         // Fungsi fetch data
         async function fetchData() {
@@ -333,6 +443,9 @@
 
                 // Mengisi Dropdown Filter Kecamatan
                 populateKecamatanDropdown();
+                
+                // Initialize School Filter based on initial Kecamatan (Semua)
+                updateSchoolFilterOptions();
 
                 // Terapkan filter pertama kali (menampilkan semua)
                 applyFilters();
@@ -367,21 +480,179 @@
                 kecamatanFilter.appendChild(opt);
             });
         }
+        
+        // Update pilihan sekolah berdasarkan kecamatan yang dipilih
+        function updateSchoolFilterOptions() {
+            const selectedKecamatan = kecamatanFilter.value;
+            selectedSchools.clear(); // Reset pilihan sekolah
+            schoolSearchInput.value = ''; // Reset input pencarian sekolah
+            
+            if (selectedKecamatan === 'Semua') {
+                schoolList.innerHTML = '<div class="text-sm text-slate-500 p-2 italic text-center">Pilih kecamatan spesifik untuk memfilter sekolah</div>';
+                schoolDropdownLabel.textContent = "Pilih Sekolah...";
+                availableSchools = [];
+                updateSchoolChips();
+                return;
+            }
+            
+            // Dapatkan list sekolah unik di kecamatan tersebut
+            availableSchools = [...new Set(globalData
+                                .filter(d => d.Kecamatan === selectedKecamatan)
+                                .map(d => d.Sekolah))]
+                                .filter(s => s && s !== '-')
+                                .sort();
+                                
+            schoolList.innerHTML = '';
+            
+            if (availableSchools.length === 0) {
+                schoolList.innerHTML = '<div class="text-sm text-slate-500 p-2 italic text-center">Tidak ada data sekolah</div>';
+                schoolDropdownLabel.textContent = "Tidak ada sekolah";
+                return;
+            }
+            
+            // Pilih semua sekolah secara default saat ganti kecamatan
+            availableSchools.forEach(school => selectedSchools.add(school));
+            updateSchoolLabel();
+            updateSchoolChips();
+            
+            availableSchools.forEach((school, index) => {
+                const id = `school-cb-${index}`;
+                
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-3 p-2 hover:bg-indigo-50 rounded-lg cursor-pointer transition-colors";
+                label.htmlFor = id;
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.id = id;
+                checkbox.value = school;
+                checkbox.className = "school-checkbox shrink-0";
+                checkbox.checked = true; // Default checked
+                
+                checkbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedSchools.add(school);
+                    } else {
+                        selectedSchools.delete(school);
+                    }
+                    updateSchoolLabel();
+                    updateSchoolChips();
+                    applyFilters();
+                });
+                
+                const span = document.createElement('span');
+                span.className = "text-sm text-slate-700 font-medium truncate";
+                span.textContent = school;
+                span.title = school;
+                
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                schoolList.appendChild(label);
+            });
+        }
+        
+        // Handle "Pilih Semua" button
+        selectAllSchoolsBtn.addEventListener('click', () => {
+            const checkboxes = schoolList.querySelectorAll('input[type="checkbox"]');
+            
+            // Jika semua sudah terpilih, maka uncheck semua. Jika belum, check semua.
+            const allChecked = selectedSchools.size === availableSchools.length;
+            
+            checkboxes.forEach(cb => {
+                cb.checked = !allChecked;
+                if (!allChecked) {
+                    selectedSchools.add(cb.value);
+                } else {
+                    selectedSchools.delete(cb.value);
+                }
+            });
+            
+            updateSchoolLabel();
+            updateSchoolChips();
+            applyFilters();
+        });
+        
+        function updateSchoolLabel() {
+            if (selectedSchools.size === 0) {
+                schoolDropdownLabel.textContent = "Pilih Sekolah...";
+                selectAllSchoolsBtn.textContent = "Pilih Semua";
+            } else if (selectedSchools.size === availableSchools.length) {
+                schoolDropdownLabel.textContent = `Semua Sekolah (${availableSchools.length})`;
+                selectAllSchoolsBtn.textContent = "Batal Pilih";
+            } else {
+                schoolDropdownLabel.textContent = `${selectedSchools.size} Sekolah Dipilih`;
+                selectAllSchoolsBtn.textContent = "Pilih Semua";
+            }
+        }
+        
+        function updateSchoolChips() {
+            selectedSchoolsChips.innerHTML = '';
+            
+            if (selectedSchools.size > 0 && selectedSchools.size < availableSchools.length) {
+                selectedSchoolsChips.classList.remove('hidden');
+                
+                selectedSchools.forEach(school => {
+                    const chip = document.createElement('div');
+                    chip.className = "inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-100 text-xs font-semibold shadow-sm";
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = school;
+                    textSpan.className = "max-w-[150px] truncate";
+                    textSpan.title = school;
+                    
+                    const closeBtn = document.createElement('button');
+                    closeBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+                    closeBtn.className = "hover:text-indigo-900 focus:outline-none p-0.5 rounded-full hover:bg-indigo-200 transition-colors";
+                    closeBtn.onclick = () => {
+                        // Uncheck corresponding checkbox
+                        const cb = Array.from(schoolList.querySelectorAll('input')).find(i => i.value === school);
+                        if (cb) cb.checked = false;
+                        
+                        selectedSchools.delete(school);
+                        updateSchoolLabel();
+                        updateSchoolChips();
+                        applyFilters();
+                    };
+                    
+                    chip.appendChild(textSpan);
+                    chip.appendChild(closeBtn);
+                    selectedSchoolsChips.appendChild(chip);
+                });
+                lucide.createIcons();
+            } else {
+                selectedSchoolsChips.classList.add('hidden');
+            }
+        }
 
-        // Fungsi Filter Global (Dipanggil setiap input pencarian atau ubah dropdown)
+        // Listener for Kecamatan change
+        kecamatanFilter.addEventListener('change', () => {
+            updateSchoolFilterOptions();
+            applyFilters();
+        });
+
+        // Fungsi Filter Global
         function applyFilters() {
             const query = searchInput.value.toLowerCase();
             const selectedKecamatan = kecamatanFilter.value;
 
             // Filter data
             filteredData = globalData.filter(item => {
+                // 1. Filter Kecamatan
                 const matchKecamatan = selectedKecamatan === 'Semua' || item.Kecamatan === selectedKecamatan;
+                
+                // 2. Filter Sekolah (hanya jika kecamatan spesifik dipilih dan set tidak kosong)
+                let matchSekolah = true;
+                if (selectedKecamatan !== 'Semua' && availableSchools.length > 0) {
+                    matchSekolah = selectedSchools.has(item.Sekolah);
+                }
+
+                // 3. Filter Search (Text)
                 const matchSearch = query === '' || 
                     (item.Nama && item.Nama.toLowerCase().includes(query)) || 
                     (item.NISN && item.NISN.toString().toLowerCase().includes(query)) ||
                     (item.Sekolah && item.Sekolah.toLowerCase().includes(query));
                 
-                return matchKecamatan && matchSearch;
+                return matchKecamatan && matchSekolah && matchSearch;
             });
 
             // 1. Update Skor & Grafik KPI
@@ -519,7 +790,6 @@
         });
 
         searchInput.addEventListener('input', applyFilters);
-        kecamatanFilter.addEventListener('change', applyFilters);
 
         // KARTU PENCARIAN (Hanya tampil jika ada text di Search Input)
         function renderSearchCards(dataToRender, query) {
@@ -624,6 +894,17 @@
             const selectedKecamatan = kecamatanFilter.value;
             const totalSiswa = filteredData.length;
             
+            // Generate Subtitle text for PDF (Shows specific schools if not all are selected)
+            let subtitleText = `Filter Kecamatan: ${selectedKecamatan.toUpperCase()}`;
+            if (selectedKecamatan !== 'Semua' && selectedSchools.size > 0 && selectedSchools.size < availableSchools.length) {
+                const schoolNames = Array.from(selectedSchools).join(', ');
+                subtitleText = `Kec. ${selectedKecamatan.toUpperCase()} | Sekolah: ${schoolNames}`;
+                // Truncate if too long
+                if (subtitleText.length > 100) {
+                    subtitleText = subtitleText.substring(0, 97) + '...';
+                }
+            }
+            
             // Hitung rata-rata
             const avgSkor = (filteredData.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
             const avgBil = (filteredData.reduce((acc, curr) => acc + curr['% Bilangan'], 0) / totalSiswa).toFixed(1);
@@ -639,9 +920,9 @@
             doc.setFont('helvetica', 'bold');
             doc.text('REKAPITULASI HASIL SIMULASI TKA MATEMATIKA', 148.5, 18, { align: 'center' });
             
-            doc.setFontSize(12);
+            doc.setFontSize(10);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Filter Kecamatan: ${selectedKecamatan.toUpperCase()}`, 148.5, 27, { align: 'center' });
+            doc.text(subtitleText, 148.5, 27, { align: 'center' });
 
             // -- KPI CARDS DESAIN --
             // Kotak 1: Total Peserta
@@ -762,8 +1043,13 @@
             doc.text(`Dokumen diunduh pada: ${dateStr}`, 14, finalY);
 
             // Generate nama file
-            const fileNameKec = selectedKecamatan === 'Semua' ? 'Semua_Wilayah' : selectedKecamatan.replace(/\s+/g, '_');
-            doc.save(`Rekap_Matematika_${fileNameKec}.pdf`);
+            let fileNameSuffix = selectedKecamatan === 'Semua' ? 'Semua_Wilayah' : selectedKecamatan.replace(/\s+/g, '_');
+            if (selectedSchools.size === 1) {
+                // If only one school is selected, append its name
+                fileNameSuffix += '_' + Array.from(selectedSchools)[0].replace(/[\s\W]+/g, '_').substring(0, 15);
+            }
+            
+            doc.save(`Rekap_Matematika_${fileNameSuffix}.pdf`);
         }
 
         // ==========================================
