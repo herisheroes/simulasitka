@@ -16,25 +16,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
 
     <style>
-        /* Custom Scrollbar for Table */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
-        .progress-bar {
-            transition: width 1s ease-in-out;
-        }
+        /* Custom Scrollbar for Table & Dropdowns */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .progress-bar { transition: width 1s ease-in-out; }
+        
+        /* Checkbox styling */
+        .checkbox-custom:checked + div { background-color: #4f46e5; border-color: #4f46e5; }
+        .checkbox-custom:checked + div svg { display: block; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen flex flex-col">
@@ -43,7 +34,7 @@
     <div id="loadingScreen" class="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-indigo-600 fixed inset-0 z-50">
         <i data-lucide="loader-2" class="w-12 h-12 animate-spin mb-4"></i>
         <h2 class="text-xl font-bold">Memuat Data Dashboard...</h2>
-        <p class="text-slate-500 mt-2">Sabar Ya, Sedang Mengambil data</p>
+        <p class="text-slate-500 mt-2">Mengambil data dari Spreadsheet</p>
     </div>
 
     <!-- ERROR SCREEN -->
@@ -71,15 +62,69 @@
                 <h1 class="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">Dashboard Nilai Simulasi TKA</h1>
                 <h2 class="text-xl md:text-3xl font-medium text-blue-200 mb-6 uppercase tracking-widest">Bahasa Indonesia • Paket 1</h2>
                 
-                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 text-indigo-50">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-5 py-2 rounded-full border border-white/20 text-indigo-50 mb-10">
                     <i data-lucide="users" class="w-5 h-5"></i>
-                    <span class="font-semibold">Total Peserta: <span id="valTotalSiswa">0</span> Siswa</span>
+                    <span class="font-semibold text-sm">Total Peserta: <span id="valTotalSiswa">0</span> Siswa</span>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-6xl w-full mx-auto px-6 -mt-10 relative z-20 flex-1">
+        <main class="max-w-6xl w-full mx-auto px-6 -mt-20 relative z-20 flex-1">
             
+            <!-- GLOBAL FILTERS (Floating over header) -->
+            <div class="bg-white p-3.5 rounded-2xl shadow-xl border border-slate-100 mb-8 flex flex-col md:flex-row gap-3 z-30 relative w-full items-center">
+                
+                <!-- Filter Kecamatan -->
+                <div class="relative w-full md:w-1/4">
+                    <i data-lucide="map-pin" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500"></i>
+                    <select id="filterKecamatan" class="w-full pl-10 pr-8 py-3 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all appearance-none cursor-pointer text-sm">
+                        <option value="Semua">Semua Kecamatan</option>
+                        <!-- Options dirender via JS -->
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"></i>
+                </div>
+
+                <!-- Filter Sekolah (Multi-select) -->
+                <div class="relative w-full md:w-1/4">
+                    <div id="schoolDropdownBtn" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl pl-10 pr-4 py-3 flex justify-between items-center cursor-pointer hover:border-indigo-500 transition-all text-sm h-[46px]">
+                        <i data-lucide="school" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500"></i>
+                        <span id="schoolDropdownLabel" class="truncate text-slate-500">Pilih Sekolah...</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+
+                    <!-- Dropdown List -->
+                    <div id="schoolDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 flex flex-col">
+                        <div class="flex justify-between items-center px-4 pt-3 pb-2">
+                            <span class="text-xs font-semibold text-slate-500">Filter Sekolah</span>
+                            <button id="toggleAllSchools" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Pilih Semua</button>
+                        </div>
+                        <div class="p-2 border-b border-slate-100 bg-slate-50">
+                            <div class="relative">
+                                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                                <input type="text" id="schoolSearch" placeholder="Cari sekolah..." class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-indigo-500 text-sm bg-white">
+                            </div>
+                        </div>
+                        <div id="schoolCheckboxes" class="max-h-60 overflow-y-auto p-1">
+                            <!-- Checkboxes dirender via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative w-full md:w-1/4">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500"></i>
+                    <input type="text" id="globalSearchInput" placeholder="Cari Nama / NISN..." class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 text-sm h-[46px]">
+                </div>
+
+                <!-- Tombol Unduh Rekap -->
+                <div class="w-full md:w-1/4">
+                    <button onclick="downloadRecapPDF()" class="w-full bg-[#059669] hover:bg-[#047857] text-white px-4 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-md text-sm h-[46px]">
+                        <i data-lucide="file-down" class="w-4 h-4 text-white"></i>
+                        Unduh Rekap Data
+                    </button>
+                </div>
+            </div>
+
             <!-- KPI CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex items-center gap-5 transform hover:-translate-y-1 transition-transform">
@@ -115,7 +160,7 @@
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-10">
                 <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <i data-lucide="bar-chart-3" class="w-6 h-6 text-indigo-600"></i>
-                    Rata-rata Penguasaan Kompetensi (Keseluruhan)
+                    Rata-rata Penguasaan Kompetensi (Filter Aktif)
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
@@ -157,45 +202,40 @@
                 </div>
             </div>
 
-            <!-- FITUR PENCARIAN & DATA INDIVIDU -->
-            <div class="mb-10">
-                <div class="bg-indigo-600 p-1 rounded-2xl shadow-lg mb-8">
-                    <div class="bg-white rounded-xl flex items-center p-2">
-                        <i data-lucide="search" class="w-6 h-6 text-indigo-400 ml-3 shrink-0"></i>
-                        <input 
-                            type="text" 
-                            id="searchInput"
-                            placeholder="Cari berdasarkan Nama, NISN, atau Sekolah..." 
-                            class="w-full p-4 outline-none text-slate-700 text-lg rounded-xl"
-                        />
-                    </div>
-                </div>
-
-                <div id="searchResultsContainer" class="mb-10 hidden">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                        <i data-lucide="user" class="w-5 h-5"></i> Hasil Pencarian: <span id="searchCount">0</span> Siswa Ditemukan
-                    </h3>
-                    
-                    <div id="searchResults" class="grid grid-cols-1 gap-6">
-                        <!-- Kartu hasil pencarian akan dirender di sini via JS -->
-                    </div>
+            <!-- DATA INDIVIDU (Dimunculkan saat pencarian aktif) -->
+            <div id="searchResultsContainer" class="mb-10 hidden">
+                <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5"></i> Hasil Pencarian Individu: <span id="searchCount">0</span> Siswa Ditemukan
+                </h3>
+                <div id="searchResults" class="grid grid-cols-1 gap-6">
+                    <!-- Kartu hasil pencarian akan dirender di sini via JS -->
                 </div>
             </div>
 
             <!-- TABEL DATA KESELURUHAN -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-12">
-                <div class="p-6 border-b border-slate-200 bg-slate-50">
+                <div class="p-6 border-b border-slate-200 bg-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
                     <h3 class="text-lg font-bold text-slate-800">Peringkat & Data Keseluruhan</h3>
+                    <div class="flex items-center gap-2 text-sm text-slate-600">
+                        <label for="rowsPerPage">Tampilkan:</label>
+                        <select id="rowsPerPage" class="bg-white border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-indigo-500">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span>data per halaman</span>
+                    </div>
                 </div>
-                <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-slate-100 text-slate-600 text-sm uppercase tracking-wider z-10 shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[800px]">
+                        <thead class="bg-slate-100 text-slate-600 text-sm uppercase tracking-wider shadow-sm">
                             <tr>
                                 <th class="p-4 font-semibold border-b">No.</th>
                                 <th class="p-4 font-semibold border-b whitespace-nowrap">NISN</th>
                                 <th class="p-4 font-semibold border-b whitespace-nowrap">Nama Siswa</th>
                                 <th class="p-4 font-semibold border-b whitespace-nowrap">Sekolah</th>
-                                <th class="p-4 font-semibold border-b text-center whitespace-nowrap">Total Benar</th>
+                                <th class="p-4 font-semibold border-b whitespace-nowrap">Kecamatan</th>
                                 <th class="p-4 font-semibold border-b text-center whitespace-nowrap">Skor Akhir</th>
                                 <th class="p-4 font-semibold border-b text-center whitespace-nowrap">Sertifikat</th>
                             </tr>
@@ -204,6 +244,18 @@
                             <!-- Baris tabel akan dirender di sini via JS -->
                         </tbody>
                     </table>
+                </div>
+                
+                <!-- PAGINATION CONTROLS -->
+                <div class="p-4 border-t border-slate-200 bg-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-sm text-slate-600" id="paginationInfo">
+                        Menampilkan 0 hingga 0 dari 0 data
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="btnPrev" class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Sebelumnya</button>
+                        <div id="pageNumbers" class="flex gap-1 hidden md:flex"></div>
+                        <button id="btnNext" class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Selanjutnya</button>
+                    </div>
                 </div>
             </div>
 
@@ -240,39 +292,57 @@
         lucide.createIcons();
 
         const API_URL = 'https://script.google.com/macros/s/AKfycbwe7RL38wCqU7AOaQ6kAdUgXokv1SOSEeDlqK15_o2z0MEOYWsuCWlvtRh9mRvepXQZ/exec';
+        
+        // Data & State
         let globalData = [];
+        let currentFilteredData = [];
+        let currentPage = 1;
+        let rowsPerPage = 10;
+        
+        let selectedKecamatan = 'Semua';
+        let selectedSchools = [];
+        let allAvailableSchools = [];
 
         // DOM Elements
         const loadingScreen = document.getElementById('loadingScreen');
         const errorScreen = document.getElementById('errorScreen');
         const mainContent = document.getElementById('mainContent');
-        const searchInput = document.getElementById('searchInput');
+        const filterKecamatan = document.getElementById('filterKecamatan');
+        const globalSearchInput = document.getElementById('globalSearchInput');
+        
+        // Dropdown Sekolah DOM
+        const schoolDropdownBtn = document.getElementById('schoolDropdownBtn');
+        const schoolDropdownList = document.getElementById('schoolDropdownList');
+        const schoolDropdownLabel = document.getElementById('schoolDropdownLabel');
+        const schoolCheckboxes = document.getElementById('schoolCheckboxes');
+        const schoolSearch = document.getElementById('schoolSearch');
+        
+        // Pagination DOM
+        const selectRowsPerPage = document.getElementById('rowsPerPage');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
 
         // Fungsi fetch data
         async function fetchData() {
             try {
-                // Tampilkan loading, sembunyikan error & konten
-                loadingScreen.classList.remove('hidden');
-                loadingScreen.classList.add('flex');
-                errorScreen.classList.add('hidden');
-                mainContent.classList.add('hidden');
+                loadingScreen.classList.remove('hidden'); loadingScreen.classList.add('flex');
+                errorScreen.classList.add('hidden'); mainContent.classList.add('hidden');
 
                 const response = await fetch(API_URL);
                 const result = await response.json();
                 
-                // Mendukung berbagai kemungkinan struktur respons JSON
                 let rawData = [];
                 if (Array.isArray(result)) rawData = result;
                 else if (result && Array.isArray(result.data)) rawData = result.data;
                 else if (result && result.result && Array.isArray(result.result)) rawData = result.result;
 
-                // Memproses dan membersihkan data
                 globalData = rawData.filter(row => 
                     row.Nama && row['Skor Akhir'] !== '' && row['Skor Akhir'] !== undefined
                 ).map(row => ({
                     NISN: row.NISN || '-',
                     Nama: row.Nama,
                     Sekolah: row.Sekolah || '-',
+                    Kecamatan: row.Kecamatan || row.kecamatan || '-', // Fallback
                     'Skor Akhir': Number(row['Skor Akhir']) || 0,
                     'Pemahaman Tekstual': Number(row['Pemahaman Tekstual']) || 0,
                     'Pemahaman Inferensial': Number(row['Pemahaman Inferensial']) || 0,
@@ -280,83 +350,266 @@
                     'Total Benar': Number(row['Total Benar']) || 0,
                 }));
 
-                // Urutkan berdasarkan Skor Akhir (Peringkat) dari besar ke kecil
                 globalData.sort((a, b) => b['Skor Akhir'] - a['Skor Akhir']);
+                currentFilteredData = [...globalData];
 
-                renderDashboard(globalData);
+                initFilters();
+                applyDashboardFilters();
 
-                // Tampilkan konten
-                loadingScreen.classList.add('hidden');
-                loadingScreen.classList.remove('flex');
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('flex');
-                
-                // Re-init lucide icons incase dynamic elements need it
+                loadingScreen.classList.add('hidden'); loadingScreen.classList.remove('flex');
+                mainContent.classList.remove('hidden'); mainContent.classList.add('flex');
                 lucide.createIcons();
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('errorMessage').textContent = 'Gagal mengambil data. Pastikan link API Anda valid dan memiliki izin akses "Anyone".';
-                loadingScreen.classList.add('hidden');
-                loadingScreen.classList.remove('flex');
+                document.getElementById('errorMessage').textContent = 'Gagal mengambil data. Pastikan link API Anda valid.';
+                loadingScreen.classList.add('hidden'); loadingScreen.classList.remove('flex');
                 errorScreen.classList.remove('hidden');
             }
         }
 
-        function renderDashboard(data) {
-            if (data.length === 0) return;
+        /* --- LOGIKA FILTER KECAMATAN & SEKOLAH --- */
+        function initFilters() {
+            // Populate Kecamatan
+            const kecamatans = [...new Set(globalData.map(item => item.Kecamatan))].filter(k => k !== '-').sort();
+            filterKecamatan.innerHTML = '<option value="Semua">Semua Kecamatan</option>';
+            kecamatans.forEach(kec => {
+                const opt = document.createElement('option');
+                opt.value = kec; opt.textContent = kec;
+                filterKecamatan.appendChild(opt);
+            });
 
-            // 1. Kalkulasi Statistik
-            const totalSiswa = data.length;
-            const avgSkor = (data.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
-            const highest = Math.max(...data.map(d => d['Skor Akhir']));
-            const lowest = Math.min(...data.map(d => d['Skor Akhir']));
+            populateSchoolFilter();
+        }
+
+        function populateSchoolFilter(searchQuery = '') {
+            // Dapatkan daftar sekolah sesuai kecamatan terpilih
+            let dataForSchools = globalData;
+            if (selectedKecamatan !== 'Semua') {
+                dataForSchools = globalData.filter(item => item.Kecamatan === selectedKecamatan);
+            }
+            allAvailableSchools = [...new Set(dataForSchools.map(item => item.Sekolah))].filter(s => s !== '-').sort();
+
+            // Filter dengan pencarian (jika ada)
+            const filteredSchools = allAvailableSchools.filter(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
             
-            const avgTekstual = (data.reduce((acc, curr) => acc + curr['Pemahaman Tekstual'], 0) / totalSiswa).toFixed(1);
-            const avgInferensial = (data.reduce((acc, curr) => acc + curr['Pemahaman Inferensial'], 0) / totalSiswa).toFixed(1);
-            const avgEvaluasi = (data.reduce((acc, curr) => acc + curr['Evaluasi dan apresiasi'], 0) / totalSiswa).toFixed(1);
+            schoolCheckboxes.innerHTML = '';
+            
+            if (filteredSchools.length === 0) {
+                schoolCheckboxes.innerHTML = '<p class="text-sm text-slate-400 p-2 text-center">Sekolah tidak ditemukan</p>';
+                return;
+            }
 
-            // 2. Update KPI DOM
+            filteredSchools.forEach(sekolah => {
+                const isChecked = selectedSchools.includes(sekolah);
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-3 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors';
+                label.innerHTML = `
+                    <div class="relative flex items-center">
+                        <input type="checkbox" class="checkbox-custom school-checkbox opacity-0 absolute h-0 w-0" value="${sekolah}" ${isChecked ? 'checked' : ''}>
+                        <div class="w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center transition-colors bg-white">
+                            <svg class="hidden w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                    </div>
+                    <span class="text-sm text-slate-700">${sekolah}</span>
+                `;
+                
+                // Event listener checkbox
+                const cb = label.querySelector('input');
+                cb.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedSchools.push(sekolah);
+                    } else {
+                        selectedSchools = selectedSchools.filter(s => s !== sekolah);
+                    }
+                    updateSchoolLabel();
+                    applyDashboardFilters();
+                });
+                
+                schoolCheckboxes.appendChild(label);
+            });
+            updateSchoolLabel();
+        }
+
+        // Event Toggle All Schools
+        document.getElementById('toggleAllSchools').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const checkboxes = document.querySelectorAll('.school-checkbox');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked) {
+                checkboxes.forEach(cb => { cb.checked = false; });
+                selectedSchools = [];
+            } else {
+                checkboxes.forEach(cb => { 
+                    cb.checked = true; 
+                    if(!selectedSchools.includes(cb.value)) selectedSchools.push(cb.value);
+                });
+            }
+            updateSchoolLabel();
+            applyDashboardFilters();
+        });
+
+        function updateSchoolLabel() {
+            if (selectedSchools.length === 0) {
+                schoolDropdownLabel.textContent = "Semua Sekolah di Kecamatan Terpilih";
+                schoolDropdownLabel.classList.add('text-slate-500');
+                schoolDropdownLabel.classList.remove('text-indigo-600', 'font-semibold');
+            } else {
+                schoolDropdownLabel.textContent = `${selectedSchools.length} Sekolah Terpilih`;
+                schoolDropdownLabel.classList.remove('text-slate-500');
+                schoolDropdownLabel.classList.add('text-indigo-600', 'font-semibold');
+            }
+        }
+
+        // Toggles & Events Filter
+        filterKecamatan.addEventListener('change', (e) => {
+            selectedKecamatan = e.target.value;
+            selectedSchools = []; // Reset sekolah saat kecamatan berubah
+            schoolSearch.value = ''; // Reset pencarian sekolah
+            populateSchoolFilter();
+            applyDashboardFilters();
+        });
+
+        schoolDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            schoolDropdownList.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!schoolDropdownBtn.contains(e.target) && !schoolDropdownList.contains(e.target)) {
+                schoolDropdownList.classList.add('hidden');
+            }
+        });
+
+        schoolSearch.addEventListener('input', (e) => {
+            populateSchoolFilter(e.target.value);
+        });
+
+        globalSearchInput.addEventListener('input', (e) => {
+            applyDashboardFilters();
+        });
+
+        function applyDashboardFilters() {
+            const searchQuery = globalSearchInput.value.toLowerCase();
+
+            currentFilteredData = globalData.filter(item => {
+                const matchKecamatan = selectedKecamatan === 'Semua' || item.Kecamatan === selectedKecamatan;
+                const matchSekolah = selectedSchools.length === 0 || selectedSchools.includes(item.Sekolah);
+                const matchSearch = item.Nama.toLowerCase().includes(searchQuery) || String(item.NISN).toLowerCase().includes(searchQuery);
+                
+                return matchKecamatan && matchSekolah && matchSearch;
+            });
+            
+            currentPage = 1; // Reset ke halaman pertama setiap filter
+            renderDashboardStats();
+            renderTable();
+
+            // Render search results blocks if search is active
+            const container = document.getElementById('searchResultsContainer');
+            const resultsDiv = document.getElementById('searchResults');
+            const searchCount = document.getElementById('searchCount');
+
+            if (searchQuery.trim() !== '') {
+                container.classList.remove('hidden');
+                searchCount.textContent = currentFilteredData.length;
+                renderSearchResultsCards(currentFilteredData, resultsDiv);
+            } else {
+                container.classList.add('hidden');
+                resultsDiv.innerHTML = '';
+            }
+        }
+
+        /* --- LOGIKA RENDER DASHBOARD & STATS --- */
+        function renderDashboardStats() {
+            const data = currentFilteredData;
+            const totalSiswa = data.length;
+            
+            let avgSkor = 0, highest = 0, lowest = 0;
+            let avgTekstual = 0, avgInferensial = 0, avgEvaluasi = 0;
+
+            if (totalSiswa > 0) {
+                avgSkor = (data.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
+                highest = Math.max(...data.map(d => d['Skor Akhir']));
+                lowest = Math.min(...data.map(d => d['Skor Akhir']));
+                avgTekstual = (data.reduce((acc, curr) => acc + curr['Pemahaman Tekstual'], 0) / totalSiswa).toFixed(1);
+                avgInferensial = (data.reduce((acc, curr) => acc + curr['Pemahaman Inferensial'], 0) / totalSiswa).toFixed(1);
+                avgEvaluasi = (data.reduce((acc, curr) => acc + curr['Evaluasi dan apresiasi'], 0) / totalSiswa).toFixed(1);
+            }
+
             document.getElementById('valTotalSiswa').textContent = totalSiswa;
             document.getElementById('valAvgSkor').textContent = avgSkor;
             document.getElementById('valHighest').textContent = highest;
             document.getElementById('valLowest').textContent = lowest;
 
-            // Update Progress Bar Text
             document.getElementById('txtValTekstual').textContent = avgTekstual;
             document.getElementById('txtValInferensial').textContent = avgInferensial;
             document.getElementById('txtValEvaluasi').textContent = avgEvaluasi;
 
-            // Beri sedikit jeda agar animasi progress bar terlihat mulus setelah DOM load
             setTimeout(() => {
                 document.getElementById('barValTekstual').style.width = `${avgTekstual}%`;
                 document.getElementById('barValInferensial').style.width = `${avgInferensial}%`;
                 document.getElementById('barValEvaluasi').style.width = `${avgEvaluasi}%`;
             }, 100);
-
-            // 3. Render Tabel Keseluruhan
-            renderTable(data);
         }
 
-        function renderTable(data) {
+        /* --- LOGIKA PAGINASI & TABEL --- */
+        selectRowsPerPage.addEventListener('change', (e) => {
+            rowsPerPage = parseInt(e.target.value);
+            currentPage = 1;
+            renderTable();
+        });
+
+        btnPrev.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); }});
+        btnNext.addEventListener('click', () => { 
+            const maxPage = Math.ceil(currentFilteredData.length / rowsPerPage);
+            if (currentPage < maxPage) { currentPage++; renderTable(); }
+        });
+
+        function renderTable() {
             const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = ''; // Kosongkan tabel
+            tbody.innerHTML = '';
             
-            data.forEach((row, idx) => {
+            const totalData = currentFilteredData.length;
+            const maxPage = Math.ceil(totalData / rowsPerPage) || 1;
+            
+            // Safety check
+            if (currentPage > maxPage) currentPage = maxPage;
+            
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, totalData);
+            const paginatedData = currentFilteredData.slice(startIndex, endIndex);
+            
+            // Update Info Paginasi
+            document.getElementById('paginationInfo').textContent = 
+                totalData === 0 ? `Menampilkan 0 data` : `Menampilkan ${startIndex + 1} hingga ${endIndex} dari ${totalData} data`;
+            
+            btnPrev.disabled = currentPage === 1;
+            btnNext.disabled = currentPage === maxPage || totalData === 0;
+
+            if (paginatedData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-500">Tidak ada data yang sesuai dengan filter.</td></tr>`;
+                return;
+            }
+            
+            paginatedData.forEach((row, idx) => {
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-indigo-50 transition-colors border-b border-slate-100 last:border-0 items-center';
+                tr.className = 'hover:bg-indigo-50 transition-colors border-b border-slate-100 last:border-0';
                 
-                const rankClass = idx < 3 ? 'bg-amber-100 text-amber-700' : 'bg-indigo-100 text-indigo-700';
-                
-                // Escape special characters for string literal argument
+                // Asli Peringkat Keseluruhan Index
+                const globalRank = globalData.findIndex(g => g.NISN === row.NISN) + 1;
+                const rankClass = globalRank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-indigo-100 text-indigo-700';
                 const safeNISN = String(row.NISN).replace(/'/g, "\\'");
 
                 tr.innerHTML = `
-                    <td class="p-4 text-slate-500 font-medium">${idx + 1}</td>
+                    <td class="p-4 text-slate-500 font-medium">${startIndex + idx + 1}</td>
                     <td class="p-4 text-slate-500 text-sm whitespace-nowrap">${row.NISN}</td>
                     <td class="p-4 font-bold text-slate-800">${row.Nama}</td>
                     <td class="p-4 text-slate-500 text-sm">${row.Sekolah}</td>
-                    <td class="p-4 text-center font-semibold text-slate-700">${row['Total Benar']}</td>
+                    <td class="p-4 text-slate-500 text-xs">${row.Kecamatan}</td>
                     <td class="p-4 text-center">
                         <span class="py-1.5 px-3 rounded-lg text-sm font-bold shadow-sm inline-block ${rankClass}">
                             ${row['Skor Akhir']}
@@ -370,38 +623,24 @@
                 `;
                 tbody.appendChild(tr);
             });
+            lucide.createIcons();
         }
 
-        function renderSearchResults(filteredData) {
-            const container = document.getElementById('searchResultsContainer');
-            const resultsDiv = document.getElementById('searchResults');
-            const searchCount = document.getElementById('searchCount');
-
-            // Jika input kosong, sembunyikan area hasil pencarian
-            if (searchInput.value.trim() === '') {
-                container.classList.add('hidden');
-                return;
-            }
-
-            container.classList.remove('hidden');
-            searchCount.textContent = filteredData.length;
+        /* --- PENCARIAN RAPOR INDIVIDU (KARTU) --- */
+        function renderSearchResultsCards(filteredData, resultsDiv) {
             resultsDiv.innerHTML = '';
 
             if (filteredData.length > 0) {
                 filteredData.forEach(student => {
                     const card = document.createElement('div');
                     card.className = 'bg-white p-6 md:p-8 rounded-2xl shadow-md border-l-4 border-indigo-500 flex flex-col lg:flex-row gap-8';
-                    
                     const initial = student.Nama.charAt(0).toUpperCase();
                     const safeNISN = String(student.NISN).replace(/'/g, "\\'");
                     
                     card.innerHTML = `
-                        <!-- Profil & Skor Utama -->
                         <div class="flex-1">
                             <div class="flex items-start gap-4 mb-6">
-                                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-black shrink-0">
-                                    ${initial}
-                                </div>
+                                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-black shrink-0">${initial}</div>
                                 <div>
                                     <h3 class="text-2xl font-bold text-slate-900 mb-1">${student.Nama}</h3>
                                     <p class="text-sm font-medium text-slate-500 flex items-center gap-2 mb-3">
@@ -412,7 +651,6 @@
                                     </button>
                                 </div>
                             </div>
-                            
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="bg-gradient-to-br from-indigo-50 to-blue-50 p-5 rounded-xl border border-indigo-100 text-center">
                                     <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-1">Skor Akhir</p>
@@ -424,129 +662,59 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Detail Kompetensi -->
                         <div class="flex-1 bg-slate-50 p-6 rounded-xl border border-slate-100">
                             <h4 class="font-bold text-slate-800 mb-5 pb-3 border-b border-slate-200">Rapor Detail Kompetensi</h4>
-                            
-                            <!-- Progress 1 -->
                             <div class="mb-5">
-                                <div class="flex justify-between mb-1.5">
-                                    <span class="text-sm font-semibold text-slate-700">Pemahaman Tekstual</span>
-                                    <span class="text-sm font-bold text-slate-900">${student['Pemahaman Tekstual']}%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-3 shadow-inner">
-                                    <div class="h-3 rounded-full bg-blue-500 progress-bar" style="width: ${student['Pemahaman Tekstual']}%"></div>
-                                </div>
+                                <div class="flex justify-between mb-1.5"><span class="text-sm font-semibold text-slate-700">Pemahaman Tekstual</span><span class="text-sm font-bold text-slate-900">${student['Pemahaman Tekstual']}%</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-3"><div class="h-3 rounded-full bg-blue-500" style="width: ${student['Pemahaman Tekstual']}%"></div></div>
                             </div>
-
-                            <!-- Progress 2 -->
                             <div class="mb-5">
-                                <div class="flex justify-between mb-1.5">
-                                    <span class="text-sm font-semibold text-slate-700">Pemahaman Inferensial</span>
-                                    <span class="text-sm font-bold text-slate-900">${student['Pemahaman Inferensial']}%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-3 shadow-inner">
-                                    <div class="h-3 rounded-full bg-indigo-500 progress-bar" style="width: ${student['Pemahaman Inferensial']}%"></div>
-                                </div>
+                                <div class="flex justify-between mb-1.5"><span class="text-sm font-semibold text-slate-700">Pemahaman Inferensial</span><span class="text-sm font-bold text-slate-900">${student['Pemahaman Inferensial']}%</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-3"><div class="h-3 rounded-full bg-indigo-500" style="width: ${student['Pemahaman Inferensial']}%"></div></div>
                             </div>
-
-                            <!-- Progress 3 -->
                             <div class="mb-5">
-                                <div class="flex justify-between mb-1.5">
-                                    <span class="text-sm font-semibold text-slate-700">Evaluasi dan Apresiasi</span>
-                                    <span class="text-sm font-bold text-slate-900">${student['Evaluasi dan apresiasi']}%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-3 shadow-inner">
-                                    <div class="h-3 rounded-full bg-purple-500 progress-bar" style="width: ${student['Evaluasi dan apresiasi']}%"></div>
-                                </div>
+                                <div class="flex justify-between mb-1.5"><span class="text-sm font-semibold text-slate-700">Evaluasi dan Apresiasi</span><span class="text-sm font-bold text-slate-900">${student['Evaluasi dan apresiasi']}%</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-3"><div class="h-3 rounded-full bg-purple-500" style="width: ${student['Evaluasi dan apresiasi']}%"></div></div>
                             </div>
-
                         </div>
                     `;
                     resultsDiv.appendChild(card);
                 });
-                
-                // Render icons inside newly created dynamic elements
                 lucide.createIcons();
-
             } else {
-                // Tampilan jika tidak ditemukan
-                resultsDiv.innerHTML = `
-                    <div class="bg-white p-10 rounded-2xl shadow-sm text-center border border-slate-200">
-                        <i data-lucide="user" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
-                        <h3 class="text-xl font-bold text-slate-700">Siswa tidak ditemukan</h3>
-                        <p class="text-slate-500 mt-1">Coba gunakan kata kunci nama atau NISN yang lain.</p>
-                    </div>
-                `;
-                lucide.createIcons();
+                resultsDiv.innerHTML = `<div class="bg-white p-10 rounded-2xl shadow-sm text-center border border-slate-200"><h3 class="text-xl font-bold text-slate-700">Siswa tidak ditemukan</h3></div>`;
             }
         }
 
-        // Fungsi Generate & Download PDF
+        /* --- PDF GENERATION: SERTIFIKAT INDIVIDU --- */
         function downloadCertificate(nisn) {
-            // Cari data siswa berdasarkan NISN
             const student = globalData.find(s => String(s.NISN) === String(nisn));
-            if (!student) {
-                alert('Data siswa tidak ditemukan!');
-                return;
-            }
-
+            if (!student) return alert('Data siswa tidak ditemukan!');
             const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
             
-            // Inisialisasi PDF: Ukuran A4, orientasi Landscape untuk sertifikat
-            const doc = new jsPDF({
-                orientation: 'landscape',
-                unit: 'mm',
-                format: 'a4'
-            });
+            doc.setDrawColor(67, 56, 202); doc.setLineWidth(2); doc.rect(10, 10, 277, 190);
+            doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.5); doc.rect(12, 12, 273, 186);
 
-            // Dimensi A4 Landscape: 297mm x 210mm
-            
-            // 1. Tambahkan Bingkai (Border)
-            doc.setDrawColor(67, 56, 202); // Warna Indigo
-            doc.setLineWidth(2);
-            doc.rect(10, 10, 277, 190);
-            
-            doc.setDrawColor(200, 200, 200); // Warna abu-abu
-            doc.setLineWidth(0.5);
-            doc.rect(12, 12, 273, 186);
-
-            // 2. Header / Judul
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(28);
-            doc.setTextColor(30, 58, 138); 
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(28); doc.setTextColor(30, 58, 138); 
             doc.text("SERTIFIKAT PENGHARGAAN", 148.5, 35, { align: 'center' });
-
-            doc.setFontSize(16);
-            doc.setTextColor(71, 85, 105);
+            doc.setFontSize(16); doc.setTextColor(71, 85, 105);
             doc.text("SIMULASI TKA BAHASA INDONESIA - PAKET 1", 148.5, 45, { align: 'center' });
 
-            // 3. Teks Penghargaan
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(14); doc.setTextColor(0, 0, 0);
             doc.text("Sertifikat ini diberikan dengan bangga kepada:", 148.5, 65, { align: 'center' });
 
-            // 4. Data Siswa
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(32);
-            doc.setTextColor(30, 58, 138);
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(32); doc.setTextColor(30, 58, 138);
             doc.text(student.Nama.toUpperCase(), 148.5, 80, { align: 'center' });
 
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(14);
-            doc.setTextColor(71, 85, 105);
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(14); doc.setTextColor(71, 85, 105);
             doc.text(`NISN: ${student.NISN} | Sekolah: ${student.Sekolah}`, 148.5, 90, { align: 'center' });
 
-            // 5. Tabel Nilai Kompetensi
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12); doc.setTextColor(0, 0, 0);
             doc.text("Atas partisipasinya dengan rincian perolehan skor:", 148.5, 105, { align: 'center' });
 
             doc.autoTable({
-                startY: 112,
-                margin: { left: 50, right: 50 },
+                startY: 112, margin: { left: 50, right: 50 },
                 head: [['Aspek Penilaian', 'Skor']],
                 body: [
                     ['Pemahaman Tekstual', student['Pemahaman Tekstual'] + '%'],
@@ -562,37 +730,143 @@
                 alternateRowStyles: { fillColor: [248, 250, 252] }
             });
 
-            // 6. Footer / Tanggal & Tanda Tangan
-            const today = new Date();
-            const dateString = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            
-            doc.setFontSize(12);
-            doc.text(`Diterbitkan tanggal: ${dateString}`, 235, 172, { align: 'center' });
-            
-            // Garis Tanda Tangan
-            doc.setDrawColor(0, 0, 0);
-            doc.setLineWidth(0.5);
-            doc.line(205, 188, 265, 188);
-            
-            doc.setFont('helvetica', 'bold');
-            doc.text("Penyelenggara Simulasi", 235, 193, { align: 'center' });
+            const dateString = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            doc.setFontSize(12); doc.text(`Diterbitkan tanggal: ${dateString}`, 235, 172, { align: 'center' });
+            doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.line(205, 188, 265, 188);
+            doc.setFont('helvetica', 'bold'); doc.text("Penyelenggara Simulasi", 235, 193, { align: 'center' });
 
-            // 7. Simpan file PDF
             doc.save(`Sertifikat_${student.Nama}_${student.NISN}.pdf`);
         }
 
-        // Event Listener Pencarian
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const filteredData = globalData.filter(item => 
-                (item.Nama && item.Nama.toLowerCase().includes(query)) || 
-                (item.NISN && item.NISN.toString().toLowerCase().includes(query)) ||
-                (item.Sekolah && item.Sekolah.toLowerCase().includes(query))
-            );
-            renderSearchResults(filteredData);
-        });
+        /* --- PDF GENERATION: REKAPITULASI (LANDSCAPE SESUAI GAMBAR) --- */
+        function downloadRecapPDF() {
+            if(currentFilteredData.length === 0) {
+                alert("Tidak ada data untuk diunduh pada filter ini.");
+                return;
+            }
 
-        // Panggil fungsi saat halaman pertama kali dimuat
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+            
+            // Kalkulasi Stats
+            const data = currentFilteredData;
+            const totalSiswa = data.length;
+            const avgSkor = (data.reduce((acc, curr) => acc + curr['Skor Akhir'], 0) / totalSiswa).toFixed(1);
+            
+            const avgTeks = (data.reduce((acc, curr) => acc + curr['Pemahaman Tekstual'], 0) / totalSiswa).toFixed(1);
+            const avgInf = (data.reduce((acc, curr) => acc + curr['Pemahaman Inferensial'], 0) / totalSiswa).toFixed(1);
+            const avgEva = (data.reduce((acc, curr) => acc + curr['Evaluasi dan apresiasi'], 0) / totalSiswa).toFixed(1);
+
+            // Warna Tema
+            const headerColor = [30, 58, 138]; // Biru gelap sesuai contoh
+
+            // 1. Header PDF
+            doc.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
+            doc.rect(0, 0, 297, 35, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(22);
+            doc.text("REKAPITULASI HASIL SIMULASI TKA BAHASA INDONESIA", 148.5, 18, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Filter Kecamatan: ${selectedKecamatan.toUpperCase()}`, 148.5, 26, { align: 'center' });
+
+            // 2. KPI BOXES (Style sesuai gambar)
+            // Box 1: TOTAL PESERTA
+            doc.setDrawColor(220, 220, 220);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(14, 45, 65, 30, 2, 2, 'FD');
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text("TOTAL PESERTA", 46.5, 55, { align: 'center' });
+            doc.setFontSize(26);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(String(totalSiswa), 46.5, 68, { align: 'center' });
+
+            // Box 2: RATA-RATA SKOR
+            doc.setDrawColor(220, 220, 220);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(84, 45, 65, 30, 2, 2, 'FD');
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.setFont('helvetica', 'normal');
+            doc.text("RATA-RATA SKOR", 116.5, 55, { align: 'center' });
+            doc.setFontSize(26);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(String(avgSkor), 116.5, 68, { align: 'center' });
+
+            // Box 3: GRAFIK RATA-RATA KOMPETENSI
+            doc.setDrawColor(220, 220, 220);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(154, 45, 129, 30, 2, 2, 'FD');
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 58, 138);
+            doc.text("Rata-rata Kompetensi:", 158, 52);
+
+            // Fungsi helper menggambar bar chart kecil
+            const drawBarChart = (yPos, label, value, color) => {
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+                doc.text(label, 158, yPos);
+                
+                // Track belakang
+                doc.setFillColor(230, 230, 235);
+                doc.rect(178, yPos - 3, 90, 4, 'F');
+                
+                // Value progress
+                doc.setFillColor(color[0], color[1], color[2]);
+                const barWidth = (value / 100) * 90;
+                doc.rect(178, yPos - 3, barWidth, 4, 'F');
+                
+                // Teks persen
+                doc.text(`${value}%`, 271, yPos);
+            };
+
+            drawBarChart(59, "Tekstual", avgTeks, [59, 130, 246]); // Blue
+            drawBarChart(66, "Inferensial", avgInf, [99, 102, 241]); // Indigo
+            drawBarChart(73, "Evaluasi", avgEva, [168, 85, 247]); // Purple
+
+            // 4. TABEL PESERTA
+            const tableBodyData = data.map((row, index) => [
+                index + 1,
+                row.NISN,
+                row.Nama,
+                row.Sekolah,
+                row.Kecamatan,
+                row['Pemahaman Tekstual'] + '%',
+                row['Pemahaman Inferensial'] + '%',
+                row['Evaluasi dan apresiasi'] + '%',
+                row['Total Benar'],
+                row['Skor Akhir']
+            ]);
+
+            doc.autoTable({
+                startY: 85,
+                head: [['Rank', 'NISN', 'Nama Siswa', 'Sekolah', 'Kecamatan', 'Tekstual', 'Inferensial', 'Evaluasi', 'Benar', 'Skor']],
+                body: tableBodyData,
+                theme: 'striped',
+                headStyles: { fillColor: [45, 45, 170], textColor: 255, halign: 'center' },
+                styles: { fontSize: 8.5 },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 12 },
+                    5: { halign: 'center', cellWidth: 20 },
+                    6: { halign: 'center', cellWidth: 22 },
+                    7: { halign: 'center', cellWidth: 20 },
+                    8: { halign: 'center', cellWidth: 15 },
+                    9: { halign: 'center', fontStyle: 'bold', cellWidth: 15 }
+                }
+            });
+
+            doc.save(`Rekapitulasi_Simulasi_TKA_${selectedKecamatan}.pdf`);
+        }
+
+        // Jalankan
         document.addEventListener('DOMContentLoaded', fetchData);
 
     </script>
