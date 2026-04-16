@@ -391,7 +391,7 @@
             allAvailableSchools = [...new Set(dataForSchools.map(item => item.Sekolah))].filter(s => s !== '-').sort();
 
             // Filter dengan pencarian (jika ada)
-            const filteredSchools = allAvailableSchools.filter(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+            const filteredSchools = allAvailableSchools.filter(s => String(s).toLowerCase().includes(searchQuery.toLowerCase()));
             
             schoolCheckboxes.innerHTML = '';
             
